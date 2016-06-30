@@ -1,4 +1,4 @@
-function G=evolutionOperator(atom,D,B,Gmc,Dw,tEj)
+function G=evolutionOperator(atom,B,Gmc,Dw,tEj)
 fundamental_constants
 sw=statistical_weights(atom.qn.I, atom.qn.S, atom.qn.J);
 [uHg,uHe]=Hamiltonian(atom,B);  %Hamiltonian
@@ -10,7 +10,7 @@ for j=1:3 %sum over three Cartesian axes
 Asge=Asge+(sw.gJ/3)*kron(conj(Dj(:,:,j)),Dj(:,:,j)); 
 end
 %Asge: the coupling matrix for spontaneous emission;
-tV=interaction(sw.ge,sw.gg,D,Dj,tEj);%the interaction matrix
+tV=interaction(sw.ge,sw.gg,atom.D,Dj,tEj);%the interaction matrix
 [Hee,Hge,Heg,Hgg]=rfShift(eigV.Ee,eigV.Eg,sw.ge,sw.gg);
 
 Acgg=eye(sw.gg*sw.gg)-LS.cPg*LS.rPg/sw.gg;%uniform-relaxation matrix 
