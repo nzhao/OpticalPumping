@@ -8,15 +8,14 @@ B=1; %static magnetic field in Gauss;
 Gmc=.1/atom.pm.te; %Collision rate; 
 rt=10; %relative pulse length, rt=tm/te = ;
 %*************************************************
-sw=statistical_weights(atom.qn.I,atom.qn.S,atom.qn.J);
-LS=LiouvilleSpace(sw.gg,sw.ge);
 G=evolutionOperator(atom,B,Gmc,Dw,tEj);
+LS=LiouvilleSpace(atom.sw.gg,atom.sw.ge);
 
  tm=rt*atom.pm.te; 
  nt=101;%number of time samples 
  th=linspace(0,tm,nt);%time samples 
  
- [Ne,Ng]=population_t(nt,G,th,sw,LS);
+ [Ne,Ng]=population_t(nt,G,th,atom.sw,LS);
  clf; 
  plotPopulation_t(th,atom.pm.te,Ng,Ne);
  [Nginf,Neinf]=steadyPopulation(G,LS);
