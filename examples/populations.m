@@ -2,6 +2,8 @@ clear,clc;
 fundamental_constants
 atom=atomParameters('Rb87D1'); %input 'Rb87D1' or 'Rb87D2'
 [Dw,tEj]=setBeam();%the beam informations
+
+
 %*********************************************************
 %atom.qn.I=0.5;  %%%%%%%%%%%%%%%%%%%%%%%%%%
 B=1; %static magnetic field in Gauss;
