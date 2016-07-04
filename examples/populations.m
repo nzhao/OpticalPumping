@@ -3,9 +3,8 @@ fundamental_constants
 atom=atomParameters('Rb87D1'); %input 'Rb87D1' or 'Rb87D2'
 [Dw,tEj]=setBeam();%the beam informations
 
-
 %*********************************************************
-%atom.qn.I=0.5;  %%%%%%%%%%%%%%%%%%%%%%%%%%
+
 B=1; %static magnetic field in Gauss;
 Gmc=.1/atom.pm.te; %Collision rate; 
 rt=10; %relative pulse length, rt=tm/te = ;
@@ -17,15 +16,35 @@ LS=LiouvilleSpace(atom.sw.gg,atom.sw.ge);
  nt=101;%number of time samples 
  th=linspace(0,tm,nt);%time samples 
  
+ te=atom.pm.te;
  [Ne,Ng]=population_t(nt,G,th,atom.sw,LS);
- clf; 
- plotPopulation_t(th,atom.pm.te,Ng,Ne);
- [Nginf,Neinf]=steadyPopulation(G,LS);
- plotSteadyPopulation(atom.pm.te,th,nt,Nginf,Neinf);
+     clf; %plot population(t)
+     plot(th/te,real(Ng),'b-'); hold on; 
+     plot(th/te,real(Ne),'r-.');grid on; 
+     xlabel('Time, \Gamma^{\{ge\}}_{\rm s}t'); 
+     ylabel('Populations'); legend('Ng','Ne')
+
+[Nginf,Neinf]=steadyPopulation(G,LS);
+     %plot steaady population
+     plot(th/te,real(Nginf)*ones(1,nt),'b-');hold on;
+     plot(th/te,real(Neinf)*ones(1,nt),'r-.');grid on; 
+     xlabel('Time, \Gamma^{\{ge\}}_{\rm s}t'); 
+     ylabel('Populations'); legend('Ng','Ne')
 
 nw=21;dw=linspace(Dw-3/atom.pm.te,Dw+3/atom.pm.te,nw); rhow= zeros(LS.gt,nw);
 for k=1:nw
     G=evolutionOperator(atom,B,Gmc,dw(k),tEj);
     rhow(:,k)=null(G);rhow(:,k)=rhow(:,k)/(LS.rP*rhow(:,k));
 end
-plotSublevelPopulations(dw,rhow,LS);
+    %plot sublevel populations
+    figure(2); %clf;
+    subplot(2,1,1)
+    plot(dw/(2*pi*1e6),real(LS.rNg*rhow),'b-');hold on;%statepopulations
+    plot(dw/(2*pi*1e6),real(LS.rNe*rhow),'r-.');grid on;
+    ylabel('StatePopulations');
+    legend('Ng','Ne')
+    subplot(2,1,2);%sublevel populations
+    plot(dw/(2*pi*1e6),real(rhow(LS.LrNg,:)),'b-');hold on;
+    plot(dw/(2*pi*1e6),real(rhow(LS.LrNe,:)),'r-.');grid on;
+    xlabel('Detuning,\Delta\nu inMHz');
+    ylabel('SublevelPopulations');
