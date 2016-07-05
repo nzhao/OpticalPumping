@@ -8,3 +8,5 @@ hP=6.6262e-27;%Planck?s constant in erg/Hz
 hbar=hP/(2*pi);%in erg s 
 re=2.816e-13;%classical electron radius in cm 
 amg=2.6868e19;%Loschmidt constant (amagat) in cm^{-3} 
+
+erg2GHz=1e-9/hP;
