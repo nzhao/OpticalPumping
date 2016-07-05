@@ -7,15 +7,11 @@ function G=evolutionOperator(atom,B,Gmc,Dw,tEj)
     eigV.Ug=eigVg.U; eigV.Eg=eigVg.E;
     eigV.Ue=eigVe.U; eigV.Ee=eigVe.E;
 
-
-    Dj=dipoleOperator(eigV.Ug,eigV.Ue,atom.qn.I,atom.qn.S,atom.qn.J);
+    Dj=dipoleOperator(eigV.Ug,eigV.Ue,atom);
     LS=LiouvilleSpace(sw.gg,sw.ge);
     
-    %Asge: the coupling matrix for spontaneous emission;
-    Asge=zeros(sw.gg*sw.gg,sw.ge*sw.ge);
-    for j=1:3 %sum over three Cartesian axes, Eq.5.50
-        Asge=Asge+(sw.gJ/3)*kron(conj(Dj(:,:,j)),Dj(:,:,j)); 
-    end
+    %the spontaneous emission, Eq. 5.50
+    Asge=spontaneous_emission(sw.gg,sw.ge,sw.gJ,Dj);
     
     %the interaction matrix, Eq. 5.62
     tV=interaction(sw.ge,sw.gg,atom.D,Dj,tEj);
@@ -24,10 +20,10 @@ function G=evolutionOperator(atom,B,Gmc,Dw,tEj)
     [Hee,Hge,Heg,Hgg]=rfShift(eigV.Ee,eigV.Eg,sw.ge,sw.gg);
 
     %uniform-relaxation matrix, Eq. 5.111
-    Acgg=eye(sw.gg*sw.gg)-LS.cPg*LS.rPg/sw.gg;
+    Acgg=relaxation(atom,LS);
     
     %G0=dark, G1=pumping, G2=collisions; dGdw=dG/dw 
-    G0=zeros(LS.gt,LS.gt); G1=G0; G2=0; dGdw=G0; 
+    G0=zeros(LS.gt,LS.gt); G1=G0; G2=G0; dGdw=G0; 
     
     %index ranges for blocks 
     n1=1:sw.ge^2; 
