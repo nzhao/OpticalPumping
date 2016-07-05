@@ -37,7 +37,7 @@ for k=1:nw
     rhow(:,k)=null(G);rhow(:,k)=rhow(:,k)/(LS.rP*rhow(:,k));
 end
     %plot sublevel populations
-    figure(2); %clf;
+    figure(2);
     subplot(2,1,1)
     plot(dw/(2*pi*1e6),real(LS.rNg*rhow),'b-');hold on;%statepopulations
     plot(dw/(2*pi*1e6),real(LS.rNe*rhow),'r-.');grid on;

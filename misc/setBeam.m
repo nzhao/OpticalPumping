@@ -1,7 +1,8 @@
 function [Dw,tEj]=setBeam()
 fundamental_constants
 Sl=1e4*40;%convert form mW/cm^2 to erg/(s cm^2)
-Dw=2*pi*1e6*(-752); %MHz
+%should choose the appropriate frequency according to the energy distribution
+Dw=2*pi*1e6*(-2256); %(-2793);%(-752); %MHz 
 %colatitude and azimuthal angles of beam direction in degrees
 thetaD = 45;%beam colatitude angle in degrees
 phiD = 0;%beam azimuthal angle in degrees
