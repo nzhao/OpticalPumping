@@ -1,16 +1,25 @@
 clear,clc;
 fundamental_constants
 atom=atomParameters('Rb87D1'); %input 'Rb87D1' or 'Rb87D2'
-[Dw,tEj]=setBeam();%the beam informations
+%****  parameters for laser field
+power=40; %mW/cm^2
+%should choose the appropriate frequency according to the energy distribution
+detuning=-2256; %MHz %(-2793);%(-752);
+%colatitude and azimuthal angles of beam direction in degrees
+thetaD = 45;%beam colatitude angle in degrees
+phiD = 0;%beam azimuthal angle in degrees
+Etheta = 1;%relative field along theta
+Ephi= 1i;%relative field along phi
+%*********
+beam=setBeam(power,detuning,thetaD,phiD,Etheta,Ephi);%the beam informations
 
 %*********************************************************
-
 B=1; %static magnetic field in Gauss;
 Gmc=.1/atom.pm.te; %Collision rate; 
 rt=10; %relative pulse length, rt=tm/te = ;
 %*************************************************
-G=evolutionOperator(atom,B,Gmc,Dw,tEj);
-LS=LiouvilleSpace(atom.sw.gg,atom.sw.ge);
+G=evolutionOperator(atom,B,Gmc,beam);
+LS=LiouvilleSpace(atom);
 
  tm=rt*atom.pm.te; 
  nt=101;%number of time samples 
@@ -31,9 +40,10 @@ LS=LiouvilleSpace(atom.sw.gg,atom.sw.ge);
      xlabel('Time, \Gamma^{\{ge\}}_{\rm s}t'); 
      ylabel('Populations'); legend('Ng','Ne')
 
-nw=21;dw=linspace(Dw-3/atom.pm.te,Dw+3/atom.pm.te,nw); rhow= zeros(LS.gt,nw);
+nw=21;dw=linspace(beam.Dw-3/atom.pm.te,beam.Dw+3/atom.pm.te,nw); rhow= zeros(LS.gt,nw);
 for k=1:nw
-    G=evolutionOperator(atom,B,Gmc,dw(k),tEj);
+    beam.Dw=dw(k);
+    G=evolutionOperator(atom,B,Gmc,beam);
     rhow(:,k)=null(G);rhow(:,k)=rhow(:,k)/(LS.rP*rhow(:,k));
 end
     %plot sublevel populations
