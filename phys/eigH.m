@@ -4,5 +4,5 @@ function eigV=eigH(uH)
     [eigV.U,eigV.E]=eig(uH);%unsorted eigVenvectors and energies
     [~,n]=sort(-diag(eigV.E));%sort energies in descending order
     H=eigV.E(n,n); eigV.E=diag(H); eigV.U=eigV.U(:,n);%sorted Hg, Eg and Ug
-
+    eigV.H=H;
 end
