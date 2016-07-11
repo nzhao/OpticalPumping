@@ -1,7 +1,8 @@
 function G=evolutionOperator(atom,B,Gmc,beam)
     fundamental_constants
     
-    [uHg,uHe]=Hamiltonian(atom,B);  %Hamiltonian
+    H=Hamiltonian(atom,B);  %Hamiltonian
+    uHg=H.uHg;  uHe=H.uHe;
     eigVg=eigH(uHg);  eigVe=eigH(uHe);
     eigV.Ug=eigVg.U; eigV.Eg=eigVg.E;
     eigV.Ue=eigVe.U; eigV.Ee=eigVe.E;

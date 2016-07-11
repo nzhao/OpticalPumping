@@ -8,7 +8,10 @@ Gmp=1000; %Mean pumping rate
 kappa=0; %Shift parameter, Eq(6.85)
 Kj=[0 0 0.25]; %Fictitious spin, [Kx Ky Kz] = . Eq(6.79)?
 %*********************************************
-G=dampingOperatorG(atom,B,Kj,kappa,Gmp); %static damping operator, Eq(6.86)
+Aop=opticalPumpingMatixAop(atom,B,Kj,kappa); %high-pressure optical pumping matrix, Eq(6.87)
+HgC=LSHamiltonian(atom,B);%HgC=flat(eigVg.H)-sharp(eigVg.H);%Liouville-space Hamiltonian
+G=1i*HgC/hbar+Gmp*Aop; %static damping operator, Eq(6.86)
+
 Lp=logical(LS.cPg);%logical variable for populations
 nt=100;%number of sample points
 t=linspace(0,40,nt);%sample times in units of 1/Gmp

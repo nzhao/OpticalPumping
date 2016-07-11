@@ -1,13 +1,13 @@
 clear,clc;
 fundamental_constants
-rb87=atomParameters('Rb87D1'); %input 'Rb87D1' or 'Rb87D2'
+atom=atomParameters('Rb87D1'); %input 'Rb87D1' or 'Rb87D2'
 
 Bmax=10001; 
 nB=1001;dB=linspace(0,Bmax,nB);
 for k=1:nB 
-    [uHg,uHe]=Hamiltonian(rb87,dB(k));%Hamiltonian
-    eigVg=eigH(uHg);
-    eigVe=eigH(uHe);
+    H=Hamiltonian(atom,dB(k));%Hamiltonian [uHg,uHe]
+    eigVg=eigH(H.uHg);
+    eigVe=eigH(H.uHe);
 
     Eg2(k,:)=1e-9*eigVg.E'/hP; %y axis for ground states %GHz
     Ee2(k,:)=1e-9*eigVe.E'/hP; %y axis for excited states %GHz
