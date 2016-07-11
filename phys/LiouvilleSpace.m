@@ -1,4 +1,5 @@
-function LS=LiouvilleSpace(gg,ge)
+function LS=LiouvilleSpace(atom)
+gg=atom.sw.gg;ge=atom.sw.ge;
 %[gt,Pe,Pg,cPe,rPe,cPg,rPg,cNe,rNe,cNg,rNg,LrNe,LrNg,cP,rP]=LiouvilleSpace(gg,ge)
 %gt:dimension of full Liouville space
 %Pe,Pg:excited and ground states' projection operators

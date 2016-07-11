@@ -3,7 +3,6 @@ function atom=atomParameters(iso)
     switch iso
         case 'Rb87D1'
             atom.qn.I=1.5; atom.qn.S=0.5; atom.qn.J=0.5;
-            %atom.sw=statistical_weights(atom.qn.I,atom.qn.S,atom.qn.J); %(atom);%
             
             atom.pm.MW=86.9;%grams/mole
             atom.pm.muI=2.751*muN;%nuclear moment in erg/G
@@ -30,6 +29,7 @@ function atom=atomParameters(iso)
             fprintf('unkonwn atom name "%s"\n', iso);
     end
     
+    atom.a=atom.qn.I+.5; atom.b=atom.qn.I-.5;  %ground-state ang. mom. quant. numbs.
     atom.sw=statistical_weights(atom.qn.I,atom.qn.S,atom.qn.J); %(atom);%
     atom.pm.keg=2*pi/atom.pm.lamJ; atom.pm.weg=c*atom.pm.keg;%nominal spatial and temporal frequencies
     atom.pm.feg=c*atom.sw.gJ/(4*atom.pm.weg^2*re*atom.pm.te);%oscillator strength

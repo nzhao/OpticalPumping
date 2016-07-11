@@ -4,7 +4,7 @@
 
 clear,clc;
 fundamental_constants
-rb87=atomParameters('Rb87D1'); %input 'Rb87D1' or 'Rb87D2'
+atom=atomParameters('Rb87D1'); %input 'Rb87D1' or 'Rb87D2'
 
 %%
 % Using _Hamiltonian_ command, one can get the spin Hamiltonian for a given
@@ -13,10 +13,11 @@ rb87=atomParameters('Rb87D1'); %input 'Rb87D1' or 'Rb87D2'
 
 Bmax=10000; %max B in Gauss
 nB=501; dB=linspace(0,Bmax,nB);
-Eg=zeros(nB, rb87.sw.gg); Ee=zeros(nB, rb87.sw.ge);
+Eg=zeros(nB, atom.sw.gg); Ee=zeros(nB, atom.sw.ge);
 for k=1:nB 
-    [uHg,uHe]=Hamiltonian(rb87,dB(k));%Hamiltonian
-    eigVg=eigH(uHg);  eigVe=eigH(uHe);
+    H=Hamiltonian(atom,dB(k));%Hamiltonian [uHg,uHe]
+    eigVg=eigH(H.uHg);
+    eigVe=eigH(H.uHe);
 
     Eg(k,:)=eigVg.E * erg2GHz; %y axis for ground states %GHz
     Ee(k,:)=eigVe.E * erg2GHz; %y axis for excited states %GHz
