@@ -24,7 +24,6 @@ function atom=atomParameters(iso)
             atom.pm.Ae=hP*84.852e6;%P3/2 dipole coefficient in erg
             atom.pm.Be=hP*12.611e6;%P3/2 quadrupole coupling coefficient in erg
             atom.pm.te=25.5e-9;%spontaneous P1/2 lifetime in s
-            atom.pm.keg=2*pi/atom.pm.lamJ; atom.pm.weg=c*atom.pm.keg;%nominal spatial and temporal frequencies
 
         otherwise 
             fprintf('unkonwn atom name "%s"\n', iso);
@@ -38,5 +37,7 @@ function atom=atomParameters(iso)
     atom.LgS=2.00231;% Lande g-value of S1/2 state
     atom.LgJ=atom.sw.gJ/3;%approximate Lande g-value of PJ state
     atom.D=sqrt(atom.sw.gS*hbar*re*c^2*atom.pm.feg/(2*atom.pm.weg));% dipole moment in esu cm
+    atom.pm.keg=2*pi/atom.pm.lamJ; %nominal spatial frequencies
+    atom.pm.weg=c*atom.pm.keg;%nominal temporal frequencies
 
 end
