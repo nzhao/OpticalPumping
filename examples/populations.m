@@ -1,6 +1,6 @@
 clear,clc;
 fundamental_constants
-atom=atomParameters('Rb87D1'); %input 'Rb87D1' or 'Rb87D2'
+atom=atomParameters('Rb87D2'); %input 'Rb87D1' or 'Rb87D2'
 %****  parameters for laser field
 power=40; %mW/cm^2
 %should choose the appropriate frequency according to the energy distribution
@@ -40,7 +40,7 @@ LS=LiouvilleSpace(atom);
      xlabel('Time, \Gamma^{\{ge\}}_{\rm s}t'); 
      ylabel('Populations'); legend('Ng','Ne')
 
-nw=21;dw=linspace(beam.Dw-3/atom.pm.te,beam.Dw+3/atom.pm.te,nw); rhow= zeros(LS.gt,nw);
+nw=51;dw=linspace(beam.Dw-10/atom.pm.te,beam.Dw+10/atom.pm.te,nw); rhow= zeros(LS.gt,nw);
 for k=1:nw
     beam.Dw=dw(k);
     G=evolutionOperator(atom,B,Gmc,beam);
