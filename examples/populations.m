@@ -6,7 +6,7 @@ power=40; %mW/cm^2
 %should choose the appropriate frequency according to the energy distribution
 detuning=-2256; %MHz %(-2793);%(-752);
 %colatitude and azimuthal angles of beam direction in degrees
-thetaD = 45;%beam colatitude angle in degrees
+thetaD = 0;%beam colatitude angle in degrees
 phiD = 0;%beam azimuthal angle in degrees
 Etheta = 1;%relative field along theta
 Ephi= 1i;%relative field along phi
