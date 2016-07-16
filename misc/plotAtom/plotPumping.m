@@ -1,4 +1,4 @@
-function fig = plotPumping( atom, beam, magB )
+function [fig, res] = plotPumping( atom, beam, magB, rho )
 %PLOTLEVELS Summary of this function goes here
 %   Detailed explanation goes here
     fundamental_constants;
@@ -21,21 +21,36 @@ function fig = plotPumping( atom, beam, magB )
     eigenG=eigH(H.uHg);  eigenE=eigH(H.uHe);
     Dj=dipoleOperator(eigenG.U,eigenE.U,atom);
     tV=interaction(atom, beam, Dj);
-    tV1=tV./norm(tV);
-    disp(tV1);
-    
-    levels = plotLevels( f, eigenG, eigenE, div, plt );
-    levels.gs.Visible='on'; levels.es.Visible='on';
 
     for i=1:atom.sw.gg
+       [x1, y1] = centerCoord(f, eigenG, i, div, 'G');
+       plot(x1, y1, 'Marker', 'o', 'MarkerSize', 200*abs(rho(i,i)), 'MarkerFaceColor', 'b', 'MarkerEdgeColor', 'b');
+    end
+    for i=1:atom.sw.ge
+       [x1, y1] = centerCoord(f, eigenE, i, div, 'E');
+       plot(x1, y1, 'Marker', 'o', 'MarkerSize', 200*abs(rho(atom.sw.gg+i,atom.sw.gg+i)), 'MarkerFaceColor', 'r', 'MarkerEdgeColor', 'r');
+    end
+    
+    tiny=1e-3;
+    tV1=( tV./max(abs(tV(:))) ).^2; tV1(abs(tV1)<tiny)=0;
+    for i=1:atom.sw.gg
         for j=1:atom.sw.ge
-            [x1 y1] = centerCoord(f, eigenG, i, div, 'G');
-            [x2 y2] = centerCoord(f, eigenE, j, div, 'E');
-            if abs(tV1(j,i)) > 1e-5
-                line( [x1 x2], [y1 y2]);
+            [x1, y1] = centerCoord(f, eigenG, i, div, 'G');
+            [x2, y2] = centerCoord(f, eigenE, j, div, 'E');
+            if abs(tV1(j,i)) > 0.2
+                line( [x1 x2], [y1 y2], 'LineWidth', tV1(j, i)*5 ,'Color', 'm');
+                text( mean([x1 x2]), mean([y1 y2]), num2str(tV1(j, i), 4) );
+            elseif abs(tV1(j,i)) > 0
+                line( [x1 x2], [y1 y2], 'LineWidth', tV1(j, i)*5 ,'Color', 'm', 'LineStyle', '--');
+                text( mean([x1 x2]), mean([y1 y2]), num2str(tV1(j, i), 4) );
             end
         end
     end
     
+    levels = plotLevels( f, eigenG, eigenE, div, plt );
+    levels.gs.Visible='on'; levels.es.Visible='on';
+        
+    res.tV1 = tV1;
+    res.rho = rho;
 end
 

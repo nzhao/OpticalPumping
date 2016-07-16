@@ -36,7 +36,6 @@ function levels = plotLevels( f, eigenG, eigenE, div, plt )
         text( x-0.5*len, y+text_dy, num2str(eigenE.E(k)* erg2MHz, 4), 'FontSize', textSize );
     end
     
-    
     levels.gs=levelG;
     levels.es=levelE;
 end
