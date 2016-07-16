@@ -1,6 +1,6 @@
 clear,clc;
 fundamental_constants
-atom=atomParameters('Rb87D2'); %input 'Rb87D1' or 'Rb87D2'
+atom=atomParameters('Rb87D1'); %input 'Rb87D1' or 'Rb87D2'
 %****  parameters for laser field
 power=40; %mW/cm^2
 %should choose the appropriate frequency according to the energy distribution
