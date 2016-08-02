@@ -39,5 +39,5 @@ function atom=atomParameters(iso)
     atom.D=sqrt(atom.sw.gS*hbar*re*c^2*atom.pm.feg/(2*atom.pm.weg));% dipole moment in esu cm
     atom.pm.keg=2*pi/atom.pm.lamJ; %nominal spatial frequencies
     atom.pm.weg=c*atom.pm.keg;%nominal temporal frequencies
-
+   
 end

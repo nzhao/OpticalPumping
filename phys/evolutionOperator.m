@@ -1,4 +1,4 @@
-function G=evolutionOperator(atom,B,Gmc,beam)
+function G=evolutionOperator(atom,B,Gmc,beam,Gm2)
     fundamental_constants
     
     H=Hamiltonian(atom,B);  %Hamiltonian
@@ -42,11 +42,11 @@ function G=evolutionOperator(atom,B,Gmc,beam)
     dGdw(n2,n2)=1i*eye(atom.sw.ge*atom.sw.gg);%dG/dw 
     dGdw(n3,n3)=-dGdw(n2,n2); 
     
-    G0(n1,n1)=diag(Hee(:)*1i/hbar+1/atom.pm.te);%diagonal elements 
-    G0(n2,n2)=diag(Hge(:)*1i/hbar+1/(2*atom.pm.te)); 
-    G0(n3,n3)=diag(Heg(:)*1i/hbar+1/(2*atom.pm.te)); 
+    G0(n1,n1)=diag(Hee(:)*1i/hbar+2*pi/atom.pm.te);%diagonal elements 
+    G0(n2,n2)=diag(Hge(:)*1i/hbar+Gm2); 
+    G0(n3,n3)=diag(Heg(:)*1i/hbar+Gm2); 
     G0(n4,n4)=diag(Hgg(:)*1i/hbar); 
-    G0(n4,n1)=-Asge/atom.pm.te;%repopulation by stimulated emission 
+    G0(n4,n1)=-Asge*2*pi/atom.pm.te;%repopulation by stimulated emission 
     
     G=G0+G1+G2+beam.Dw*dGdw;%total damping matrix 
 end
