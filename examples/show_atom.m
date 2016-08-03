@@ -47,11 +47,12 @@ function myui
         phiD = 0;
         Etheta = 1;
         Ephi= 1i;
+        Gm2=2*pi/(2*atom.pm.te);
         beam=setBeam(power,detuning,thetaD,phiD,Etheta,Ephi);
 
         beam.Dw=dw;
 
-        G=evolutionOperator(atom,magB,Gmc,beam);
+        G=evolutionOperator(atom,magB,Gmc,beam, Gm2);
         LS=LiouvilleSpace(atom);
 
         rho=null(G); rho=rho/(LS.rP*rho);
