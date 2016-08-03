@@ -4,7 +4,7 @@
 
 clear,clc;
 fundamental_constants
-atom=atomParameters('Rb87D1'); %input 'Rb87D1' or 'Rb87D2'
+atom=atomParameters('Rb87D2'); %input 'Rb87D1' or 'Rb87D2'
 
 %%
 % Using _Hamiltonian_ command, one can get the spin Hamiltonian for a given
@@ -35,7 +35,7 @@ end
 % Notice that, the sign of _gF_ are opposite for _F_=1 and _F_=2.
 %
 % Here displays the splittings at 20 Gauss.
-disp( 1e3*[(Eg(2,:)-Eg(1,:))/dB(2); (Ee(2,:)-Ee(1,:))/dB(2)]' )
+%disp( 1e3*[(Eg(2,:)-Eg(1,:))/dB(2); (Ee(2,:)-Ee(1,:))/dB(2)]' )
 
 %%
 % Plot of energy levels for _B_=0 to 200 Gauss.

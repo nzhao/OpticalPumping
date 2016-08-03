@@ -22,9 +22,18 @@ function mat=spin_matrices(atom)
         gSj(:,:,k)=kron(eye(gI),sSj(:,:,k));
         aIje(:,:,k)=kron(sIj(:,:,k),eye(gJ));
         gJj(:,:,k)=kron(eye(gI),sJj(:,:,k));
+        uFjg(:,:,k)=aIjg(:,:,k)+gSj(:,:,k);
+        uFje(:,:,k)=aIje(:,:,k)+gJj(:,:,k);
     end
     mat.aIjg=aIjg;
     mat.gSj=gSj;
     mat.aIje=aIje;
     mat.gJj=gJj;
+    
+    mat.uFjg=uFjg;
+    mat.uFje=uFje;
+    mat.uIS=matdot(aIjg,gSj); %uncoupled I.S
+    mat.uIJ=matdot(aIje,gJj);%uncoupled I.J
+    mat.uF2g=( I*(I+1)+S*(S+1) )*eye(sw.gg)+2*mat.uIS;
+    mat.uF2e=( I*(I+1)+J*(J+1) )*eye(sw.ge)+2*mat.uIJ;
 end

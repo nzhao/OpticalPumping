@@ -10,3 +10,4 @@ re=2.816e-13;%classical electron radius in cm
 amg=2.6868e19;%Loschmidt constant (amagat) in cm^{-3} 
 
 erg2GHz=1e-9/hP;
+erg2MHz=1e-6/hP;
