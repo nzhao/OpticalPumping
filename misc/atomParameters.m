@@ -39,5 +39,15 @@ function atom=atomParameters(iso)
     atom.D=sqrt(atom.sw.gS*hbar*re*c^2*atom.pm.feg/(2*atom.pm.weg));% dipole moment in esu cm
     atom.pm.keg=2*pi/atom.pm.lamJ; %nominal spatial frequencies
     atom.pm.weg=c*atom.pm.keg;%nominal temporal frequencies
-   
+
+    gg=atom.sw.gg;ge=atom.sw.ge;
+    LS.Pg=eye(gg); LS.Pe=eye(ge);%projection operators 
+    LS.cPe=LS.Pe(:); LS.rPe=LS.cPe'; LS.cPg=LS.Pg(:); LS.rPg=LS.cPg(:)'; 
+    LS.gt=(gg+ge)^2;%dimension of full Liouville space 
+    LS.cNe=[LS.cPe;zeros(LS.gt-ge*ge,1)]; LS.rNe=LS.cNe'; LS.LrNe=logical(LS.rNe); 
+    LS.cNg=[zeros(LS.gt-gg*gg,1); LS.cPg];LS.rNg=LS.cNg'; LS.LrNg=logical(LS.rNg); 
+    LS.cP=LS.cNe+LS.cNg; LS.rP=LS.rNe+LS.rNg; 
+    
+    atom.LS=LS;
+    atom.pumpR=(-1)^(atom.qn.J-atom.qn.S)/atom.sw.gJ;
 end

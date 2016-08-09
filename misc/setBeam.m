@@ -8,4 +8,6 @@ Ej(2)=Etheta*cos(theta)*sin(phi)+Ephi*cos(phi);
 Ej(3)=-Etheta*sin(theta); %Cartesian projections
 beam.EjOr=Ej/norm(Ej); %the orientation of electric field
 beam.tEj=sqrt(2*pi*Sl/c)*beam.EjOr;%field in esu/cm^2
+
+beam.s=1i*cross(beam.EjOr,conj(beam.EjOr));
 end
