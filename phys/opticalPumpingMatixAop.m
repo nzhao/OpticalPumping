@@ -17,4 +17,5 @@ op.Aex=exchangeMat(flatS,sharpS);%exchange matrix, Eq(6.90)
 %high-pressure optical pumping matrix
 op.Aop=op.Asd-Kj(1)*op.Aex(:,:,1)-Kj(2)*op.Aex(:,:,2)-Kj(3)*op.Aex(:,:,3) ...
     -2*1i*kappa*(Kj(1)*op.SC(:,:,1)+Kj(2)*op.SC(:,:,2)+Kj(3)*op.SC(:,:,3));
+op.Sj=Sj;
 end

@@ -15,10 +15,10 @@ function eHg = effectiveHg( atom, beam, B, Gm2, temperature )
     tV=interaction(atom,beam,Dj);
     
     if nargin == 4 
-        tW=tV./(Heg-hP*beam.Dw-1i*hbar*Gm2);
+        tW=tV./(Heg-hbar*beam.Dw-1i*hbar*Gm2);
     elseif nargin == 5
         sigv=(2*pi/atom.pm.lamJ)*sqrt(kB*temperature*NA/atom.pm.MW);%Doppler variance, k*v; v=Eq(6.111)
-        z=-(Heg-hP*beam.Dw-1i*hbar*Gm2)/(hbar*sigv*sqrt(2));
+        z=-(Heg-hbar*beam.Dw-1i*hbar*Gm2)/(hbar*sigv*sqrt(2));
         tW=tV.*w(z)*1i*sqrt(pi/2)/(hbar*sigv); %w(z) is the Faddeeva function
     else
         error('wrong input');
