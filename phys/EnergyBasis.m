@@ -9,7 +9,7 @@ for j=1:3;
     Sj(:,:,j)=Ug'*atom.mat.gSj(:,:,j)*Ug;
 end
     I=atom.qn.I; S=atom.qn.S;
-    fg=round(-1+sqrt(1+4*(2*diag(Ug'*H.uIS*Ug)+I*(I+1)+S*(S+1))))/2;
+    fg=round(-1+sqrt(1+4*(2*diag(Ug'*atom.mat.uIS*Ug)+I*(I+1)+S*(S+1))))/2;
     mg=round(2*diag(Ijg(:,:,3)+Sj(:,:,3)))/2;
         %the left and right versions of f and m (from Schrodinger space to
         %Liouville space)

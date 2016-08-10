@@ -1,3 +1,6 @@
 examples/html
 
 *.m~
+*.m
+examples/absorptionCrossSection.m
+examples/Energy_B.m

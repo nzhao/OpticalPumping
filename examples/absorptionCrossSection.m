@@ -36,10 +36,12 @@ Dnu=linspace(Dnu1,Dnu2,ns); %sample frequencies
 sigT=zeros(1,ns); sig0=zeros(1,ns);
 for k=1:ns
     %Doppler broadened cross section
-    z=-(Heg-hP*Dnu(k)-1i*hbar*Gm2)/(hbar*sigv*sqrt(2));
-    tWT=tV.*w(z)*1i*sqrt(pi/2)/(hbar*sigv); %w(z) is the Faddeeva function
-    dHgT=-tV'*tWT;
-    sigT(k)=-(2*atom.pm.weg/(1e4*power))*imag(trace(dHgT)/atom.sw.gg); %convert power from mW/cm^2 to erg/(s cm^2)
+    z=-(Heg-hP*Dnu(k)-1i*hbar*Gm2)/(hbar*sigv*sqrt(2)); %Eq(6.117)
+    tWT=tV.*w(z)*1i*sqrt(pi/2)/(hbar*sigv); %Eq(8.27); %w(z) is the Faddeeva function 
+    dHgT=-tV'*tWT; %Eq(6.12)
+    %Eq(8.17) %1e4*power:convert power from mW/cm^2 to erg/(s cm^2)
+    sigT(k)=-(2*atom.pm.weg/(1e4*power))*imag(trace(dHgT)/atom.sw.gg); 
+   
     %cross section for atoms at rest
     tW0=tV./(Heg-hP*Dnu(k)-1i*hbar*Gm2);
     dHg0=-tV'*tW0;

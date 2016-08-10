@@ -14,7 +14,7 @@ Ephi= 1i;%relative field along phi
 %************************************************
 beam=setBeam(power,detuning,thetaD,phiD,Etheta,Ephi);%the beam informations
 Gm2=2*pi/(2*atom.pm.te);%the damping rate of optical coherence
-eHg=effectiveHg(atom,power,detuning,Gm2); %Eq(6.78)
+eHg=effectiveHgHighPressure(atom,power,detuning,Gm2); %Eq(6.78)
 Gmp=-imag(eHg)*2/hbar;   %%Mean pumping rate
 kappa=2*real(eHg)/(hbar*Gmp);  %Shift parameter, Eq(6.85)
 %Fictitious spin, [Kx Ky Kz] = . Eq(6.79) %[sqrt(2)/4 0 sqrt(2)/4];
