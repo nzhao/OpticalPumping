@@ -15,7 +15,7 @@ function fig = dispMat( mat, xlabel, ylabel )
                              %#   black and lower values are white)
 
     if 0.5*(dim1+dim2)<=32
-        textStrings = num2str(mat(:),'%0.2f');  %# Create strings from the matrix values
+        textStrings = num2str(mat(:),'%0.1e');  %# Create strings from the matrix values
         textStrings = strtrim(cellstr(textStrings));  %# Remove any space padding
         [x,y] = meshgrid(1:dim2, 1:dim1);   %# Create x and y coordinates for the strings
         hStrings = text(x(:),y(:),textStrings(:),...      %# Plot the strings

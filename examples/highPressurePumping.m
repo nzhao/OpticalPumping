@@ -10,16 +10,22 @@ pol=[1, 1i];     % pol_x & pol_y
 beam=setBeam(power, detuning, dir, pol);
 
 %% Experiment Condition
-magB=1; % Gauss
-Gm2=2*pi* 20.0 * 1e9; % s^(-1), collisional broadening
-temperature= 300.0;  % Kelvin
+condition.magB=1; % Gauss
+condition.Gm2=2*pi* 20.0 * 1e9; % s^(-1), collisional broadening
+condition.temperature= 300.0;  % Kelvin
 
 %% Analysis
-H=Hamiltonian(atom, magB); % Hamiltonian in erg
-eigen=Diagnalize(H.uHg);
 
-% eHgApprox=effectiveHgHighPressure(atom,beam,Gm2); %Eq(6.78)
-% eHg=effectiveHg( atom, beam, magB, Gm2 );%, temperature
+H=Hamiltonian(atom, condition); % Hamiltonian in erg
+eigenG=Diagnalize(H.uHg);
+eigenE=Diagnalize(H.uHe);
+% Dj=ElectricDipole(atom, eigenG, eigenE);
+[~,~,Heg,~]=TransitionFrequency(atom, eigenG, eigenE);
+tV=AtomPhotonInteraction(atom, beam, condition);
+tW=WMatrix(atom, beam, condition, tV, Heg);
+effHg=effectiveHg(atom, beam, condition);
+
+% eHg=effectiveHg( atom, magB, beam, Gm2 );%, temperature
 % 
 % rho0=atom.LS.cPg/atom.sw.gg;
 % options=odeset('RelTol',1e-4,'AbsTol',1e-4*ones(1,atom.sw.gg^2));
