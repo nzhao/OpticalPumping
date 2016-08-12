@@ -43,12 +43,11 @@ function myui
 
         power=40;
         detuning=-2256;
-        thetaD = 0;
-        phiD = 0;
-        Etheta = 1;
-        Ephi= 1i;
+        dir=[0.0, 0.0]; % theta & phi
+        pol=[1, 1i];     % pol_x & pol_y
+        beam=setBeam(power, detuning, dir, pol);
         Gm2=2*pi/(2*atom.pm.te);
-        beam=setBeam(power,detuning,thetaD,phiD,Etheta,Ephi);
+        
 
         beam.Dw=dw;
 

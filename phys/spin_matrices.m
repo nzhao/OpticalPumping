@@ -1,5 +1,7 @@
 %function [aIjg,gSj,aIje,gJj]=spin_matrices(I,S,J,gI,gS,gJ)
 function mat=spin_matrices(atom)
+    fundamental_constants
+
     qn=atom.qn; I=qn.I; S=qn.S; J=qn.J;
     sw=atom.sw; gI=sw.gI; gS=sw.gS; gJ=sw.gJ;
 
@@ -36,4 +38,10 @@ function mat=spin_matrices(atom)
     mat.uIJ=matdot(aIje,gJj);%uncoupled I.J
     mat.uF2g=( I*(I+1)+S*(S+1) )*eye(sw.gg)+2*mat.uIS;
     mat.uF2e=( I*(I+1)+J*(J+1) )*eye(sw.ge)+2*mat.uIJ;
+    
+    %uncoupled spin matrices
+    for k=1:3;% uncoupled magnetic moment operators
+        mat.umug(:,:,k)=-atom.LgS*muB*gSj(:,:,k) + (atom.pm.muI/(atom.qn.I+eps))*aIjg(:,:,k);
+        mat.umue(:,:,k)=-atom.LgJ*muB*gJj(:,:,k) + (atom.pm.muI/(atom.qn.I+eps))*aIje(:,:,k);
+    end
 end
