@@ -1,4 +1,4 @@
-function eHg = effectiveHg(atom, beam, condition)
+function eHg = EffectiveHg(atom, beam, condition)
 %EFFEHG Summary of this function goes here
 %   Detailed explanation goes here
     fundamental_constants
@@ -14,8 +14,7 @@ function eHg = effectiveHg(atom, beam, condition)
     if ~ isfield(condition, 'temperature')
         condition.temperature=0.0;
     end
-    tW=WMatrix(atom, beam, condition, tV, Heg);
-    
-    eHg = -tV'*tW;
+    denomMat=DenominatorMat(atom, beam, condition, tV, Heg);
+    eHg = -tV'*(tV.*denomMat);
 end
 

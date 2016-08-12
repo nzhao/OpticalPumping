@@ -5,7 +5,7 @@ atom=atomParameters('Rb87D1'); %input 'Rb87D1' or 'Rb87D2'
 %% Laser Beam
 power=40;       %0.00001; %mW/cm^2
 detuning=-2258; %3761%4575% %MHz %(-2793);%(-752);
-dir=[45.0, 0.0]; % theta & phi
+dir=[0.0, 0.0]; % theta & phi
 pol=[1, 1i];     % pol_x & pol_y
 beam=setBeam(power, detuning, dir, pol);
 
@@ -22,8 +22,8 @@ eigenE=Diagnalize(H.uHe);
 % Dj=ElectricDipole(atom, eigenG, eigenE);
 [~,~,Heg,~]=TransitionFrequency(atom, eigenG, eigenE);
 tV=AtomPhotonInteraction(atom, beam, condition);
-tW=WMatrix(atom, beam, condition, tV, Heg);
-effHg=effectiveHg(atom, beam, condition);
+denomMat=DenominatorMat(atom, beam, condition, tV, Heg);
+effHg=EffectiveHg(atom, beam, condition);
 
 % eHg=effectiveHg( atom, magB, beam, Gm2 );%, temperature
 % 
