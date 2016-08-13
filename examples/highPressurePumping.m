@@ -25,6 +25,9 @@ tV=AtomPhotonInteraction(atom, beam, condition);
 denomMat=DenominatorMat(atom, beam, condition, tV, Heg);
 effHg=EffectiveHg(atom, beam, condition);
 
+S=SpinOperator(atom, eigenG);
+Asd=SDmat(S);
+Aex=SEmat(S, beam.s);
 % eHg=effectiveHg( atom, magB, beam, Gm2 );%, temperature
 % 
 % rho0=atom.LS.cPg/atom.sw.gg;
