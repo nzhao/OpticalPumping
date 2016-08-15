@@ -10,9 +10,10 @@ pol=[1, 1i];     % pol_x & pol_y
 beam=setBeam(power, detuning, dir, pol);
 
 %% Experiment Condition
-condition.magB=1; % Gauss
+condition.magB=0.001; % Gauss
 condition.Gm2=2*pi* 20.0 * 1e9; % s^(-1), collisional broadening
 condition.temperature= 300.0;  % Kelvin
+condition.HighPressureApproximation=true;
 
 %% Analysis
 
@@ -28,6 +29,11 @@ effHg=EffectiveHg(atom, beam, condition);
 S=SpinOperator(atom, eigenG);
 Asd=SDmat(S);
 Aex=SEmat(S, beam.s);
+Arot=SRmat(S, beam.s);
+
+[shift, gamma]=OpticalPumpingRate(effHg);
+G=1i*circleC(eigenG.H) + 1i*shift*Arot + gamma*Asd - gamma*Aex;
+
 % eHg=effectiveHg( atom, magB, beam, Gm2 );%, temperature
 % 
 % rho0=atom.LS.cPg/atom.sw.gg;
@@ -61,25 +67,26 @@ Aex=SEmat(S, beam.s);
 %  eHg
 %  eHg2=eHgApprox*(eye(atom.sw.gg)-4*(Kj(1)*op.Sj(:,:,1)+Kj(2)*op.Sj(:,:,2)-Kj(3)*op.Sj(:,:,3)))
 % 
-% %% *********************************************
-% Lp=logical(atom.LS.cPg);%logical variable for populations
-% nt=100;%number of sample points
-% t=linspace(0,40,nt);%sample times in units of 1/Gmp
-% rhoc=zeros(atom.sw.gg,nt);%initialize compactified density matrix
-% for k=1:nt%evaluate transient
-%     rhocR(:,k)=expm(-t(k)*G(Lp,Lp)/Gmp)*atom.LS.cPg(Lp)/atom.sw.gg; %rate equations
-%     rho=expm(-t(k)*G/Gmp)*atom.LS.cPg/atom.sw.gg; %master equations
-%     rhoc(:,k)=real(rho(Lp));
-% end
-% subplot(1,2,2)
-% plot(t,rhocR); grid on; hold on
-%  rhocinR=null(G(Lp,Lp));
-%  rhocinR=rhocinR/sum(rhocinR); %steady state (rate equations)
-% plot(t,rhocinR*ones(1,nt), '-.')
-% plot(t,rhoc);
-% rhocin=null(G);
-% rhocin(Lp)=real(rhocin(Lp))/sum(real(rhocin(Lp))); %steady state (master equations)
-% plot(t,rhocin(Lp)*ones(1,nt), '-.')
-% xlabel('Time in units of 1/\Gamma_p^{\{g\}}')
-% ylabel('Sublevel populations')
-% legend('2,2','2,1','2,0','2,-1','2,-2','1,-1','1,0','1,1')
+%% *********************************************
+Gmp=abs(gamma);
+Lp=logical(atom.LS.cPg);%logical variable for populations
+nt=100;%number of sample points
+t=linspace(0,40,nt);%sample times in units of 1/Gmp
+rhoc=zeros(atom.sw.gg,nt);%initialize compactified density matrix
+for k=1:nt%evaluate transient
+    rhocR(:,k)=expm(-t(k)*G(Lp,Lp)/Gmp)*atom.LS.cPg(Lp)/atom.sw.gg; %rate equations
+    rho=expm(-t(k)*G/Gmp)*atom.LS.cPg/atom.sw.gg; %master equations
+    rhoc(:,k)=real(rho(Lp));
+end
+subplot(1,2,2)
+plot(t,rhocR); grid on; hold on
+ rhocinR=null(G(Lp,Lp));
+ rhocinR=rhocinR/sum(rhocinR); %steady state (rate equations)
+plot(t,rhocinR*ones(1,nt), '-.')
+plot(t,rhoc);
+rhocin=null(G);
+rhocin(Lp)=real(rhocin(Lp))/sum(real(rhocin(Lp))); %steady state (master equations)
+plot(t,rhocin(Lp)*ones(1,nt), '-.')
+xlabel('Time in units of 1/\Gamma_p^{\{g\}}')
+ylabel('Sublevel populations')
+legend('2,2','2,1','2,0','2,-1','2,-2','1,-1','1,0','1,1')

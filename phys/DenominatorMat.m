@@ -9,7 +9,14 @@ function denominator_mat = DenominatorMat( atom, beam, condition, tV, Heg )
     detune = hbar*beam.Dw * erg2MHz;
     gamma = hbar*Gm2 * erg2MHz;
     energy_mat = Heg - detune - 1i*gamma; % MHz
-    if temperature == 0 
+    
+    if ~ isfield(condition, 'HighPressureApproximation')
+        condition.HighPressureApproximation = 0;
+    end
+    
+    if condition.HighPressureApproximation
+        denominator_mat = -ones(size(tV))/(detune+1i*gamma);
+    elseif temperature == 0 
         denominator_mat = ones(size(tV))./energy_mat;
     else
         wavenumber_k = 2*pi/atom.pm.lamJ; % cm^(-1), wave number k
