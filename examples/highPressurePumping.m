@@ -26,6 +26,10 @@ rhoMat=eye(8)/8;
 % exchange= SpinExchange( atom, eigen, rhoMat, eigen.S.Sj, rate);
 % G = eigen.G + pump.G + exchange.G;
 
+% nt=100; tspan=linspace(0,5,nt);
+% options = odeset('RelTol',1e-3);
+% [T,Y]=ode45(@(t,rho)EvolutionKernel(t,rho, atom, rate, eigen, pump),tspan, eye(8)/8, options );
+
 %% *********************************************
 
 Lp=logical(atom.LS.cPg);%logical variable for populations

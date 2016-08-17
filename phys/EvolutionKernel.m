@@ -9,6 +9,6 @@ function drho_dt = EvolutionKernel( t, rho, atom, rate, eigen, pump )
     exchange= SpinExchange( atom, eigen, rhoMat, eigen.S.Sj, rate);
     
     G = eigen.G + pump.G + exchange.G;
-    drho_dt = G*rho;
+    drho_dt = -G*rho;
 end
 
