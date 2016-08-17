@@ -52,4 +52,6 @@ function atom=atomParameters(iso)
     atom.LS=LS;
     atom.mat=spin_matrices(atom);
     atom.pumpR=(-1)^(atom.qn.J-atom.qn.S)/atom.sw.gJ;
+    
+    atom.SE_cross_section = 1.9e-14; % cm^(-2) S. J. Seltzer thesis
 end

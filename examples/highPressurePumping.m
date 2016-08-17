@@ -14,14 +14,13 @@ condition.magB=0.001; % Gauss
 condition.Gm2=2*pi* 20.0 * 1e9; % s^(-1), collisional broadening
 condition.temperature= 300.0;  % Kelvin
 condition.HighPressureApproximation=false;
+condition.density = 1e13; % cm^(-3)
 
 %% Analysis
 eigen   = EigenSystem(atom, condition);
 pump    = OpticalPumping(atom, beam, condition, eigen);
 
-rate.shift = 0;
-rate.damping = 0.001;
-rate.exchange = 0.001;
+rate = SelfSERate(atom, condition);
 rhoMat=eye(8)/8;
 % exchange= SpinExchange( atom, eigen, rhoMat, eigen.S.Sj, rate);
 % G = eigen.G + pump.G + exchange.G;
@@ -33,7 +32,7 @@ rhoMat=eye(8)/8;
 %% *********************************************
 
 Lp=logical(atom.LS.cPg);%logical variable for populations
-nt=1000; t=linspace(0,40,nt);%sample times in units of 1/Gmp
+nt=500; t=linspace(0,40,nt);%sample times in units of 1/Gmp
 rhoc=zeros(atom.sw.gg,nt);%initialize compactified density matrix
 for k=1:nt%evaluate transient
     exchange= SpinExchange( atom, eigen, rhoMat, eigen.S.Sj, rate);
