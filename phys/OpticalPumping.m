@@ -4,7 +4,7 @@ function pump = OpticalPumping( atom, beam, condition, eigen_sys )
     
     gs_lv_dim = atom.sw.ge * atom.sw.ge;
     pump.G=zeros(gs_lv_dim, gs_lv_dim);
-    S=eigen_sys.S;
+    S=eigen_sys.operators.S;
     
     %% Optical Pumping
     

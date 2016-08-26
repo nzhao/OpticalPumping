@@ -1,20 +1,20 @@
-function sys = EigenSystem( atom, condition )
+function eigen = EigenSystem( atom, condition )
 %EIGENSYSTEM Summary of this function goes here
 %   Detailed explanation goes here
 
     %% Initialize GS Liouvillian 
     gs_lv_dim = atom.sw.ge * atom.sw.ge;
-    sys.G=zeros(gs_lv_dim, gs_lv_dim);
+    eigen.G=zeros(gs_lv_dim, gs_lv_dim);
     
     %% Eigen System
     H=Hamiltonian(atom, condition);
-    sys.eigenG=Diagnalize(H.uHg);
-    sys.eigenE=Diagnalize(H.uHe);
-    sys.S=SpinOperator(atom, sys.eigenG);
+    eigen.eigenG=Diagnalize(H.uHg);
+    eigen.eigenE=Diagnalize(H.uHe);
+    eigen.operators=SpinOperator(atom, eigen.eigenG);
 
-    sys.hamiltonian=H;
-    sys.G0 = 1i*circleC(sys.eigenG.H);
-    sys.G  = sys.G + sys.G0;
+    eigen.hamiltonian=H;
+    eigen.G0 = 1i*circleC(eigen.eigenG.H);
+    eigen.G  = eigen.G + eigen.G0;
 
 end
 
