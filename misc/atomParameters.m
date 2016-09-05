@@ -28,12 +28,13 @@ function atom=atomParameters(iso)
         otherwise 
             fprintf('unkonwn atom name "%s"\n', iso);
     end
+
     
     atom.a=atom.qn.I+.5; atom.b=atom.qn.I-.5;  %ground-state ang. mom. quant. numbs.
     atom.sw=statistical_weights(atom.qn.I,atom.qn.S,atom.qn.J); %(atom);%
     atom.pm.keg=2*pi/atom.pm.lamJ; atom.pm.weg=c*atom.pm.keg;%nominal spatial and temporal frequencies
     atom.pm.feg=c*atom.sw.gJ/(4*atom.pm.weg^2*re*atom.pm.te);%oscillator strength
-    atom.mat=spin_matrices(atom);
+    
     atom.LgS=2.00231;% Lande g-value of S1/2 state
     atom.LgJ=atom.sw.gJ/3;%approximate Lande g-value of PJ state
     atom.D=sqrt(atom.sw.gS*hbar*re*c^2*atom.pm.feg/(2*atom.pm.weg));% dipole moment in esu cm
@@ -49,5 +50,8 @@ function atom=atomParameters(iso)
     LS.cP=LS.cNe+LS.cNg; LS.rP=LS.rNe+LS.rNg; 
     
     atom.LS=LS;
+    atom.mat=spin_matrices(atom);
     atom.pumpR=(-1)^(atom.qn.J-atom.qn.S)/atom.sw.gJ;
+    
+    atom.SE_cross_section = 1.9e-14; % cm^(-2) S. J. Seltzer thesis
 end

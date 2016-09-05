@@ -1,29 +1,20 @@
-function eHg = effectiveHg( atom, beam, B, Gm2, temperature )
+function eHg = EffectiveHg(atom, beam, condition)
 %EFFEHG Summary of this function goes here
 %   Detailed explanation goes here
     fundamental_constants
     
-    H=Hamiltonian(atom,B);  %Hamiltonian
-    uHg=H.uHg;  uHe=H.uHe;
-    eigVg=eigH(uHg);  eigVe=eigH(uHe);
-    eigV.Ug=eigVg.U; eigV.Eg=eigVg.E;
-    eigV.Ue=eigVe.U; eigV.Ee=eigVe.E;
-
-    [~,~,Heg,~]=rfShift(eigV.Ee,eigV.Eg,atom);
-
-    Dj=dipoleOperator(eigV.Ug,eigV.Ue,atom);
-    tV=interaction(atom,beam,Dj);
+    H=Hamiltonian(atom,condition);  %Hamiltonian
     
-    if nargin == 4 
-        tW=tV./(Heg-hbar*beam.Dw-1i*hbar*Gm2);
-    elseif nargin == 5
-        sigv=(2*pi/atom.pm.lamJ)*sqrt(kB*temperature*NA/atom.pm.MW);%Doppler variance, k*v; v=Eq(6.111)
-        z=-(Heg-hbar*beam.Dw-1i*hbar*Gm2)/(hbar*sigv*sqrt(2));
-        tW=tV.*w(z)*1i*sqrt(pi/2)/(hbar*sigv); %w(z) is the Faddeeva function
-    else
-        error('wrong input');
+    eigenG=Diagnalize(H.uHg);
+    eigenE=Diagnalize(H.uHe);
+    [~,~,Heg,~]=TransitionFrequency(atom, eigenG, eigenE);
+
+    tV=AtomPhotonInteraction(atom, beam, condition);
+    
+    if ~ isfield(condition, 'temperature')
+        condition.temperature=0.0;
     end
-    
-    eHg = -tV'*tW;
+    denomMat=DenominatorMat(atom, beam, condition, tV, Heg);
+    eHg = -tV'*(tV.*denomMat);
 end
 
