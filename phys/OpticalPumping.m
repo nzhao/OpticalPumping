@@ -12,7 +12,7 @@ function pump = OpticalPumping( atom, beam, condition, eigen_sys )
     pump.effHg=EffectiveHg(atom, beam, condition);
     [pump.shift, pump.Gmp]=OpticalPumpingRate(pump.effHg);
 
-    exchange_v = 0.5*atom.pumpR*beam.s;
+    exchange_v = atom.pumpR*beam.s;
     pump.G_op = RelaxationS(S, ...
                            pump.shift, ... % frequency shift
                            pump.Gmp, ...   % S-damping rate

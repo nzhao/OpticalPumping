@@ -19,7 +19,7 @@ function exchange = SpinExchange( atom, eigen, rho, S_operator, rate)
                            exchange.shift, ... % frequency shift
                            exchange.SD, ...   % S-damping rate
                            exchange.SE, ...   % S-exchange rate
-                           0.25*v);   % exchange counterpart spin polarization
+                           v);   % exchange counterpart spin polarization
     
     exchange.G = exchange.G  + exchange.G_op.sf ...
                              + exchange.G_op.sd ...
