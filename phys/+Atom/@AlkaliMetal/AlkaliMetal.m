@@ -20,6 +20,12 @@ classdef AlkaliMetal < handle
         dim
         
         mat
+        matEigen
+        eigen
+        
+        operator
+        
+        rho
     end
     
     methods
@@ -35,7 +41,38 @@ classdef AlkaliMetal < handle
             obj.dim = obj.gI * obj.gJ;
             
             obj.mat = obj.spinMatrix();
+            
+            obj.rho = Algorithm.DensityMatrix(obj);
         end
+        
+        function set_eigen(obj, coil)
+            obj.eigen=Algorithm.Eigen(obj, coil);
+            
+            obj.matEigen.Imat = obj.eigen.transform(obj.mat.Imat);
+            obj.matEigen.Smat = obj.eigen.transform(obj.mat.Smat);
+            obj.matEigen.Fmat = obj.eigen.transform(obj.mat.Fmat);
+            obj.matEigen.IS = obj.eigen.transform(obj.mat.IS);
+            obj.matEigen.F2 = obj.eigen.transform(obj.mat.F2);
+            obj.matEigen.mu = obj.eigen.transform(obj.mat.mu);
+           
+            obj.operator = obj.spinOperator();
+        end
+        
+        function v = mean_vector( obj, opt )
+            if nargin < 2
+                opt = 1;
+            end
+
+            i_mat = obj.matEigen.Imat{opt};
+            s_mat = obj.matEigen.Smat{opt};
+            f_mat = obj.matEigen.Fmat{opt};
+            v.I = obj.rho.mean(i_mat);
+            v.S = obj.rho.mean(s_mat);
+            v.F = obj.rho.mean(f_mat);
+        end
+        
+        
+        p=getPressure(obj, temperature)
     end
     
 end
