@@ -12,5 +12,15 @@ function eigenList = diagonalize( obj )
         
         eigenList{k}=eigen;
     end
+    
+    obj.transFreq=cell( length(obj.hamiltonian), length(obj.hamiltonian));
+    for k=1:length(obj.hamiltonian)
+        for q=1:length(obj.hamiltonian)
+            Ek=eigenList{k}.E;
+            Eq=eigenList{q}.E;
+            
+            obj.transFreq{k,q} = Ek*ones(1,length(Eq)) - ones(length(Ek),1)*Eq';
+        end
+    end
 end
 

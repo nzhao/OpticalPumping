@@ -19,5 +19,6 @@ function op = spinOperator( obj )
     op.S_flat = S_flat;
     op.S_sharp = S_sharp;
     
+    
 end
 

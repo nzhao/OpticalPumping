@@ -56,6 +56,7 @@ classdef AlkaliMetal < handle
             obj.matEigen.mu = obj.eigen.transform(obj.mat.mu);
            
             obj.operator = obj.spinOperator();
+            obj.dipole();
         end
         
         function v = mean_vector( obj, opt )
@@ -71,8 +72,6 @@ classdef AlkaliMetal < handle
             v.F = obj.rho.mean(f_mat);
         end
         
-        
-        p=getPressure(obj, temperature)
     end
     
 end

@@ -15,6 +15,7 @@ function parameters = AtomParameters( name )
                     parameters.IP=4.1771;           %ionization potential in eV
                     parameters.lambda_D1=794.978;   %wave length of D1 transition in nm
                     parameters.lambda_D2=780.241;   %wave length of D2 transition in nm
+
                     parameters.delta_FS=237.60;     %Fine-structure splitting in cm^(-1)
                     parameters.tau_1=27.75;         %lifetime of P_1/2 states
                     parameters.tau_2=26.25;         %lifetime of P_3/2 states
@@ -33,6 +34,18 @@ function parameters = AtomParameters( name )
                     parameters.hf_es1=406.12;       %hf coeff of excited state P_1/2 in MHz
                     parameters.hf_es2A=84.72;       %hf coeff_A of excited state P_3/2 state in MHz
                     parameters.hf_es2B=12.50;       %hf coeff_B of excited state P_3/2 state in MHz
+                    
+                    parameters.Tmelt = 39.3+273.15;
+                    
+                    parameters.LambdaRef = parameters.lambda_D1;
+
+                    parameters.wavenumber_D1 = parameters.lambda_D1;
+                    parameters.wavenumber_D2 = parameters.lambda_D2;
+                    parameters.omega_D1 = c_velocity*parameters.wavenumber_D1;
+                    parameters.omega_D2 = c_velocity*parameters.wavenumber_D2;                    
+                    
+                    parameters.dipole_D1 = (2*parameters.spin_S+1)*hbar*re*c_velocity*c_velocity*parameters.osc_1/(2*parameters.omega_D1);
+                    parameters.dipole_D2 = (2*parameters.spin_S+1)*hbar*re*c_velocity*c_velocity*parameters.osc_2/(2*parameters.omega_D2);
                 case '133Cs'
                     parameters.dim=16+16+32;
                     parameters.spin_S=0.5;
@@ -63,9 +76,20 @@ function parameters = AtomParameters( name )
                     parameters.hf_es1=291.91;       %hf coeff of excited state P_1/2 in MHz
                     parameters.hf_es2A=50.29;       %hf coeff_A of excited state P_3/2 state in MHz
                     parameters.hf_es2B=-0.49;       %hf coeff_B of excited state P_3/2 state in MHz
+                    
+                    parameters.Tmelt = 28.5+273.15;
+                    
+                    parameters.LambdaRef = parameters.lambda_D1;
+                    
+                    parameters.wavenumber_D1 = parameters.lambda_D1;
+                    parameters.wavenumber_D2 = parameters.lambda_D2;
+                    parameters.omega_D1 = c_velocity*parameters.wavenumber_D1;
+                    parameters.omega_D2 = c_velocity*parameters.wavenumber_D2;                    
+                    
+                    parameters.dipole_D1 = (2*parameters.spin_S+1)*hbar*re*c_velocity*c_velocity*parameters.osc_1/(2*parameters.omega_D1);
+                    parameters.dipole_D2 = (2*parameters.spin_S+1)*hbar*re*c_velocity*c_velocity*parameters.osc_2/(2*parameters.omega_D2);
                 otherwise
                         error('no atomic data.');
-            end    
-
+            end
 end
 

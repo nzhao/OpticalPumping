@@ -8,6 +8,8 @@ classdef Gas < handle
         density
         pressure
         temperature
+        
+        gamma2 = 0
     end
     
     methods
@@ -15,7 +17,7 @@ classdef Gas < handle
             obj.atom = atom;
             obj.type = type;
             obj.temperature = temperature;
-            if nargin < 3
+            if nargin < 4
                 pressure = atom.getPressure(temperature);
             end
             obj.pressure = pressure;

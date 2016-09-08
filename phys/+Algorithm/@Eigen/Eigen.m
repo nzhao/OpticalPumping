@@ -7,6 +7,7 @@ classdef Eigen < handle
         eigen_system
         hamiltonian
         operator
+        transFreq
     end
     
     methods

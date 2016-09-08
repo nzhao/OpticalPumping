@@ -5,31 +5,22 @@ classdef MixedGas < handle
     properties
         gasList
         
-        sd_coeff
-        se_coeff
+        spin_destruction
+        spin_exchange
+        spin_rotation
+
+        optical_pumping
     end
     
     methods
         function obj = MixedGas(gas)
             obj.gasList = gas;
-            nGas = length(gas);
             
-            obj.sd_coeff = zeros(nGas);
-            obj.se_coeff = zeros(nGas);
-            
-            for k=1:nGas
-                for q=1:nGas
-                    obj.sd_coeff(k,q) = obj.SDRatio(gas{k}, gas{q});
-                    obj.se_coeff(k,q) = obj.SERatio(gas{k}, gas{q});
-                end
-            end
+            obj.set_pressure_broadening();
+            obj.set_collision_rate();
             
         end
-    end
-    
-    methods (Access=private)
-        r=SDRatio(obj, gas1, gas2)
-        r=SERatio(obj, gas1, gas2)
+
     end
     
 end
