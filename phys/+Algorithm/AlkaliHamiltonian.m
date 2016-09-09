@@ -8,7 +8,7 @@ function hamiltonian = AlkaliHamiltonian( atom, magB )
         atom.parameters.hf_es2A};
     hamiltonian=cell(1, 3);
     for k=1:3
-        hamiltonian{k} = A{k}*IS{k} - mu{k}(:,:,3)*magB;
+        hamiltonian{k} = A{k}*IS{k} - mu{k}(:,:,3)*magB/(2*pi*hbar)*1e-6;
     end
     
     Be2= atom.parameters.hf_es2B;

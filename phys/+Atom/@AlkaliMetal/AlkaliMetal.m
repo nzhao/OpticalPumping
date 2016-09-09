@@ -59,6 +59,18 @@ classdef AlkaliMetal < handle
             obj.dipole();
         end
         
+        function res = energy_spectrum(obj, state, minB, maxB, nB)
+            res.magB=linspace(minB, maxB, nB);
+            res.energy = zeros(obj.dim(state), nB); 
+            
+            coil=Condition.Coil('coil');
+            
+            for k = 1:nB
+                obj.set_eigen( coil.set_magB(res.magB(k)) );
+                res.energy(:, k) = obj.eigen.getEnergy(state);
+            end
+        end
+        
         function v = mean_vector( obj, opt )
             if nargin < 2
                 opt = 1;

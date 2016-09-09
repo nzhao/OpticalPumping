@@ -7,8 +7,8 @@ function parameters = AtomParameters( name )
                     parameters.dim=8+8+16;
                     parameters.spin_S=0.5;
                     parameters.LgS=2.00231;% Lande g-value of S1/2 state
-                    parameters.LgJ1=(2*1.0+1)/3.0;
-                    parameters.LgJ2=(2*2.0+1)/3.0;
+                    parameters.LgJ1=(2*0.5+1)/3.0;
+                    parameters.LgJ2=(2*1.5+1)/3.0;
 
                     % fine-structure parameters
                     parameters.config='[Kr]5s';     %electron configuation
@@ -50,8 +50,8 @@ function parameters = AtomParameters( name )
                     parameters.dim=16+16+32;
                     parameters.spin_S=0.5;
                     parameters.LgS=2.00231;% Lande g-value of S1/2 state
-                    parameters.LgJ1=(2*3.0+1)/3.0;
-                    parameters.LgJ2=(2*4.0+1)/3.0;
+                    parameters.LgJ1=(2*0.5+1)/3.0;
+                    parameters.LgJ2=(2*1.5+1)/3.0;
 
                     % fine-structure parameters
                     parameters.config='[Xe]6s';     %electron configuation
@@ -72,7 +72,7 @@ function parameters = AtomParameters( name )
                     parameters.te1=30.462e-9;          %spontaneous P3/2 lifetime in s  J=1.5
                     parameters.lamJ2=8945.93e-10;        %D1 wavelength in m    J=0.5
                     parameters.te2=34.88e-9;          %spontaneous P1/2 lifetime in when J=0.5
-                    parameters.hf_gs=4596.315885;   %  hf coeff of ground state S_1/2 in MHz
+                    parameters.hf_gs=2298.1579425;   %  hf coeff of ground state S_1/2 in MHz
                     parameters.hf_es1=291.91;       %hf coeff of excited state P_1/2 in MHz
                     parameters.hf_es2A=50.29;       %hf coeff_A of excited state P_3/2 state in MHz
                     parameters.hf_es2B=-0.49;       %hf coeff_B of excited state P_3/2 state in MHz

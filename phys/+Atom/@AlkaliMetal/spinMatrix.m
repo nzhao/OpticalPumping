@@ -21,7 +21,7 @@ function m = spinMatrix( obj )
         m.Fmat{i} = m.Smat{i} + m.Imat{i};
         m.IS{i} = matdot(m.Imat{i}, m.Smat{i}); 
         m.F2{i} = (I2+S2(i))*eye(obj.dim(i)) + 2*m.IS{i};
-        m.mu{i} = -LgS{i}*muB * m.Smat{i}  + muI/(obj.I+eps) * m.Imat{i};
+        m.mu{i} = -LgS{i}*muB * m.Smat{i}  + muI*muN/(obj.I+eps) * m.Imat{i};
     end
 
 end

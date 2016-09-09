@@ -4,6 +4,7 @@ classdef Eigen < handle
     
     properties
         atom
+        magB
         eigen_system
         hamiltonian
         operator
@@ -13,10 +14,10 @@ classdef Eigen < handle
     methods
         function obj = Eigen(atom, coil)
             obj.atom = atom;
-            magB = coil.magB;
+            obj.magB = coil.magB;
             
             if isa(atom, 'Atom.AlkaliMetal')
-                obj.hamiltonian = Algorithm.AlkaliHamiltonian(atom, magB);
+                obj.hamiltonian = Algorithm.AlkaliHamiltonian(atom, obj.magB);
             else
                 error('Wrong atom type: %s', class(atom));
             end
