@@ -14,7 +14,7 @@ classdef Eigen < handle
     methods
         function obj = Eigen(atom, coil)
             obj.atom = atom;
-            obj.magB = coil.magB;
+            obj.magB = coil.get_magB;
             
             if isa(atom, 'Atom.AlkaliMetal')
                 obj.hamiltonian = Algorithm.AlkaliHamiltonian(atom, obj.magB);

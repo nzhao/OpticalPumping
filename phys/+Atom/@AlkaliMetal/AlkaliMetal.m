@@ -1,7 +1,6 @@
 classdef AlkaliMetal < handle
     %ALKALIMETAL Summary of this class goes here
     %   Detailed explanation goes here
-    
     properties
         name
         parameters
@@ -29,7 +28,7 @@ classdef AlkaliMetal < handle
     end
     
     methods
-        function obj = AlkaliMetal(name)
+        function obj = AlkaliMetal(name, coil)
             obj.name = name;
             obj.parameters = Atom.AtomParameters(name);
             
@@ -43,6 +42,10 @@ classdef AlkaliMetal < handle
             obj.mat = obj.spinMatrix();
             
             obj.rho = Algorithm.DensityMatrix(obj);
+            
+            if nargin > 1
+                obj.set_eigen(coil);
+            end
         end
         
         function set_eigen(obj, coil)
@@ -59,15 +62,16 @@ classdef AlkaliMetal < handle
             obj.dipole();
         end
         
-        function res = energy_spectrum(obj, state, minB, maxB, nB)
-            res.magB=linspace(minB, maxB, nB);
-            res.energy = zeros(obj.dim(state), nB); 
+        function res = energy_spectrum(obj, state, coil)
+            res.magB = coil.iter.dataList;
+            res.energy = zeros(obj.dim(state), ...
+                               coil.iter.length); 
             
-            coil=Condition.Coil('coil');
-            
-            for k = 1:nB
-                obj.set_eigen( coil.set_magB(res.magB(k)) );
-                res.energy(:, k) = obj.eigen.getEnergy(state);
+            coil.restart0();
+            while coil.iter.hasNext
+                obj.set_eigen( coil.move_forward );
+                res.energy(:, coil.iter.cursor) ...
+                    = obj.eigen.getEnergy(state);
             end
         end
         

@@ -18,7 +18,7 @@ classdef Gas < handle
             obj.type = type;
             obj.temperature = temperature;
             if nargin < 4
-                pressure = atom.getPressure(temperature);
+                pressure = obj.getPressure(temperature);
             end
             obj.pressure = pressure;
             

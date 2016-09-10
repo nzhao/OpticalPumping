@@ -1,15 +1,10 @@
 function denominator_mat = DenominatorMat( gas, beam )
 %DENOMINATORMAT Summary of this function goes here
 %   Detailed explanation goes here
-    if strcmp(beam.refTransition, 'D1')
-%        Heg=gas.atom.eigen.transFreq{1, 2};
-        dimG = gas.atom.dim(1);
-        dimE = gas.atom.dim(2);
-    elseif strcmp(beam.refTransition, 'D2')
-%        Heg=gas.atom.eigen.transFreq{1, 3};
-        dimG = gas.atom.dim(1);
-        dimE = gas.atom.dim(3);
-    end
+
+    dimG = gas.atom.dim(1);
+    dimE = gas.atom.dim(1+beam.refTransition);
+
 
 %    temperature=gas.temperature;
 

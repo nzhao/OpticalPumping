@@ -26,6 +26,22 @@ classdef iterator < handle
         function tf = hasNext(obj)
             tf = ( obj.cursor < length(obj.data) );
         end
+        
+        function obj = reset(obj)
+            obj.cursor = 1;
+        end
+        
+        function obj = reset0(obj)
+            obj.cursor = 0;
+        end
+        
+        function len = length(obj)
+            len = length(obj.data);
+        end
+        
+        function d = dataList(obj)
+            d = cell2mat(obj.data);
+        end
     end
     
 end
