@@ -39,14 +39,7 @@ function parameters = AtomParameters( name )
                     
                     parameters.LambdaRef = parameters.lambda_D1;
 
-                    parameters.wavenumber_D1 = parameters.lambda_D1;
-                    parameters.wavenumber_D2 = parameters.lambda_D2;
-                    parameters.omega_D1 = c_velocity*parameters.wavenumber_D1;
-                    parameters.omega_D2 = c_velocity*parameters.wavenumber_D2;                    
-                    
-                    parameters.dipole_D1 = (2*parameters.spin_S+1)*hbar*re*c_velocity*c_velocity*parameters.osc_1/(2*parameters.omega_D1);
-                    parameters.dipole_D2 = (2*parameters.spin_S+1)*hbar*re*c_velocity*c_velocity*parameters.osc_2/(2*parameters.omega_D2);
-                    parameters.dipole = [parameters.dipole_D1, parameters.dipole_D2];
+
                 case '133Cs'
                     parameters.dim=16+16+32;
                     parameters.spin_S=0.5;
@@ -82,16 +75,27 @@ function parameters = AtomParameters( name )
                     
                     parameters.LambdaRef = parameters.lambda_D1;
                     
-                    parameters.wavenumber_D1 = parameters.lambda_D1;
-                    parameters.wavenumber_D2 = parameters.lambda_D2;
-                    parameters.omega_D1 = c_velocity*parameters.wavenumber_D1;
-                    parameters.omega_D2 = c_velocity*parameters.wavenumber_D2;                    
-                    
-                    parameters.dipole_D1 = (2*parameters.spin_S+1)*hbar*re*c_velocity*c_velocity*parameters.osc_1/(2*parameters.omega_D1);
-                    parameters.dipole_D2 = (2*parameters.spin_S+1)*hbar*re*c_velocity*c_velocity*parameters.osc_2/(2*parameters.omega_D2);
-                    parameters.dipole = [parameters.dipole_D1, parameters.dipole_D2];
                 otherwise
                         error('no atomic data.');
             end
+            
+            if ismember(name, {'87Rb', '133Cs'})
+                    parameters.wavenumber_D1 = 2*pi/(parameters.lambda_D1*1e-9);
+                    parameters.wavenumber_D2 = 2*pi/(parameters.lambda_D2*1e-9);
+                    parameters.omega_D1 = c_velocity*parameters.wavenumber_D1;
+                    parameters.omega_D2 = c_velocity*parameters.wavenumber_D2;                    
+                    
+                    parameters.dipole_D1 = sqrt( (3*h_bar) * (4*pi*eps0) / (4*parameters.tau_1*1e-9*parameters.wavenumber_D1^3) );
+                    parameters.dipole_D2 = sqrt( (3*h_bar) * (4*pi*eps0) / (4*parameters.tau_2*1e-9*parameters.wavenumber_D2^3) * 2 );
+                    parameters.dipole = [parameters.dipole_D1, parameters.dipole_D2];                
+            end
 end
+
+
+
+
+
+
+
+
 

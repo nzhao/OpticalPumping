@@ -8,8 +8,8 @@ function denominator_mat = DenominatorMat( gas, beam )
 
 %    temperature=gas.temperature;
 
-    detune = hbar*beam.detune;
-    gamma =  hbar*gas.gamma2;
+    detune = h_bar*beam.detune;
+    gamma =  h_bar*gas.gamma2;
 %    energy_mat = Heg - detune - 1i*gamma; % MHz
     
     denominator_mat = -ones(dimE,dimG)/(detune+1i*gamma);
