@@ -75,6 +75,9 @@ function parameters = AtomParameters( name )
                     
                     parameters.LambdaRef = parameters.lambda_D1;
                     
+                case '131Xe'
+                    parameters.spin_K = 0.5;
+                    
                 otherwise
                         error('no atomic data.');
             end

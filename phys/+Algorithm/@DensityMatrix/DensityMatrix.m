@@ -4,7 +4,9 @@ classdef DensityMatrix < handle
     
     properties
         atom
+        dim
         mat
+        col
     end
     
     methods
@@ -13,10 +15,13 @@ classdef DensityMatrix < handle
             
             if nargin < 2
                 obj.mat = eye(atom.dim(1))/atom.dim(1);
+                obj.dim = atom.dim(1);
             else
                 sum_dim = sum( atom.dim(opt) );
                 obj.mat = eye( sum_dim )/sum_dim;
+                obj.dim = sum_dim;
             end
+            obj.col = obj.mat(:);
         end
         
         function rho_lv = getStateVector(obj)
@@ -25,6 +30,7 @@ classdef DensityMatrix < handle
         
         function set_matrix(obj, m)
             obj.mat = m;
+            obj.col = m(:);
         end
         
         function val = mean(obj, op)
@@ -34,6 +40,12 @@ classdef DensityMatrix < handle
                 op_mat = op(:,:, k);
                 val(k) = op_mat(:)'*obj.mat(:);
             end
+        end
+        
+        function new_rho = evolve( obj, ker, dt)
+            new_col = expm(-ker*dt)*obj.col;
+            new_rho = Algorithm.DensityMatrix(obj.atom);
+            new_rho.set_matrix( reshape(new_col, [obj.dim, obj.dim]) );
         end
         
     end

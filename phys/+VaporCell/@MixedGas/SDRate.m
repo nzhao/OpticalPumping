@@ -13,7 +13,7 @@ function r = SDRate( obj, gas1, gas2 )
             r=0.1;
         otherwise
             r=0;
-            warning('atom pair (%s, %s) not supported. damping ratio is set to zero.', gas1.atom.name, gas2.atom.name);
+            %warning('atom pair (%s, %s) not supported. damping ratio is set to zero.', gas1.atom.name, gas2.atom.name);
     end
 
 end

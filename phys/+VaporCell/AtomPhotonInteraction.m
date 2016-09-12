@@ -11,6 +11,7 @@ function tV = AtomPhotonInteraction( gas, beam )
     for j=1:3 
         tV=tV-D*Dj(:,:,j)'*beam.vectorE(j);
     end
+    tV = tV / (h_bar * 2*pi) * 1e-6; % Dipole coupling matrix in MHz
 
 end
 

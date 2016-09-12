@@ -14,5 +14,6 @@ function pumping = highPressurePumping( obj, beam )
     pumping.effective_Hg = eHg;
     pumping.optical_shift = real(trace(eHg)/dim);
     pumping.gamma_p = - imag(trace(eHg)/dim);
+    pumping.photon_spin = beam.fictionSpin;
 end
 

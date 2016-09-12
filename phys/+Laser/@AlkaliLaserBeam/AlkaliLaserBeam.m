@@ -25,10 +25,10 @@ classdef AlkaliLaserBeam < handle
     
     methods
         function obj=AlkaliLaserBeam(power, refAtom, refTransition, detune, dir, pol, waist)
-            obj.power = power;
+            obj.power = power; % in W
             obj.refAtom = refAtom;
             obj.refTransition = refTransition;
-            obj.detune = detune;
+            obj.detune = detune; % in MHz
             obj.dir = dir/norm(dir);
             obj.pol = pol/norm(pol);
             obj.waist = waist;
@@ -47,11 +47,9 @@ classdef AlkaliLaserBeam < handle
                         + obj.amplitudeE * obj.transDir2 * obj.pol(2);
             
             obj.photonSpin = 1i*cross(obj.vectorE, obj.vectorE')/obj.amplitudeE/obj.amplitudeE;
-            if strcmp(refTransition, 'D1')
-                obj.fictionSpin = 0.5*obj.photonSpin;
-            elseif strcmp(refTransition, 'D2')
-                obj.fictionSpin = -0.25*obj.photonSpin;
-            end
+            
+            J = obj.refAtom.J(1+refTransition); S = obj.refAtom.J(1);
+            obj.fictionSpin = (-1)^(J-S)/(2*J+1) * obj.photonSpin;
         end
     end
     

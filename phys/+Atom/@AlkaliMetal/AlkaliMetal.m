@@ -4,6 +4,7 @@ classdef AlkaliMetal < handle
     properties
         name
         parameters
+        hasSpin = 1
         
         I
         S = 0.5
@@ -24,7 +25,7 @@ classdef AlkaliMetal < handle
         
         operator
         
-        rho
+%         rho
     end
     
     methods
@@ -41,7 +42,7 @@ classdef AlkaliMetal < handle
             
             obj.mat = obj.spinMatrix();
             
-            obj.rho = Algorithm.DensityMatrix(obj);
+%             obj.rho = Algorithm.DensityMatrix(obj);
             
             if nargin > 1
                 obj.set_eigen(coil);
@@ -75,17 +76,22 @@ classdef AlkaliMetal < handle
             end
         end
         
-        function v = mean_vector( obj, opt )
-            if nargin < 2
-                opt = 1;
+        function S = mean_spin(obj, rho)
+            s_mat = obj.matEigen.Smat{Atom.Subspace.GS};
+            S = rho.mean(s_mat);
+        end
+        
+        function v = mean_vector( obj, rho, space )
+            if nargin < 3
+                space = Atom.Subspace.GS;
             end
 
-            i_mat = obj.matEigen.Imat{opt};
-            s_mat = obj.matEigen.Smat{opt};
-            f_mat = obj.matEigen.Fmat{opt};
-            v.I = obj.rho.mean(i_mat);
-            v.S = obj.rho.mean(s_mat);
-            v.F = obj.rho.mean(f_mat);
+            i_mat = obj.matEigen.Imat{space};
+            s_mat = obj.matEigen.Smat{space};
+            f_mat = obj.matEigen.Fmat{space};
+            v.I = rho.mean(i_mat);
+            v.S = rho.mean(s_mat);
+            v.F = rho.mean(f_mat);
         end
         
     end
