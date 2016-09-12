@@ -1,8 +1,7 @@
 clear;clc;
 
 import Condition.Coil
-import Atom.AlkaliMetal Atom.Noble Atom.Buffer.Nitrogen Atom.Buffer.He4
-import VaporCell.Gas VaporCell.MixedGas
+import Atom.* Atom.Buffer.* VaporCell.*
 import Laser.AlkaliLaserBeam
 
 coil=Condition.Coil('coil');
@@ -21,8 +20,9 @@ gases={ ...
 
 ensemble=MixedGas(gases);
 
-pumpBeam=AlkaliLaserBeam(0.1, rb, Atom.Transition.D1, 0, ...
-                               [0 0 1], [1, 1i], 1e-3);
+pumpBeam=AlkaliLaserBeam(0.1, ...                       % power in [W]
+                         rb, Atom.Transition.D1, 0, ... % ref Atom 
+                         [0 0 1], [1, 1i], 1e-3);       % direction, pol, spot size
 
 sys=System.OpticalPumping(ensemble, pumpBeam);
 sys.evolve(1.0, 101);

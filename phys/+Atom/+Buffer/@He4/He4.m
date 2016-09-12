@@ -10,7 +10,7 @@ classdef He4
     end
     
     methods
-        function obj = H4()
+        function obj = He4()
             obj.name = '4He';
         end
     end
