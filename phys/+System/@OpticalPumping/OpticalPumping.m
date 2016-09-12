@@ -38,6 +38,10 @@ classdef OpticalPumping < handle
             obj.calc_kernel('init');
         end
         
+        function atom = get_atom(obj, k)
+            atom = obj.gases.gasList{k}.atom;
+        end
+        
         function update_kernel(obj)
             obj.calc_kernel('update');
         end

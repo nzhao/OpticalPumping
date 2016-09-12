@@ -7,6 +7,7 @@ function calc_kernel( obj, mode )
     
     for k=1:obj.gases.nGas
         if strcmp(mode, 'init')
+            obj.process.g0_term{k} = obj.gases.calc_g0_term( k );
             obj.process.sd_term{k} = obj.gases.calc_sd_term( k );
             obj.process.op_term{k} = obj.gases.calc_op_term( k );
         end

@@ -14,7 +14,7 @@ function se_term = calc_se_term( obj, k, state)
                 if obj.gasList{q}.atom.hasSpin
                     c_kq = obj.spin_exchange(k, q);
                     v_q = obj.gasList{q}.atom.mean_spin( state{q} );
-                    se_term = se_term + c_kq*sd_op + v_dot_m(c_kq, v_q, se_op);
+                    se_term = se_term + c_kq*sd_op - v_dot_m(c_kq, v_q, se_op);
                 end
             end
         case 'noble'

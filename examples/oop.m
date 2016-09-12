@@ -25,4 +25,7 @@ pumpBeam=AlkaliLaserBeam(0.1, ...                       % power in [W]
                          [0 0 1], [1, 1i], 1e-3);       % direction, pol, spot size
 
 sys=System.OpticalPumping(ensemble, pumpBeam);
-sys.evolve(1.0, 101);
+sys.evolve(10.0, 101);
+
+sys.calc_observable();
+plot(sys.result.time, sys.result.observable, 'd-')
