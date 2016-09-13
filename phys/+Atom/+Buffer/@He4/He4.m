@@ -13,6 +13,10 @@ classdef He4
         function obj = He4()
             obj.name = '4He';
         end
+
+        function s = mean_spin(obj, rho)
+            s = [0 0 0];
+        end
     end
     
 end

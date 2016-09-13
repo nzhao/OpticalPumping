@@ -5,7 +5,7 @@ function r = SERate( obj, gas1, gas2 )
     
     switch atom_pair
         case '87Rb-87Rb'
-            r=0.0;
+            r=0.01;
         case '87Rb-133Cs'
             r=0.0;
         case '133Cs-87Rb'

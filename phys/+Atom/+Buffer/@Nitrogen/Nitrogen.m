@@ -13,6 +13,10 @@ classdef Nitrogen
         function obj = Nitrogen()
             obj.name = 'nitrogen';
         end
+        
+        function s = mean_spin(obj, rho)
+            s = [0 0 0];
+        end
     end
     
 end

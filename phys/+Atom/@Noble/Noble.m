@@ -26,8 +26,8 @@ classdef Noble < handle
             obj.rho = Algorithm.DensityMatrix(obj);
         end
         
-        function K = mean_spin(obj)
-            K = obj.rho.mean(obj.Kmat);
+        function K = mean_spin(obj, rho)
+            K = rho.mean(obj.Kmat);
         end
         
     end

@@ -4,10 +4,12 @@ function obs = calc_observable( obj )
     idx = 1;
     atom = obj.get_atom(idx);
     
-    obs = zeros(3, length(obj.result.time));
-    for k=1:length(obs)
+     obs.mean_spin = zeros(3, length(obj.result.time));
+     obs.population = zeros(atom.dim(1), length(obj.result.time));
+    for k=1:length(obj.result.time)
         state = obj.result.state{k}{idx};
-        obs(:, k) = atom.mean_spin(state);
+        obs.mean_spin(:, k) = atom.mean_spin(state);
+        obs.population(:, k) = diag(state.mat);
     end
     obj.result.observable = obs;
 

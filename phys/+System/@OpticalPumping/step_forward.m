@@ -5,7 +5,7 @@ function [ new, old ] = step_forward( obj, dt )
     new = cell(size(old));
     for k = 1:obj.gases.nGas
         if isa(old{k}, 'Algorithm.DensityMatrix')
-            new{k} = old{k}.evolve( obj.kernel{k}, dt );
+            new{k} = old{k}.evolve( 2*pi*obj.kernel{k}, dt );
         else
             new{k} = old{k};
         end

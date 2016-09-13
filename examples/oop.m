@@ -20,12 +20,16 @@ gases={ ...
 
 ensemble=MixedGas(gases);
 
-pumpBeam=AlkaliLaserBeam(0.1, ...                       % power in [W]
+pumpBeam=AlkaliLaserBeam(0.001, ...                     % power in [W]
                          rb, Atom.Transition.D1, 0, ... % ref Atom 
-                         [0 0 1], [1, 1i], 1e-3);       % direction, pol, spot size
+                         [0 0 1], [1, 1i], 2e-3);       % direction, pol, spot size
 
 sys=System.OpticalPumping(ensemble, pumpBeam);
-sys.evolve(10.0, 101);
+sys.evolve(500.0, 301);
 
 sys.calc_observable();
-plot(sys.result.time, sys.result.observable, 'd-')
+
+subplot(1,2,1)
+plot(sys.result.time, sys.result.observable.mean_spin, 'd-')
+subplot(1,2,2)
+plot(sys.result.time, sys.result.observable.population, '*-')

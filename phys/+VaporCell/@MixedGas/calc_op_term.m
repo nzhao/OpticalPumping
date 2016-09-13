@@ -9,7 +9,7 @@ function op_term = calc_op_term( obj, k )
         se_op = gas.atom.operator.SE;
         coeff = obj.optical_pumping{k}.gamma_p;
         v = obj.optical_pumping{k}.photon_spin;
-        op_term = coeff*sd_op + v_dot_m(coeff, v, se_op);
+        op_term = coeff*sd_op - v_dot_m(coeff, v, se_op);
     end
 end
 
