@@ -35,7 +35,7 @@ function dynamics = PumpingDynamics( atom, beam, condition, tmin, tmax, dt, init
         G = eigen.G + pump.G + exchange.G;
 
         % step forward - update observables
-        rho1=expm(-dt*G)*rho; 
+        rho1=expm(-dt*2*pi*G)*rho; 
         
         % convergency check
         diff=norm(rho-rho1);
