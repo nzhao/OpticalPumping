@@ -10,6 +10,10 @@ function pressureBroadening( obj, gases )
                 gamma2_q = 19e3 * gas.density / (amagat*1e6);
             case '87Rb-4He'
                 gamma2_q = 18e3 * gas.density / (amagat*1e6);
+            case '133Cs-N2'
+                gamma2_q = 16e3 * gas.density / (amagat*1e6);
+            case '133Cs-4He'
+                gamma2_q = 23e3 * gas.density / (amagat*1e6);
             otherwise
                 gamma2_q=0;
                 %warning('atom pair (%s, %s) not supported. Pressure broadening is set to zero.', obj.name, gas.name);

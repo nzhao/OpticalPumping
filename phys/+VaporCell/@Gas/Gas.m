@@ -9,6 +9,7 @@ classdef Gas < handle
         density
         pressure
         temperature
+        velocity
         
         gamma2 = 0
     end
@@ -29,6 +30,9 @@ classdef Gas < handle
             obj.pressure = pressure;
             
             obj.density = pressure / kB / temperature;
+            
+            mass = Atom.AtomParameters(obj.name).mass / avogadro * 1e-3;
+            obj.velocity = sqrt( kB*temperature / mass );
         end
         
     end

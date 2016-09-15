@@ -5,13 +5,15 @@ classdef Nitrogen
     properties
         name
         hasSpin = 0
+        parameters
         
         rho = []
     end
     
     methods
         function obj = Nitrogen()
-            obj.name = 'nitrogen';
+            obj.name = '14N';
+            obj.parameters = Atom.AtomParameters(obj.name);
         end
         
         function s = mean_spin(obj, rho)

@@ -5,6 +5,7 @@ classdef He4
     properties
         name
         hasSpin = 0
+        parameters
         
         rho = []
     end
@@ -12,6 +13,7 @@ classdef He4
     methods
         function obj = He4()
             obj.name = '4He';
+            obj.parameters = Atom.AtomParameters(obj.name);
         end
 
         function s = mean_spin(obj, rho)

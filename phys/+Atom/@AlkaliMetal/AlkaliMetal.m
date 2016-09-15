@@ -93,6 +93,7 @@ classdef AlkaliMetal < handle
             v.S = rho.mean(s_mat);
             v.F = rho.mean(f_mat);
         end
+
         
     end
     

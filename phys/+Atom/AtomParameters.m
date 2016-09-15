@@ -35,6 +35,7 @@ function parameters = AtomParameters( name )
                     parameters.hf_es2A=84.72;       %hf coeff_A of excited state P_3/2 state in MHz
                     parameters.hf_es2B=12.50;       %hf coeff_B of excited state P_3/2 state in MHz
                     
+                    parameters.mass = 87;         % approx. grams/mole
                     parameters.Tmelt = 39.3+273.15;
                     
                     parameters.LambdaRef = parameters.lambda_D1;
@@ -71,12 +72,23 @@ function parameters = AtomParameters( name )
                     parameters.hf_es2A=50.29;       %hf coeff_A of excited state P_3/2 state in MHz
                     parameters.hf_es2B=-0.49;       %hf coeff_B of excited state P_3/2 state in MHz
                     
+                    parameters.mass = 133;         % approx. grams/mole
                     parameters.Tmelt = 28.5+273.15;
                     
                     parameters.LambdaRef = parameters.lambda_D1;
                     
                 case '131Xe'
+                    parameters.mass = 131;         % approx. grams/mole
                     parameters.spin_K = 0.5;
+                    
+                case '4He'
+                    parameters.mass = 4;
+                
+                case '14N'
+                    parameters.mass = 14;
+                    
+                case 'N2'
+                    parameters.mass = 28;
                     
                 otherwise
                         error('no atomic data.');
