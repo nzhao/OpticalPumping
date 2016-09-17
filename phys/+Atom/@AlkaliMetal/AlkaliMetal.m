@@ -25,6 +25,8 @@ classdef AlkaliMetal < handle
         
         operator
         
+        zeeman_terms
+        
 %         rho
     end
     
@@ -47,10 +49,11 @@ classdef AlkaliMetal < handle
             if nargin > 1
                 obj.set_eigen(coil);
             end
+            
         end
         
         function set_eigen(obj, coil)
-            obj.eigen=Algorithm.Eigen(obj, coil);
+            obj.eigen=Algorithm.Eigen(obj, coil{3});
             
             obj.matEigen.Imat = obj.eigen.transform(obj.mat.Imat);
             obj.matEigen.Smat = obj.eigen.transform(obj.mat.Smat);
@@ -58,6 +61,9 @@ classdef AlkaliMetal < handle
             obj.matEigen.IS = obj.eigen.transform(obj.mat.IS);
             obj.matEigen.F2 = obj.eigen.transform(obj.mat.F2);
             obj.matEigen.mu = obj.eigen.transform(obj.mat.mu);
+            for k=1:3
+                obj.matEigen.zeeman_terms(:,:,k) = - obj.matEigen.mu{1}(:,:,k)*coil{k}.magB/(2*pi*h_bar)*1e-6;
+            end
            
             obj.operator = obj.spinOperator();
             obj.dipole();

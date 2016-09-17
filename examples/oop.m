@@ -4,10 +4,14 @@ import Condition.Coil
 import Atom.* Atom.Buffer.* VaporCell.*
 import Laser.AlkaliLaserBeam
 
-coil=Condition.Coil('coil');
-coil.set_magB(0.0100);
+coilz=Condition.Coil('coilz');
+coilz.set_magB(0.0001);
+coilx=Condition.Coil('coilx');
+coilx.set_magB(0.00001);
+coily=Condition.Coil('coily');
+coily.set_magB(0.0);
 
-rb=AlkaliMetal('87Rb', coil);
+rb=AlkaliMetal('87Rb', {coilx, coily, coilz});
 n2=Nitrogen();
 he4=He4();
 
@@ -25,12 +29,12 @@ pumpBeam=AlkaliLaserBeam(0.001, ...                     % power in [W]
                          [0 0 1], [1, 1i], 2e-3);       % direction, pol, spot size
 
 sys=System.OpticalPumping(ensemble, pumpBeam);
-sys.evolve(5000.0, 301);
+sys.evolve(5000.0, 1001);
 
 sys.calc_observable();
 
 pop = real(sys.result.observable.population(:,end));
-[aRatio, bRatio] = rb.pop_ratio(pop);
+ratio = rb.pop_ratio(pop);
 
 
 
