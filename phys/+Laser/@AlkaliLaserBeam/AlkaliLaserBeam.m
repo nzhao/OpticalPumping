@@ -6,6 +6,7 @@ classdef AlkaliLaserBeam < handle
         power
         refAtom
         refTransition
+        frequency
         detune
         
         dir
@@ -16,6 +17,7 @@ classdef AlkaliLaserBeam < handle
         waist
         
         energyFlux
+        photonFlux
         amplitudeE
         vectorE
         
@@ -28,6 +30,12 @@ classdef AlkaliLaserBeam < handle
             obj.power = power; % in W
             obj.refAtom = refAtom;
             obj.refTransition = refTransition;
+            if refTransition == Atom.Transition.D1
+                obj.frequency = refAtom.parameters.omega_D1/2/pi;
+            elseif refTransition == Atom.Transition.D2
+                obj.frequency = refAtom.parameters.omega_D2/2/pi;
+            end
+            
             obj.detune = detune; % in MHz
             obj.dir = dir/norm(dir);
             obj.pol = pol/norm(pol);
@@ -42,6 +50,7 @@ classdef AlkaliLaserBeam < handle
             end
             
             obj.energyFlux = power / (pi*waist*waist);
+            obj.photonFlux = obj.energyFlux / (h_bar * 2*pi*obj.frequency);
             obj.amplitudeE = sqrt(2.0*obj.energyFlux*VacImp);
             obj.vectorE = obj.amplitudeE * obj.transDir1 * obj.pol(1) ...
                         + obj.amplitudeE * obj.transDir2 * obj.pol(2);

@@ -12,7 +12,9 @@ function obs = calc_observable( obj )
         state = obj.result.state{k}{idx};
         obs.mean_spin(:, k) = atom.mean_spin(state);
         obs.population(:, k) = diag(state.mat);
-        obs.abs_cross_section(:,k) = obj.result.state{k}{idx}.mean(obj.gases.optical_pumping{idx}.effective_Gamma);
+        obs.abs_cross_section(:,k) = ...
+            obj.result.state{k}{idx}.mean(obj.gases.optical_pumping{idx}.effective_Gamma) * 2*pi*1e6 ...
+            / obj.beam.photonFlux * 1e4;
     end
     obj.result.observable = obs;
 
