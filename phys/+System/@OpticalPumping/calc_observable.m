@@ -4,12 +4,15 @@ function obs = calc_observable( obj )
     idx = 1;
     atom = obj.get_atom(idx);
     
-     obs.mean_spin = zeros(3, length(obj.result.time));
-     obs.population = zeros(atom.dim(1), length(obj.result.time));
-    for k=1:length(obj.result.time)
+    ntime = length(obj.result.time);
+    obs.mean_spin = zeros(3, ntime);
+    obs.population = zeros(atom.dim(1), ntime);
+    obs.abs_cross_section = zeros(1, ntime);
+    for k=1:ntime
         state = obj.result.state{k}{idx};
         obs.mean_spin(:, k) = atom.mean_spin(state);
         obs.population(:, k) = diag(state.mat);
+        obs.abs_cross_section(:,k) = obj.result.state{k}{idx}.mean(obj.gases.optical_pumping{idx}.effective_Gamma);
     end
     obj.result.observable = obs;
 

@@ -35,7 +35,10 @@ ratio = rb.pop_ratio(pop);
 
 
 
-subplot(1,2,1)
+subplot(2,2,1)
 plot(sys.result.time, sys.result.observable.mean_spin, 'd-')
-subplot(1,2,2)
+subplot(2,2,2)
 plot(sys.result.time, sys.result.observable.population, '*-')
+
+subplot(2,2,3)
+plot(sys.result.time, sys.result.observable.abs_cross_section, '*-')
