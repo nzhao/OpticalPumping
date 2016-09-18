@@ -48,6 +48,30 @@ classdef DensityMatrix < handle
             new_rho.set_matrix( reshape(new_col, [obj.dim, obj.dim]) );
         end
         
+        function s = plus(obj1, obj2)
+            if ~ strcmp(obj1.atom.name, obj2.atom.name)
+                warning('obj1.name=%s but obj2.name=%s', obj1.atom.name, obj2.atom.name);
+            end
+            
+            s = Algorithm.DensityMatrix(obj1.atom);
+            m = obj1.mat - obj2.mat;
+            c = m(:);
+            s.mat = m;
+            s.col = c;
+        end
+        
+        function s = minus(obj1, obj2)
+            if ~ strcmp(obj1.atom.name, obj2.atom.name)
+                warning('obj1.name=%s but obj2.name=%s', obj1.atom.name, obj2.atom.name);
+            end
+            
+            s = Algorithm.DensityMatrix(obj1.atom);
+            m=obj1.mat - obj2.mat;
+            c=m(:);
+            s.mat = m;
+            s.col = c;
+        end
+        
     end
 
     

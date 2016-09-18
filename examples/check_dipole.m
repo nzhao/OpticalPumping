@@ -1,7 +1,10 @@
 clear;clc;
 
-coil=Condition.Coil('coil');
-rb=Atom.AlkaliMetal('87Rb', coil.set_magB(1e-10) );
+coilx=Condition.Coil('coilx', 0.0);
+coily=Condition.Coil('coily', 0.0);
+coilz=Condition.Coil('coilz', 1e-10);
+
+rb=AlkaliMetal('87Rb', {coilx, coily, coilz});
 
 
 D1j=rb.dipole{1};

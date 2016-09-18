@@ -4,12 +4,9 @@ import Condition.Coil
 import Atom.* Atom.Buffer.* VaporCell.*
 import Laser.AlkaliLaserBeam
 
-coilz=Condition.Coil('coilz');
-coilz.set_magB(0.0001);
-coilx=Condition.Coil('coilx');
-coilx.set_magB(0.00001);
-coily=Condition.Coil('coily');
-coily.set_magB(0.0);
+coilz=Condition.Coil('coilz', 0.0001);
+coilx=Condition.Coil('coilx', 0.00001);
+coily=Condition.Coil('coily', 0.0);
 
 rb=AlkaliMetal('87Rb', {coilx, coily, coilz});
 n2=Nitrogen();

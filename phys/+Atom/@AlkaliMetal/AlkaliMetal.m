@@ -70,14 +70,17 @@ classdef AlkaliMetal < handle
         end
         
         function res = energy_spectrum(obj, state, coil)
-            res.magB = coil.iter.dataList;
+            coilx=coil{1};
+            coily=coil{2};
+            coilz=coil{3};
+            res.magB = coilz.iter.dataList;
             res.energy = zeros(obj.dim(state), ...
-                               coil.iter.length); 
+                               coilz.iter.length); 
             
-            coil.restart0();
-            while coil.iter.hasNext
-                obj.set_eigen( coil.move_forward );
-                res.energy(:, coil.iter.cursor) ...
+            coilz.restart0();
+            while coilz.iter.hasNext
+                obj.set_eigen( {coilx, coily, coilz.move_forward} );
+                res.energy(:, coilz.iter.cursor) ...
                     = obj.eigen.getEnergy(state);
             end
         end

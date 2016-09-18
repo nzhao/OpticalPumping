@@ -14,8 +14,13 @@ classdef Coil < handle
     end
     
     methods
-        function obj=Coil(name)
+        function obj=Coil(name, magB)
             obj.name = name;
+            if nargin < 2
+                magB = 0.0;
+            end
+            obj.magB = magB;
+            obj.type = 'fixed';
         end
         
         function obj = set_magB(obj, magB)
