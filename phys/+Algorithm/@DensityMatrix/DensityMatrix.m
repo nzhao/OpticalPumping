@@ -60,6 +60,10 @@ classdef DensityMatrix < handle
             s.col = c;
         end
         
+        function n = norm(obj)
+            n = norm(obj.mat);
+        end
+        
         function s = minus(obj1, obj2)
             if ~ strcmp(obj1.atom.name, obj2.atom.name)
                 warning('obj1.name=%s but obj2.name=%s', obj1.atom.name, obj2.atom.name);

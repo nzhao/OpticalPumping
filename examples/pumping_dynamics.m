@@ -6,7 +6,7 @@ import Laser.AlkaliLaserBeam
 
 %% System
 coil = { ... 
-    Condition.Coil('coilx', 0.00001), ...
+    Condition.Coil('coilx', 0.0000), ...
     Condition.Coil('coily', 0.0), ...
     Condition.Coil('coilz', 0.0001)};
 
@@ -23,12 +23,12 @@ gases={ ...
 
 ensemble=MixedGas(gases);
 
-pumpBeam=AlkaliLaserBeam(0.001, ...                     % power in [W]
+pumpBeam=AlkaliLaserBeam(1e-6, ...                     % power in [W]
                          rb, Atom.Transition.D1, 0, ... % ref Atom 
                          [0 0 1], [1, 1i], 2e-3);       % direction, pol, spot size
 
 sys=System.OpticalPumping(ensemble, pumpBeam);
-sys.evolve(5000.0, 1001);
+sys.evolve(5000000.0, 1001);
 
 %% Observable
 density_matrix = sys.get_state(1);
@@ -49,9 +49,6 @@ obs3=containers.Map();
 obs3('gamma_p') = sys.gases.optical_pumping{1}.effective_Gamma;
 abs_cross_sec=System.calc_obs( density_matrix, obs3 );
 
-% 
-% pop = real(sys.result.observable.population(:,end));
-% ratio = rb.pop_ratio(pop);
 
 %% Plot
 figure;
