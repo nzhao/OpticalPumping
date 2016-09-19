@@ -4,11 +4,13 @@ import Condition.Coil
 import Atom.* Atom.Buffer.* VaporCell.*
 import Laser.AlkaliLaserBeam
 
-coilz=Condition.Coil('coilz', 0.0001);
-coilx=Condition.Coil('coilx', 0.00001);
-coily=Condition.Coil('coily', 0.0);
+%% System
+coil = { ... 
+    Condition.Coil('coilx', 0.00001), ...
+    Condition.Coil('coily', 0.0), ...
+    Condition.Coil('coilz', 0.0001)};
 
-rb=AlkaliMetal('87Rb', {coilx, coily, coilz});
+rb=AlkaliMetal('87Rb', coil);
 n2=Nitrogen();
 he4=He4();
 
@@ -28,17 +30,36 @@ pumpBeam=AlkaliLaserBeam(0.001, ...                     % power in [W]
 sys=System.OpticalPumping(ensemble, pumpBeam);
 sys.evolve(5000.0, 1001);
 
-sys.calc_observable();
+%% Observable
+density_matrix = sys.get_state(1);
 
-pop = real(sys.result.observable.population(:,end));
-ratio = rb.pop_ratio(pop);
+obs1=containers.Map();
+obs1('sx') = rb.matEigen.Smat{1}(:,:,1);
+obs1('sy') = rb.matEigen.Smat{1}(:,:,2);
+obs1('sz') = rb.matEigen.Smat{1}(:,:,3);
+spin_component=System.calc_obs( density_matrix, obs1 );
 
+obs2=containers.Map();
+for k = 1:rb.dim(Atom.Subspace.GS)
+    obs2(['p' num2str(k)]) = rb.proj_op(k);
+end
+level_population=System.calc_obs( density_matrix, obs2 );
 
+obs3=containers.Map();
+obs3('gamma_p') = sys.gases.optical_pumping{1}.effective_Gamma;
+abs_cross_sec=System.calc_obs( density_matrix, obs3 );
 
+% 
+% pop = real(sys.result.observable.population(:,end));
+% ratio = rb.pop_ratio(pop);
+
+%% Plot
+figure;
 subplot(2,2,1)
-plot(sys.result.time, sys.result.observable.mean_spin, 'd-')
+System.plot_obs(sys.result.time, spin_component, {'+r-', 'xg-', 'ob-'});
+
 subplot(2,2,2)
-plot(sys.result.time, sys.result.observable.population, '*-')
+System.plot_obs(sys.result.time, level_population, {'r.-', 'g.-', 'b.-'});
 
 subplot(2,2,3)
-plot(sys.result.time, sys.result.observable.abs_cross_section, '*-')
+System.plot_obs(sys.result.time, abs_cross_sec, {'r.-'}, @semilogy);

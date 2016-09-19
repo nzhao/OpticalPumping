@@ -4,7 +4,7 @@ coilx=Condition.Coil('coilx', 0.0);
 coily=Condition.Coil('coily', 0.0);
 coilz=Condition.Coil('coilz', 1e-10);
 
-rb=AlkaliMetal('87Rb', {coilx, coily, coilz});
+rb=Atom.AlkaliMetal('87Rb', {coilx, coily, coilz});
 
 
 D1j=rb.dipole{1};

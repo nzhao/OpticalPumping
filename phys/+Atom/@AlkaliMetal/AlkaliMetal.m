@@ -102,6 +102,14 @@ classdef AlkaliMetal < handle
             v.S = rho.mean(s_mat);
             v.F = rho.mean(f_mat);
         end
+        
+        function p = proj_op(obj, k, space)
+            if nargin < 3
+                space = Atom.Subspace.GS;
+            end
+            p = zeros( obj.dim(space) );
+            p(k,k) = 1;
+        end
 
         
     end

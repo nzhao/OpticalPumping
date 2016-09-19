@@ -42,6 +42,14 @@ classdef OpticalPumping < handle
             atom = obj.gases.gasList{k}.atom;
         end
         
+        function density_matrix = get_state(obj, gas_k)
+            nstate = length(obj.result.state);
+            density_matrix = cell(1, nstate);
+            for q = 1:nstate
+                density_matrix{q} = obj.result.state{q}{gas_k};
+            end
+        end
+        
         function update_kernel(obj)
             obj.calc_kernel('update');
         end
