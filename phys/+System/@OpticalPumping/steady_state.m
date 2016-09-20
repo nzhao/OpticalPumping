@@ -11,7 +11,7 @@ function state = steady_state( obj, dt, maxN, eps0 )
     
     k = 1; diff = 1;
     while k < maxN && diff > eps0
-        %fprintf( 'evolving %d, diff=%f\n', k, diff);
+        %fprintf( 'evolving %d, diff=%5.2e\n', k, diff);
         [new_state, old_state] = obj.step_forward(dt);
         obj.state = new_state;
         obj.update_kernel();

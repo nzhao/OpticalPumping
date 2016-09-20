@@ -23,44 +23,48 @@ gases={ ...
 
 ensemble=MixedGas(gases);
 
-pumpBeam=AlkaliLaserBeam(1e-5, ...                     % power in [W]
+pumpBeam=AlkaliLaserBeam(1e-8, ...                     % power in [W]
                          rb, Atom.Transition.D1, 0, ... % ref Atom 
                          [0 0 1], [1, 1i], 2e-3);       % direction, pol, spot size
-
+    
 %% absorption vs. detuning
-
-detune = linspace(-100e3, 100e3, 21);
-absorption = zeros(1, length(detune));
+detune = linspace(-100e3, 100e3, 101);
+absorption_det = zeros(1, length(detune));
 for k = 1:length(detune)
     fprintf('detuning = %f\n', detune(k));
-    pumpBeam.detune = detune(k);
+    pumpBeam.set_power(1e-6).set_detuning(detune(k)) ;
     sys=System.OpticalPumping(ensemble, pumpBeam);
-    obs = sys.gases.optical_pumping{1}.effective_Gamma;
+    obs = sys.gases.optical_pumping{1}.effective_Gamma* 2*pi*1e6;
     
-    tau = 1e-2 / sys.gases.optical_pumping{1}.gamma_p;
-    %tau = 5;
-    state = sys.steady_state(tau, inf, 1e-8);
-    absorption(k) = state{1}.mean(obs);
+    tau = 1e-3 / sys.gases.optical_pumping{1}.gamma_p;
+    state = sys.steady_state(tau, inf, 1e-6);
+    absorption_det(k) = state{1}.mean(obs) / pumpBeam.photonFlux * 1e4;
 end
-figure;
-plot(detune, absorption* 2*pi*1e6 / pumpBeam.photonFlux * 1e4, 'rd-')
 
-%% absorption vs. detuning
-
-power = logspace(-6, -2, 25);
+%% absorption vs. power
+power = logspace(-9, -1, 35);
 absorption_power = zeros(1, length(power));
 for k = 1:length(power)
     fprintf('power = %f\n', power(k));
-    pumpBeam=AlkaliLaserBeam(power(k), ...                     % power in [W]
-                             rb, Atom.Transition.D1, 0, ... % ref Atom 
-                             [0 0 1], [1, 1i], 2e-3);       % direction, pol, spot size
-    sys=System.OpticalPumping(ensemble, pumpBeam);
-    obs = sys.gases.optical_pumping{1}.effective_Gamma;
+    pumpBeam.set_detuning(0).set_power(power(k));
+    sys=System.OpticalPumping(ensemble, pumpBeam );
+    obs = sys.gases.optical_pumping{1}.effective_Gamma* 2*pi*1e6;
     
-    tau = 1e-2 / sys.gases.optical_pumping{1}.gamma_p;
-    %tau = 5;
-    state = sys.steady_state(tau, inf, 1e-8);
-    absorption_power(k) = state{1}.mean(obs);
+    tau = 1e-3 / sys.gases.optical_pumping{1}.gamma_p;
+    state = sys.steady_state(tau, inf, 1e-6);
+    absorption_power(k) = state{1}.mean(obs) / pumpBeam.photonFlux * 1e4;
 end
+
+%% plot
 figure;
-semilogx(power, absorption_power* 2*pi*1e6 / pumpBeam.photonFlux * 1e4, 'rd-')
+subplot(1, 2, 1)
+plot(detune*1e-3, absorption_det, 'rd-')
+title('Power = 10^{-6} W')
+xlabel('detuning (GHz)')
+ylabel('absorption cross section (cm^{-2})')
+
+subplot(1, 2, 2)
+semilogx(power, absorption_power, 'bo-')
+title('detuning = 0')
+xlabel('power (W)')
+ylabel('absorption cross section (cm^{-2})')

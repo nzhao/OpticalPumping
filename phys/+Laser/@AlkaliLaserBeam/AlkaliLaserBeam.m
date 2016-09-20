@@ -60,6 +60,20 @@ classdef AlkaliLaserBeam < handle
             J = obj.refAtom.J(1+refTransition); S = obj.refAtom.J(1);
             obj.fictionSpin = (-1)^(J-S)/(2*J+1) * obj.photonSpin;
         end
+        
+        function obj = set_power(obj, power)
+            obj.power = power; % in W
+            obj.energyFlux = power / (pi*obj.waist*obj.waist);
+            obj.photonFlux = obj.energyFlux / (h_bar * 2*pi*obj.frequency);
+            obj.amplitudeE = sqrt(2.0*obj.energyFlux*VacImp);
+            obj.vectorE = obj.amplitudeE * obj.transDir1 * obj.pol(1) ...
+                        + obj.amplitudeE * obj.transDir2 * obj.pol(2);
+            obj.photonSpin = 1i*cross(obj.vectorE, obj.vectorE')/obj.amplitudeE/obj.amplitudeE;
+        end
+        
+        function obj = set_detuning(obj, detuning)
+            obj.detune = detuning; % in MHz
+        end
     end
     
 end
