@@ -55,6 +55,12 @@ classdef MixedGas < handle
             end
 
         end
+        
+        function obj = set_temperature(obj, t)
+            for k = 1:obj.nGas
+                obj.gasList{k}.set_temperature(t);
+            end
+        end
 
     end
     

@@ -14,7 +14,7 @@ rb=AlkaliMetal('87Rb', coil);
 n2=Nitrogen();
 he4=He4();
 
-temperature=350;
+temperature=373;
 gases={ ...
     Gas(rb, 'vapor', temperature), ... 
     Gas(n2, 'buffer', temperature, 50*Torr2Pa, 'N2'), ...
@@ -55,16 +55,49 @@ for k = 1:length(power)
     absorption_power(k) = state{1}.mean(obs) / pumpBeam.photonFlux * 1e4;
 end
 
+%% analytisis
+
+absorption_power_analytic = zeros(1, length(power));
+intensity_out = zeros(1, length(power));
+for k = 1:length(power)
+    pumpBeam.set_detuning(0).set_power(power(k));
+    sys=System.OpticalPumping(ensemble, pumpBeam );
+    sigma0 = sys.gases.optical_pumping{1}.absorption_cross_section0;
+    OD = sys.gases.gasList{1}.density * sigma0 * 0.020;
+    
+    gamma_p=sys.gases.optical_pumping{1}.gamma_p;
+    gamma_sd=sum(sys.gases.spin_destruction(1,:));
+    x = gamma_p/gamma_sd;
+    absorption_power_analytic(k) = sigma0 / (1 + x) * 1e4;
+    intensity_out(k) = power(k) * lambertw(x*exp(x-OD)) / x;
+end
+
 %% plot
 figure;
-subplot(1, 2, 1)
+subplot(2, 2, 1)
 plot(detune*1e-3, absorption_det, 'rd-')
+grid on
 title('Power = 10^{-6} W')
 xlabel('detuning (GHz)')
 ylabel('absorption cross section (cm^{-2})')
 
-subplot(1, 2, 2)
-semilogx(power, absorption_power, 'bo-')
+subplot(2, 2, 2)
+semilogx(power, absorption_power, 'bo', power, absorption_power_analytic, 'b-')
+grid on
 title('detuning = 0')
 xlabel('power (W)')
 ylabel('absorption cross section (cm^{-2})')
+
+subplot(2, 2, 3)
+loglog(power, intensity_out, 'bo-')
+grid on
+title('detuning = 0')
+xlabel('power (W)')
+ylabel('power (W)')
+
+subplot(2, 2, 4)
+semilogx(power, log(power./intensity_out), 'bo-')
+grid on
+title('detuning = 0')
+xlabel('power (W)')
+ylabel('OD')

@@ -17,5 +17,6 @@ function pumping = highPressurePumping( obj, beam )
     pumping.optical_shift = trace(pumping.effective_Shift)/dim;
     pumping.gamma_p = trace(pumping.effective_Gamma)/dim;
     pumping.photon_spin = beam.fictionSpin;
+    pumping.absorption_cross_section0 = pumping.gamma_p*2*pi*1e6 / beam.photonFlux; % m^2
 end
 

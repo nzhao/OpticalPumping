@@ -35,6 +35,15 @@ classdef Gas < handle
             obj.velocity = sqrt( kB*temperature / mass );
         end
         
+        function obj = set_temperature(obj, temperature)
+            if strcmp(obj.type, 'vapor')
+                obj.pressure = obj.getPressure(temperature);
+                obj.density = obj.pressure / kB / temperature;
+                mass = Atom.AtomParameters(obj.name).mass / avogadro * 1e-3;
+                obj.velocity = sqrt( kB*temperature / mass );
+            end
+        end
+        
     end
     
 end
