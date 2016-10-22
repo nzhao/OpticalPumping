@@ -1,4 +1,4 @@
-function f=w(z)
+function f=w_Fadeeva(z)
 %Computes the function w(z)=exp(-z^2)erfc(-iz) using a rational 
 %series with N terms. It is assumed that Im(z)>0 or Im(z)=0. 
 %we use N=10, but higher accuracy can be obtained with larger N. 

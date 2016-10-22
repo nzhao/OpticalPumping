@@ -29,7 +29,9 @@ function parameters = AtomParameters( name )
                     parameters.lamJ1=7800e-10;       %D2 wavelength in m when J=1.5
                     parameters.te1=25.5e-9;          %spontaneous P1/2 lifetime in s  J=1.5
                     parameters.lamJ2=7947e-10;        %D1 wavelength in m    J=0.5
+                    parameters.lambda = [7947e-10, 7800e-10];
                     parameters.te2=28.5e-9;          %spontaneous P1/2 lifetime in when J=0.5
+                    parameters.te = [25.5e-9, 28.5e-9];
                     parameters.hf_gs=3417.35;   %  hf coeff of ground state S_1/2 in MHz
                     parameters.hf_es1=406.12;       %hf coeff of excited state P_1/2 in MHz
                     parameters.hf_es2A=84.72;       %hf coeff_A of excited state P_3/2 state in MHz
@@ -66,7 +68,9 @@ function parameters = AtomParameters( name )
                     parameters.lamJ1=8523.47e-10;       %D2 wavelength in m when J=1.5
                     parameters.te1=30.462e-9;          %spontaneous P3/2 lifetime in s  J=1.5
                     parameters.lamJ2=8945.93e-10;        %D1 wavelength in m    J=0.5
+                    parameters.lambda = [8945.93e-10, 8523.47e-10];
                     parameters.te2=34.88e-9;          %spontaneous P1/2 lifetime in when J=0.5
+                    parameters.te = [30.462e-9, 34.88e-9];
                     parameters.hf_gs=2298.1579425;   %  hf coeff of ground state S_1/2 in MHz
                     parameters.hf_es1=291.91;       %hf coeff of excited state P_1/2 in MHz
                     parameters.hf_es2A=50.29;       %hf coeff_A of excited state P_3/2 state in MHz
@@ -97,8 +101,10 @@ function parameters = AtomParameters( name )
             if ismember(name, {'87Rb', '133Cs'})
                     parameters.wavenumber_D1 = 2*pi/(parameters.lambda_D1*1e-9);
                     parameters.wavenumber_D2 = 2*pi/(parameters.lambda_D2*1e-9);
+                    parameters.wavenumber = [parameters.wavenumber_D1, parameters.wavenumber_D2];
                     parameters.omega_D1 = c_velocity*parameters.wavenumber_D1;
-                    parameters.omega_D2 = c_velocity*parameters.wavenumber_D2;                    
+                    parameters.omega_D2 = c_velocity*parameters.wavenumber_D2; 
+                    parameters.omega = [parameters.omega_D1, parameters.omega_D2];
                     
                     parameters.dipole_D1 = sqrt( (3*h_bar) * (4*pi*eps0) / (4*parameters.tau_1*1e-9*parameters.wavenumber_D1^3) );
                     parameters.dipole_D2 = sqrt( (3*h_bar) * (4*pi*eps0) / (4*parameters.tau_2*1e-9*parameters.wavenumber_D2^3) * 2 );

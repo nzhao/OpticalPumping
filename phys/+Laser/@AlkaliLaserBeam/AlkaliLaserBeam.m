@@ -7,6 +7,7 @@ classdef AlkaliLaserBeam < handle
         refAtom
         refTransition
         frequency
+        wavenumber
         detune
         
         dir
@@ -31,13 +32,11 @@ classdef AlkaliLaserBeam < handle
             obj.power = power; % in W
             obj.refAtom = refAtom;
             obj.refTransition = refTransition;
-            if refTransition == Atom.Transition.D1
-                obj.frequency = refAtom.parameters.omega_D1/2/pi;
-            elseif refTransition == Atom.Transition.D2
-                obj.frequency = refAtom.parameters.omega_D2/2/pi;
-            end
+            obj.frequency = refAtom.parameters.omega(refTransition)/2/pi;
+            obj.wavenumber = refAtom.parameters.wavenumber(refTransition);
             
             obj.detune = detune; % in MHz
+            
             obj.dir = dir/norm(dir);
             obj.pol = pol/norm(pol);
             obj.waist = waist;

@@ -17,18 +17,27 @@ he4=He4();
 temperature=373;
 gases={ ...
     Gas(rb, 'vapor', temperature), ... 
-    Gas(n2, 'buffer', temperature, 50*Torr2Pa, 'N2'), ...
-    Gas(he4, 'buffer', temperature, 700*Torr2Pa) ...
+%    Gas(n2, 'buffer', temperature, 50*Torr2Pa, 'N2'), ...
+%    Gas(he4, 'buffer', temperature, 700*Torr2Pa) ...
 };
 
 ensemble=MixedGas(gases);
 
-pumpBeam=AlkaliLaserBeam(1e-8, ...                     % power in [W]
-                         rb, Atom.Transition.D1, 0, ... % ref Atom 
+pumpBeam=AlkaliLaserBeam(1e-3, ...                     % power in [W]
+                         rb, Atom.Transition.D1, 2.2594e3, ... % ref Atom 
                          [0 0 1], [1, 1i], 2e-3);       % direction, pol, spot size
-    
+%% Test
+detune = linspace(-10e3, 10e3, 501);
+absorption_det = zeros(1, length(detune));
+for k = 1:length(detune)
+    pumpBeam.set_power(1e-6).set_detuning(detune(k)) ;
+    sys=System.OpticalPumping(ensemble, pumpBeam);
+    absorption_det(k) = sys.gases.optical_pumping{1}.absorption_cross_section0;
+end
+plot(detune, absorption_det)
+
 %% absorption vs. detuning
-detune = linspace(-100e3, 100e3, 101);
+detune = linspace(-10e3, 10e3, 101);
 absorption_det = zeros(1, length(detune));
 for k = 1:length(detune)
     fprintf('detuning = %f\n', detune(k));

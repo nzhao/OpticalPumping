@@ -1,8 +1,10 @@
 function optical_matrix = AlkaliOpticalMatrix( gas, beam )
 %ALKALIOPTICALMATRIX Summary of this function goes here
 %   Detailed explanation goes here
+    
+    Dk = beam.refTransition; % D1 or D2
     dimG = gas.atom.dim(1);
-    dimE = gas.atom.dim(1+beam.refTransition);
+    dimE = gas.atom.dim(1+Dk);
     %dimFull = dimG+dimE;
     
     denom = VaporCell.DenominatorMat(gas, beam);
@@ -15,8 +17,8 @@ function optical_matrix = AlkaliOpticalMatrix( gas, beam )
     pump_rate_g = trace(gamma_g)/dimG;
     pump_rate_e = trace(gamma_e)/dimE;
     
-    A_pump_gg = 1i*eff_Hg/pump_rate_g;
-    A_pump_ee = 1i*eff_He/pump_rate_e;
+    A_pump_gg = 1i*circleC(eff_Hg)/pump_rate_g;
+    A_pump_ee = 1i*circleC(eff_He)/pump_rate_e;
     A_pump_ge = -1i*( kron(tW.', tV') - kron(tV.', tW') )/pump_rate_g;
     A_pump_eg = -1i*( kron(conj(tV), tW) - kron(conj(tW), tV) )/pump_rate_e;
     
@@ -25,11 +27,28 @@ function optical_matrix = AlkaliOpticalMatrix( gas, beam )
     A_collision_ge = zeros(dimG*dimG, dimE*dimE);
     A_collision_eg = zeros(dimE*dimE, dimG*dimG);
 
-    gJ = gas.atom.gJ(1+beam.refTransition);
-    Dj = gas.atom.operator.electric_dipole{beam.refTransition};
+    gJ = gas.atom.gJ(1+Dk);
+    Dj = gas.atom.operator.electric_dipole{Dk};
+    gamma_s_ge = 1/gas.atom.parameters.te(Dk) /2/pi * 1e-6;
     A_spDecay_ge=(gJ/3)*( kron(conj(Dj(:,:,1)),Dj(:,:,1)) ...
                          +kron(conj(Dj(:,:,2)),Dj(:,:,2)) ...
                          +kron(conj(Dj(:,:,3)),Dj(:,:,3)) ); 
+    
+    
+    freq = gas.atom.eigen.transFreq;
+    gamma1 = gamma_s_ge;
+    gamma2 = 0.5*gamma_s_ge;
+    E_ee = diag( freq{1+Dk, 1+Dk}(:) - 1i*gamma1 );
+    %E_ge = diag( freq{1, 1+Dk}(:) - 1i*gamma2 );
+    %E_eg = diag( freq{1+Dk, 1}(:) - 1i*gamma2 );
+    E_gg = diag( freq{1, 1}(:) );
+    
+    qsG_ee = 1i*E_ee + pump_rate_e*A_pump_ee + A_collision_ee;
+    qsG_ge =-gamma_s_ge*A_spDecay_ge - pump_rate_e*A_pump_ge + A_collision_ge;
+    qsG_eg = pump_rate_g*A_pump_eg;
+    qsG_gg = 1i*E_gg + pump_rate_g*A_pump_gg + A_collision_gg;
+    qsG = [qsG_ee qsG_eg; qsG_ge qsG_gg];
+    
     
     %% export to structure
     optical_matrix.dipole = tV;
@@ -50,6 +69,12 @@ function optical_matrix = AlkaliOpticalMatrix( gas, beam )
     
     optical_matrix.A_s_ge = A_spDecay_ge;
     
+
+    optical_matrix.qsG_ee = qsG_ee;
+    optical_matrix.qsG_eg = qsG_eg;
+    optical_matrix.qsG_ge = qsG_ge;
+    optical_matrix.qsG_gg = qsG_gg;
+    optical_matrix.qsG = qsG;
 
 end
 
