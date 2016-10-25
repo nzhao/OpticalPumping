@@ -14,7 +14,7 @@ function denominator_mat = DenominatorMat( gas, beam, approx )
     sigma = sqrt(2)*beam.wavenumber*doppler_sigma_v /2/pi *1e-6;
 
     Heg = gas.atom.eigen.transFreq{1, 1+beam.refTransition};
-    energy_mat = Heg - detune - 1i*gamma; % MHz
+    energy_mat = Heg + detune - 1i*gamma; % MHz
     
     if strcmp(approx, 'HighPressure')
         denominator_mat = -ones(dimE,dimG)/(detune+1i*gamma);

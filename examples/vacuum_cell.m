@@ -10,25 +10,38 @@ coil = { ...
     Condition.Coil('coily', 0.0), ...
     Condition.Coil('coilz', 0.0001)};
 
-rb=AlkaliMetal('87Rb', coil);
+rb85=AlkaliMetal('85Rb', coil);
+rb87=AlkaliMetal('87Rb', coil);
 
-temperature=373;
+temperature=273.15+20;
 gases={ ...
-    Gas(rb, 'vapor', temperature)
-
+    Gas(rb85, 'vapor', temperature), ...
+    Gas(rb87, 'vapor', temperature)
 };
 
 ensemble=MixedGas(gases);
 
 pumpBeam=AlkaliLaserBeam(1e-3, ...                     % power in [W]
-                         rb, Atom.Transition.D1, 2.2594e3, ... % ref Atom 
+                         rb85, Atom.Transition.D1, 0.0, ... % ref Atom 
                          [0 0 1], [1, 1i], 2e-3);       % direction, pol, spot size
-%% Test
-detune = linspace(-10e3, 10e3, 501);
-absorption_det = zeros(1, length(detune));
+%% cross section
+detune = linspace(-6e3, 6e3, 301);
+absorption_det85 = zeros(1, length(detune));
+absorption_det87 = zeros(1, length(detune));
 for k = 1:length(detune)
     pumpBeam.set_power(1e-6).set_detuning(detune(k)) ;
     sys=System.OpticalPumping(ensemble, pumpBeam);
-    absorption_det(k) = sys.gases.optical_pumping{1}.absorption_cross_section0;
+    absorption_det85(k) = sys.gases.optical_pumping{1}.absorption_cross_section0;
+    absorption_det87(k) = sys.gases.optical_pumping{2}.absorption_cross_section0;
 end
-plot(detune, absorption_det)
+
+cell_length = 0.020; %m
+OD85 = gases{1}.density*absorption_det85*cell_length;
+OD87 = gases{2}.density*absorption_det87*cell_length;
+
+%% plot
+subplot(1,2,1)
+plot(detune/1e3,  OD85, 'b--', detune/1e3,  OD87, 'r--', detune/1e3, OD85+OD87, 'k-' )
+subplot(1,2,2)
+plot(detune/1e3, exp(-OD85), 'b--', detune/1e3,  exp(-OD85), 'r--', detune/1e3, exp(-OD85-OD87), 'k-' )
+ylim([0,1.2])

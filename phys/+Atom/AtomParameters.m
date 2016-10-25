@@ -3,6 +3,44 @@ function parameters = AtomParameters( name )
 %   Detailed explanation goes here
 
             switch char(name)
+                case '85Rb'
+                    parameters.dim=12+12+24;
+                    parameters.spin_S=0.5;
+                    parameters.LgS=2.00231;% Lande g-value of S1/2 state
+                    parameters.LgJ1=(2*0.5+1)/3.0;
+                    parameters.LgJ2=(2*1.5+1)/3.0;
+
+                    % fine-structure parameters
+                    parameters.config='[Kr]5s';     %electron configuation
+                    parameters.IP=4.1771;           %ionization potential in eV
+                    parameters.lambda_D1=794.979;   %wave length of D1 transition in nm
+                    parameters.lambda_D2=780.241;   %wave length of D2 transition in nm
+
+                    parameters.delta_FS=237.60;     %Fine-structure splitting in cm^(-1)
+                    parameters.tau_1=27.75;         %lifetime of P_1/2 states
+                    parameters.tau_2=26.25;         %lifetime of P_3/2 states
+                    parameters.osc_1=0.341;         %oscillator strength of P_1/2 stats
+                    parameters.osc_2=0.695;         %oscillator strength of P_3/2 stats
+                    
+                    % hyperfine-structure parameters
+                    parameters.abundance=0.7217;    %natural abundance
+                    parameters.spin_I=5./2.;        %nuclear spin number
+                    parameters.mu_I=1.35335;        %nuclear magnetic moment in [mu_N]
+                    parameters.lamJ1=7802e-10;       %D2 wavelength in m when J=1.5
+                    parameters.te1=26.23e-9;          %spontaneous P1/2 lifetime in s  J=1.5
+                    parameters.lamJ2=7947e-10;        %D1 wavelength in m    J=0.5
+                    parameters.lambda = [7947e-10, 7800e-10];
+                    parameters.te2=27.68e-9;          %spontaneous P1/2 lifetime in when J=0.5
+                    parameters.te = [27.68e-9, 26.23e-9];
+                    parameters.hf_gs=1011.91;   %  hf coeff of ground state S_1/2 in MHz
+                    parameters.hf_es1=120.527;       %hf coeff of excited state P_1/2 in MHz
+                    parameters.hf_es2A=25.00;       %hf coeff_A of excited state P_3/2 state in MHz
+                    parameters.hf_es2B=25.790;       %hf coeff_B of excited state P_3/2 state in MHz
+                    
+                    parameters.mass = 84.912;         % approx. grams/mole
+                    parameters.Tmelt = 39.3+273.15;
+                    
+                    parameters.LambdaRef = parameters.lambda_D1;
                 case '87Rb'
                     parameters.dim=8+8+16;
                     parameters.spin_S=0.5;
@@ -37,7 +75,7 @@ function parameters = AtomParameters( name )
                     parameters.hf_es2A=84.72;       %hf coeff_A of excited state P_3/2 state in MHz
                     parameters.hf_es2B=12.50;       %hf coeff_B of excited state P_3/2 state in MHz
                     
-                    parameters.mass = 87;         % approx. grams/mole
+                    parameters.mass = 86.909;         % approx. grams/mole
                     parameters.Tmelt = 39.3+273.15;
                     
                     parameters.LambdaRef = parameters.lambda_D1;
@@ -98,7 +136,7 @@ function parameters = AtomParameters( name )
                         error('no atomic data.');
             end
             
-            if ismember(name, {'87Rb', '133Cs'})
+            if ismember(name, {'85Rb', '87Rb', '133Cs'})
                     parameters.wavenumber_D1 = 2*pi/(parameters.lambda_D1*1e-9);
                     parameters.wavenumber_D2 = 2*pi/(parameters.lambda_D2*1e-9);
                     parameters.wavenumber = [parameters.wavenumber_D1, parameters.wavenumber_D2];
