@@ -14,13 +14,17 @@ classdef DensityMatrix < handle
             obj.atom = atom;
             
             if nargin < 2
-                obj.mat = eye(atom.dim(1))/atom.dim(1);
-                obj.dim = atom.dim(1);
-            else
+                opt = 1;
+            end
+            
+%             if nargin < 2
+%                 obj.mat = eye(atom.dim(1))/atom.dim(1);
+%                 obj.dim = atom.dim(1);
+%             else
                 sum_dim = sum( atom.dim(opt) );
                 obj.mat = eye( sum_dim )/sum_dim;
                 obj.dim = sum_dim;
-            end
+%             end
             obj.col = obj.mat(:);
         end
         
