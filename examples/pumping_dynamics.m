@@ -23,12 +23,12 @@ gases={ ...
 
 ensemble=MixedGas(gases);
 
-pumpBeam=AlkaliLaserBeam(1e-6, ...                     % power in [W]
+pumpBeam=AlkaliLaserBeam(1e-4, ...                     % power in [W]
                          rb, Atom.Transition.D1, 0, ... % ref Atom 
                          [0 0 1], [1, 1i], 2e-3);       % direction, pol, spot size
 
 sys=System.OpticalPumping(ensemble, pumpBeam);
-sys.evolve(5000000.0, 1001);
+sys.evolve(50000.0, 1001);
 
 %% Observable
 density_matrix = sys.get_state(1);
@@ -53,10 +53,10 @@ abs_cross_sec=System.calc_obs( density_matrix, obs3 );
 %% Plot
 figure;
 subplot(2,2,1)
-System.plot_obs(sys.result.time, spin_component, {'+r-', 'xg-', 'ob-'});
+System.plot_obs(sys.result.time*1e-6, spin_component, {'+r-', 'xg-', 'ob-'});
 
 subplot(2,2,2)
-System.plot_obs(sys.result.time, level_population, {'r.-', 'g.-', 'b.-'});
+System.plot_obs(sys.result.time*1e-6, level_population, {'r.-', 'g.-', 'b.-'});
 
 subplot(2,2,3)
-System.plot_obs(sys.result.time, abs_cross_sec, {'r.-'}, @semilogy);
+System.plot_obs(sys.result.time*1e-6, abs_cross_sec, {'r.-'}, @semilogy);

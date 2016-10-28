@@ -25,7 +25,7 @@ classdef AlkaliMetal < handle
         
         operator
         
-        zeeman_terms
+%        zeeman_terms
         
 %         rho
     end
@@ -110,7 +110,6 @@ classdef AlkaliMetal < handle
             p = zeros( obj.dim(space) );
             p(k,k) = 1;
         end
-
         
     end
     
