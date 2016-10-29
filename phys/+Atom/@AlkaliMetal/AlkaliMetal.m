@@ -64,9 +64,9 @@ classdef AlkaliMetal < handle
             for k=1:3
                 obj.matEigen.zeeman_terms(:,:,k) = - obj.matEigen.mu{1}(:,:,k)*coil{k}.magB/(2*pi*h_bar)*1e-6;
             end
-           
+            
+%             obj.dipole();
             obj.operator = obj.spinOperator();
-            obj.dipole();
         end
         
         function res = energy_spectrum(obj, state, coil)

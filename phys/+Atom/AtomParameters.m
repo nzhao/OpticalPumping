@@ -147,6 +147,7 @@ function parameters = AtomParameters( name )
                     parameters.dipole_D1 = sqrt( (3*h_bar) * (4*pi*eps0) / (4*parameters.tau_1*1e-9*parameters.wavenumber_D1^3) );
                     parameters.dipole_D2 = sqrt( (3*h_bar) * (4*pi*eps0) / (4*parameters.tau_2*1e-9*parameters.wavenumber_D2^3) * 2 );
                     parameters.dipole = [parameters.dipole_D1, parameters.dipole_D2];                
+                    parameters.gamma_s = 1./parameters.te /2/pi * 1e-6; %spontaneous decay rate in MHz
             end
 end
 

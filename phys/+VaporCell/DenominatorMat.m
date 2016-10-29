@@ -9,7 +9,7 @@ function denominator_mat = DenominatorMat( gas, beam, approx )
     dimE = gas.atom.dim(1+beam.refTransition);
 
     detune = beam.detune;
-    gamma =  gas.gamma2;
+    gamma =  gas.gamma2 + gas.atom.parameters.gamma_s(beam.refTransition);
     doppler_sigma_v = gas.dopplerBroadening();
     sigma = sqrt(2)*beam.wavenumber*doppler_sigma_v /2/pi *1e-6;
 

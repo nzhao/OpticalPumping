@@ -26,6 +26,23 @@ function op = spinOperator( obj )
     op.cProj{1} = op.Proj{1}(:); op.rProj{1} = op.cProj{1}';
     op.cProj{2} = op.Proj{2}(:); op.rProj{2} = op.cProj{1}';
     op.cProj{3} = op.Proj{3}(:); op.rProj{3} = op.cProj{1}';
+
     
+    electric_dipole=obj.dipole();
+
+    gJ1 = obj.gJ(1+Atom.Transition.D1);
+    Dj1 = electric_dipole{Atom.Transition.D1};
+    A_spDecay1=(gJ1/3)*( kron(conj(Dj1(:,:,1)),Dj1(:,:,1)) ...
+                        +kron(conj(Dj1(:,:,2)),Dj1(:,:,2)) ...
+                        +kron(conj(Dj1(:,:,3)),Dj1(:,:,3)) ); 
+    gJ2 = obj.gJ(1+Atom.Transition.D2);
+    Dj2 = electric_dipole{Atom.Transition.D2};
+    A_spDecay2=(gJ2/3)*( kron(conj(Dj2(:,:,1)),Dj2(:,:,1)) ...
+                        +kron(conj(Dj2(:,:,2)),Dj2(:,:,2)) ...
+                        +kron(conj(Dj2(:,:,3)),Dj2(:,:,3)) ); 
+    
+    op.spDecay=cell(1,2);
+    op.spDecay{1} = A_spDecay1; op.spDecay{2} = A_spDecay2;
+    op.electric_dipole=electric_dipole;
 end
 
