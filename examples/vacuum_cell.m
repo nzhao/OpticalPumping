@@ -33,11 +33,11 @@ lg=logical(rho.getQuasiSteadyStateCol());
 col=zeros(128,1);
 col(1)=1;
 col=rho.getQuasiSteadyStateCol();
-t=linspace(0,10,101);
-res=zeros(8, length(t));
+t=linspace(0,10000,101);
+res=zeros(16, length(t));
 for k=1:length(t)
 col1 = expm(-ker*t(k))*col;
-res(:,k)=col1(lg);
+res(:,k)=col1([lg lg]);
 end
 plot(t,res)
 
