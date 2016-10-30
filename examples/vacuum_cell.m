@@ -21,25 +21,30 @@ gases={ ...
 
 ensemble=MixedGas(gases);
 
-pumpBeam=AlkaliLaserBeam(1e-3, ...                     % power in [W]
+pumpBeam=AlkaliLaserBeam(1e-6, ...                     % power in [W]
                          rb85, Atom.Transition.D1, -2.25e3, ... % ref Atom 
                          [0 0 1], [1, 0], 2e-3);       % direction, pol, spot size
 
 %% debug AlkaliOpticalMatrix
 mat=VaporCell.AlkaliOpticalMatrix(gases{2}, pumpBeam);
 ker=mat.qsG;
-rho=rb87.equilibrium_state(Atom.Transition.D1)
-lg=logical(rho.getQuasiSteadyStateCol());
-col=zeros(128,1);
-col(1)=1;
+id8=eye(8);
+lg=[logical(id8(:)) logical(id8(:))];
+rho=rb87.equilibrium_state(Atom.Transition.D1);
 col=rho.getQuasiSteadyStateCol();
-t=linspace(0,10000,101);
+t=linspace(0,1e5,101);
 res=zeros(16, length(t));
 for k=1:length(t)
 col1 = expm(-ker*t(k))*col;
-res(:,k)=col1([lg lg]);
+res(:,k)=col1(lg);
 end
-plot(t,res)
+figure;
+subplot(1,3,1)
+plot(t,res(1:8, :))
+subplot(1,3,2)
+plot(t,res(9:16, :))
+subplot(1,3,3)
+plot(t,sum(res,1))
 
 %% cross section
 detune = linspace(-6e3, 6e3, 301);

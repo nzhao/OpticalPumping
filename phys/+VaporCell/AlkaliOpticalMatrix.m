@@ -12,15 +12,17 @@ function optical_matrix = AlkaliOpticalMatrix( gas, beam )
     tW = tV.*denom;
     
     eff_Hg = -tV'*tW;  eff_He = tV*tW';
-    shift_g = real(eff_Hg); gamma_g = -imag(eff_Hg);
-    shift_e = real(eff_He); gamma_e = -imag(eff_He);
+%     shift_g = real(eff_Hg); gamma_g = -imag(eff_Hg);
+%     shift_e = real(eff_He); gamma_e = -imag(eff_He);
+    shift_g = 0.5*(eff_Hg+eff_Hg'); gamma_g = 1i*(eff_Hg-eff_Hg');
+    shift_e = 0.5*(eff_He+eff_He'); gamma_e = 1i*(eff_He-eff_He');
     pump_rate_g = trace(gamma_g)/dimG;
     pump_rate_e = trace(gamma_e)/dimE;
     
     A_pump_gg = 1i*circleC(eff_Hg)/pump_rate_g;
     A_pump_ee = 1i*circleC(eff_He)/pump_rate_e;
-    A_pump_ge = -1i*( kron(tW.', tV') - kron(tV.', tW') )/pump_rate_g;
-    A_pump_eg = -1i*( kron(conj(tV), tW) - kron(conj(tW), tV) )/pump_rate_e;
+    A_pump_ge = -1i*( kron(tW.', tV') - kron(tV.', tW') )/pump_rate_e;
+    A_pump_eg = -1i*( kron(conj(tV), tW) - kron(conj(tW), tV) )/pump_rate_g;
     
     A_collision_gg = zeros(dimG*dimG);
     A_collision_ee = zeros(dimE*dimE);
@@ -39,9 +41,9 @@ function optical_matrix = AlkaliOpticalMatrix( gas, beam )
     %E_eg = diag( freq{1+Dk, 1}(:) - 1i*gamma2 );
     E_gg = diag( freq{1, 1}(:) );
     
-    qsG_ee = 1i*E_ee + pump_rate_e*A_pump_ee + A_collision_ee;
-    qsG_ge =-gamma_s_ge*A_spDecay_ge - pump_rate_e*A_pump_ge + A_collision_ge;
-    qsG_eg =-pump_rate_g*A_pump_eg;
+    qsG_ee =1i*E_ee + 0*pump_rate_e*A_pump_ee + A_collision_ee;
+    qsG_ge =-gamma_s_ge*A_spDecay_ge - 0*pump_rate_e*A_pump_ge + A_collision_ge;
+    qsG_eg =-0*pump_rate_g*A_pump_eg;
     qsG_gg = 1i*E_gg + pump_rate_g*A_pump_gg + A_collision_gg;
     qsG = [qsG_ee qsG_eg; qsG_ge qsG_gg];
     
