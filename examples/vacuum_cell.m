@@ -16,12 +16,12 @@ rb87=AlkaliMetal('87Rb', coil);
 temperature=273.15+20;
 gases={ ...
     Gas(rb85, 'vapor', temperature), ...
-    Gas(rb87, 'vapor', temperature)
+    Gas(rb87, 'vapor', temperature) ...
 };
 
 ensemble=MixedGas(gases);
 
-pumpBeam=AlkaliLaserBeam(1e-6, ...                     % power in [W]
+pumpBeam=AlkaliLaserBeam(1e-3, ...                     % power in [W]
                          rb85, Atom.Transition.D1, -2.25e3, ... % ref Atom 
                          [0 0 1], [1, 0], 2e-3);       % direction, pol, spot size
 
@@ -29,14 +29,14 @@ pumpBeam=AlkaliLaserBeam(1e-6, ...                     % power in [W]
 mat=VaporCell.AlkaliOpticalMatrix(gases{2}, pumpBeam);
 ker=mat.qsG;
 id8=eye(8);
-lg=[logical(id8(:)) logical(id8(:))];
+lg=[logical(id8(:)); logical(id8(:))];
 rho=rb87.equilibrium_state(Atom.Transition.D1);
 col=rho.getQuasiSteadyStateCol();
-t=linspace(0,1e5,101);
+t=linspace(0,1e4,101);
 res=zeros(16, length(t));
 for k=1:length(t)
-col1 = expm(-ker*t(k))*col;
-res(:,k)=col1(lg);
+    col1 = expm(-ker*t(k))*col;
+    res(:,k)=col1(lg);
 end
 figure;
 subplot(1,3,1)

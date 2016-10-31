@@ -41,9 +41,9 @@ function optical_matrix = AlkaliOpticalMatrix( gas, beam )
     %E_eg = diag( freq{1+Dk, 1}(:) - 1i*gamma2 );
     E_gg = diag( freq{1, 1}(:) );
     
-    qsG_ee =1i*E_ee + 0*pump_rate_e*A_pump_ee + A_collision_ee;
-    qsG_ge =-gamma_s_ge*A_spDecay_ge - 0*pump_rate_e*A_pump_ge + A_collision_ge;
-    qsG_eg =-0*pump_rate_g*A_pump_eg;
+    qsG_ee =1i*E_ee + pump_rate_e*A_pump_ee + A_collision_ee;
+    qsG_ge =-gamma_s_ge*A_spDecay_ge - pump_rate_e*A_pump_ge + A_collision_ge;
+    qsG_eg =-pump_rate_g*A_pump_eg;
     qsG_gg = 1i*E_gg + pump_rate_g*A_pump_gg + A_collision_gg;
     qsG = [qsG_ee qsG_eg; qsG_ge qsG_gg];
     

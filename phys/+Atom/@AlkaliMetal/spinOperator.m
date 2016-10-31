@@ -30,16 +30,17 @@ function op = spinOperator( obj )
     
     electric_dipole=obj.dipole();
 
+    gS = obj.gJ(1);
     gJ1 = obj.gJ(1+Atom.Transition.D1);
     Dj1 = electric_dipole{Atom.Transition.D1};
-    A_spDecay1=(gJ1/3)*( kron(conj(Dj1(:,:,1)),Dj1(:,:,1)) ...
-                        +kron(conj(Dj1(:,:,2)),Dj1(:,:,2)) ...
-                        +kron(conj(Dj1(:,:,3)),Dj1(:,:,3)) ); 
+    A_spDecay1=3/gS*(gJ1/3)*( kron(conj(Dj1(:,:,1)),Dj1(:,:,1)) ... % 3/gS comes from different convention of Dj
+                           +kron(conj(Dj1(:,:,2)),Dj1(:,:,2)) ...
+                           +kron(conj(Dj1(:,:,3)),Dj1(:,:,3)) );
     gJ2 = obj.gJ(1+Atom.Transition.D2);
     Dj2 = electric_dipole{Atom.Transition.D2};
-    A_spDecay2=(gJ2/3)*( kron(conj(Dj2(:,:,1)),Dj2(:,:,1)) ...
-                        +kron(conj(Dj2(:,:,2)),Dj2(:,:,2)) ...
-                        +kron(conj(Dj2(:,:,3)),Dj2(:,:,3)) ); 
+    A_spDecay2=3/gS*(gJ2/3)*( kron(conj(Dj2(:,:,1)),Dj2(:,:,1)) ...
+                             +kron(conj(Dj2(:,:,2)),Dj2(:,:,2)) ...
+                             +kron(conj(Dj2(:,:,3)),Dj2(:,:,3)) ); 
     
     op.spDecay=cell(1,2);
     op.spDecay{1} = A_spDecay1; op.spDecay{2} = A_spDecay2;
