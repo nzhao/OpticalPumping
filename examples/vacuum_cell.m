@@ -21,7 +21,7 @@ gases={ ...
 
 ensemble=MixedGas(gases);
 
-pumpBeam=AlkaliLaserBeam(1e-3, ...                     % power in [W]
+pumpBeam=AlkaliLaserBeam(5e-3, ...                     % power in [W]
                          rb85, Atom.Transition.D1, -2.25e3, ... % ref Atom 
                          [0 0 1], [1, 0], 2e-3);       % direction, pol, spot size
 
@@ -32,7 +32,7 @@ id8=eye(8);
 lg=[logical(id8(:)); logical(id8(:))];
 rho=rb87.equilibrium_state(Atom.Transition.D1);
 col=rho.getQuasiSteadyStateCol();
-t=linspace(0,1e4,101);
+t=linspace(0,5e3,101);
 res=zeros(16, length(t));
 for k=1:length(t)
     col1 = expm(-ker*t(k))*col;
@@ -45,6 +45,25 @@ subplot(1,3,2)
 plot(t,res(9:16, :))
 subplot(1,3,3)
 plot(t,sum(res,1))
+%% full kernel
+full_ker=mat.fullG;
+id8=eye(8); zero8=zeros(8);
+lg=logical([id8(:); zero8(:); zero8(:); id8(:)]);
+col=[zero8(:); zero8(:); zero8(:); id8(:)]/8;
+
+resFull=zeros(16, length(t));
+for k=1:length(t)
+    col1 = expm(-full_ker*t(k))*col;
+    resFull(:,k)=col1(lg);
+end
+figure;
+subplot(1,3,1)
+plot(t,resFull(1:8, :))
+subplot(1,3,2)
+plot(t,resFull(9:16, :))
+subplot(1,3,3)
+plot(t,sum(resFull,1))
+
 
 %% cross section
 detune = linspace(-6e3, 6e3, 301);

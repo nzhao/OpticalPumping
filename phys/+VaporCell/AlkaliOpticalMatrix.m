@@ -37,8 +37,8 @@ function optical_matrix = AlkaliOpticalMatrix( gas, beam )
     gamma1 = gamma_s_ge;
     gamma2 = gas.gamma2+0.5*gamma_s_ge;
     E_ee = diag( freq{1+Dk, 1+Dk}(:) - 1i*gamma1 );
-    %E_ge = diag( freq{1, 1+Dk}(:) - 1i*gamma2 );
-    %E_eg = diag( freq{1+Dk, 1}(:) - 1i*gamma2 );
+    E_ge = diag( freq{1, 1+Dk}(:) - 1i*gamma2 );
+    E_eg = diag( freq{1+Dk, 1}(:) - 1i*gamma2 );
     E_gg = diag( freq{1, 1}(:) );
     
     qsG_ee =1i*E_ee + pump_rate_e*A_pump_ee + A_collision_ee;
@@ -47,6 +47,28 @@ function optical_matrix = AlkaliOpticalMatrix( gas, beam )
     qsG_gg = 1i*E_gg + pump_rate_g*A_pump_gg + A_collision_gg;
     qsG = [qsG_ee qsG_eg; qsG_ge qsG_gg];
     
+    Pg=gas.atom.operator.Proj{1}; Pe=gas.atom.operator.Proj{1+Dk};
+    gg=gas.atom.dim(1); ge=gas.atom.dim(1+Dk);
+    n1=1:ge^2; n2=ge^2+1:ge^2+ge*gg; n3=ge^2+ge*gg+1:ge^2+2*ge*gg; n4=ge^2+2*ge*gg+1:(ge+gg)^2; 
+    
+    G0=zeros((ge+gg)^2); 
+    G0(n1, n1)=1i*E_ee; G0(n2, n2)=1i*E_ge; G0(n3, n3)=1i*E_eg; G0(n4, n4)=1i*E_gg;
+    
+    G1=zeros((ge+gg)^2); 
+    G1(n1, n2)=1i*kron(Pe, tV); 
+    G1(n1, n3)=-1i*kron(conj(tV), Pe);
+    G1(n2, n4)=-1i*kron(conj(tV), Pg);
+    G1(n3, n4)=1i*kron(Pg, tV);
+    G1=G1-G1';
+    
+    G2=zeros((ge+gg)^2);
+    G2(n4, n1)=-gamma_s_ge*A_spDecay_ge;
+    
+    G3=zeros((ge+gg)^2);
+    G3(n2, n2)=1i*beam.detune*eye(ge*gg);
+    G3(n3, n3)=-1i*beam.detune*eye(ge*gg);
+    
+    fullG=G0+G1+G2+G3;
     
     %% export to structure
     optical_matrix.dipole = tV;
@@ -75,6 +97,8 @@ function optical_matrix = AlkaliOpticalMatrix( gas, beam )
     optical_matrix.qsG_ge = qsG_ge;
     optical_matrix.qsG_gg = qsG_gg;
     optical_matrix.qsG = qsG;
+    
+    optical_matrix.fullG = fullG;
 
 end
 
