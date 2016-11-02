@@ -3,11 +3,13 @@ fundamental_constants
 atom=atomParameters('Rb87D1'); %input 'Rb87D1' or 'Rb87D2'
 
 %% Laser Beam
-power=79.5775;       %0.00001; %mW/cm^2
+power=100.0/(pi*0.1^2);       %0.00001; %mW/cm^2
 detuning=-2258; %3761%4575% %MHz %(-2793);%(-752);
 dir=[0.0, 0.0]; % theta & phi
 pol=[1, 1i];     % pol_x & pol_y
 beam=setBeam(power, detuning, dir, pol);
+
+disp( norm( atom.D*beam.tEj/hbar/2/pi) );
 
 %% Experiment Condition
 condition.magB=100.0; % Gauss

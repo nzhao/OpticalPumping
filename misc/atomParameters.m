@@ -37,7 +37,8 @@ function atom=atomParameters(iso)
     
     atom.LgS=2.00231;% Lande g-value of S1/2 state
     atom.LgJ=atom.sw.gJ/3;%approximate Lande g-value of PJ state
-    atom.D=sqrt(atom.sw.gS*hbar*re*c^2*atom.pm.feg/(2*atom.pm.weg));% dipole moment in esu cm
+    %atom.D=sqrt(atom.sw.gS*hbar*re*c^2*atom.pm.feg/(2*atom.pm.weg));% dipole moment in esu cm
+    atom.D=sqrt(3/2)*sqrt(atom.sw.gS*hbar*re*c^2*atom.pm.feg/(2*atom.pm.weg));% dipole moment in esu cm
     atom.pm.keg=2*pi/atom.pm.lamJ; %nominal spatial frequencies
     atom.pm.weg=c*atom.pm.keg;%nominal temporal frequencies
 
@@ -50,7 +51,7 @@ function atom=atomParameters(iso)
     LS.cP=LS.cNe+LS.cNg; LS.rP=LS.rNe+LS.rNg; 
     
     atom.LS=LS;
-    atom.mat=spin_matrices(atom);
+%    atom.mat=spin_matrices(atom);
     atom.pumpR=(-1)^(atom.qn.J-atom.qn.S)/atom.sw.gJ;
     
     atom.SE_cross_section = 1.9e-14; % cm^(-2) S. J. Seltzer thesis

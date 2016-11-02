@@ -7,7 +7,8 @@ function Dj=ElectricDipole(atom, eigenG, eigenE)
         for l=1:-1:-1
             for m=S:-1:-S
                 if k+l==m
-                    sDs(S-m+1,J-k+1,2-l)=sqrt(3/gS)*cg(J,k,1,l,S,m);
+                    %sDs(S-m+1,J-k+1,2-l)=sqrt(3/gS)*cg(J,k,1,l,S,m);
+                    sDs(S-m+1,J-k+1,2-l)=cg(J,k,1,l,S,m);
                 end
             end
         end
