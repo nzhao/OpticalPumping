@@ -1,4 +1,4 @@
-classdef VacuumCell < CellSystem.AbstractCellSystem
+ classdef VacuumCell < CellSystem.AbstractCellSystem
     %VACUUMCELL Summary of this class goes here
     %   Detailed explanation goes here
     

@@ -6,6 +6,8 @@ classdef AbstractCellSystem < handle
         gas
         beam
         ingredient
+        nIngredient
+        
         interaction
     end
     
@@ -23,18 +25,20 @@ classdef AbstractCellSystem < handle
                 obj.beam = {beam};
             end
             
-            obj.ingredient = [obj.beam, obj.gas];
+            obj.ingredient = [obj.beam, obj.gas];            
+            obj.nIngredient = length(obj.ingredient);
+
+            obj.interaction = cell(obj.nIngredient);
+            for k = 1:length(obj.ingredient)
+                for q = 1:length(obj.ingredient)
+                    
+                    obj.interaction{k, q} = obj.interaction()
+                end
+            end
             
-            nIngredient = length(obj.ingredient);
-            obj.interaction = cell(nIngredient);
         end
         
         function obj = calc_interaction(obj)
-            for k = 1:length(obj.ingredient)
-                for q = 1:length(obj.ingredient)
-                    obj.interaction{k, q} = calc
-                end
-            end
         end
     end
     
