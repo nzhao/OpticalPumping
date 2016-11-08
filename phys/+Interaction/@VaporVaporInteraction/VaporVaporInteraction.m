@@ -1,4 +1,4 @@
-classdef GasGasInteraction < Interaction.AbstractInteraction
+classdef VaporVaporInteraction < Interaction.AbstractInteraction
     %GASGASINTERACTION Summary of this class goes here
     %   Detailed explanation goes here
     
@@ -6,9 +6,13 @@ classdef GasGasInteraction < Interaction.AbstractInteraction
     end
     
     methods
-        function obj = GasGasInteraction(gas1, gas2)
+        function obj = VaporVaporInteraction(gas1, gas2)
             obj@Interaction.AbstractInteraction(gas1, gas2);
         end
+        
+        function calc_matrix(obj)
+        end
+
     end
     
 end

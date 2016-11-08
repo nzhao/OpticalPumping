@@ -38,16 +38,22 @@ classdef AbstractCellSystem < handle
             obj.component = cell( 1, obj.nComponent );
             for k=1:length(stuff)
                 obj.component{k} = CellSystem.Component(k, stuff{k});
+                if strcmp(obj.component{k}.type, 'beam')
+                    obj.component{k}.set_frequency();
+                elseif strcmp(obj.component{k}.type, 'vapor')
+                    obj.component{k}.set_frequency(obj.beam{1});
+                end
             end    
         end
         
-        function obj = calc_interaction(obj)
+        function interaction = calc_interaction(obj)
             for k = 1:obj.nComponent
                 for q = k:obj.nComponent
                     obj.interaction{k, q} = obj.component_interaction(k,q);
                     obj.interaction{q, k} = obj.interaction{k, q};
                 end
             end
+            interaction = obj.interaction;
         end
         
         %% Input Interface

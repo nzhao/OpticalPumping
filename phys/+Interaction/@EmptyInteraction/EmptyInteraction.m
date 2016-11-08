@@ -9,6 +9,9 @@ classdef EmptyInteraction < Interaction.AbstractInteraction
         function obj = EmptyInteraction(comp1, comp2)
             obj@Interaction.AbstractInteraction(comp1, comp2);
         end
+        
+        function calc_matrix(obj)
+        end
     end
     
 end
