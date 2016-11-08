@@ -5,13 +5,14 @@ classdef AbstractCellSystem < handle
     properties
         gas
         beam
-        ingredient
-        nIngredient
+        component
+        nComponent
         
-        interaction
+        interaction        
     end
     
     methods
+        %% Constructor
         function obj = AbstractCellSystem(gas, beam)
             if iscell(gas)
                 obj.gas = gas;
@@ -25,21 +26,64 @@ classdef AbstractCellSystem < handle
                 obj.beam = {beam};
             end
             
-            obj.ingredient = [obj.beam, obj.gas];            
-            obj.nIngredient = length(obj.ingredient);
-
-            obj.interaction = cell(obj.nIngredient);
-            for k = 1:length(obj.ingredient)
-                for q = 1:length(obj.ingredient)
-                    
-                    obj.interaction{k, q} = obj.interaction()
-                end
-            end
+            stuff = [obj.beam, obj.gas];
+            obj.nComponent = length(stuff);
+            obj.make_component(stuff);
+            obj.interaction = cell(obj.nComponent);
             
         end
         
-        function obj = calc_interaction(obj)
+        %% Proc
+        function obj = make_component(obj, stuff)
+            obj.component = cell( 1, obj.nComponent );
+            for k=1:length(stuff)
+                obj.component{k} = CellSystem.Component(k, stuff{k});
+            end    
         end
+        
+        function obj = calc_interaction(obj)
+            for k = 1:obj.nComponent
+                for q = k:obj.nComponent
+                    obj.interaction{k, q} = obj.component_interaction(k,q);
+                    obj.interaction{q, k} = obj.interaction{k, q};
+                end
+            end
+        end
+        
+        %% Input Interface
+        function obj = set_options(obj, varargin)
+            if nargin == 2
+                opt=varargin{1};
+                for k=1:obj.nComponent
+                    obj.component{k}.option = opt;
+                end
+            elseif nargin == 3
+                idx = varargin{1};  opt = varargin{2};
+                obj.component{idx}.option = opt;
+            else
+                error('wrong parameters');
+            end
+        end
+        
+        %% Output Interface
+        function interaction = get_interaction(obj, k, q)
+            if nargin == 2
+                q = k;
+            end
+            interaction = obj.interaction{k,q};
+        end
+        
+        function disp_component(obj)
+            fprintf([repmat('=',1,50), '\n']);
+            fprintf('There are %d components included.\n', obj.nComponent);
+            fprintf([repmat('-',1,50), '\n']);
+            for k=1:obj.nComponent
+                obj.component{k}.disp;
+            end
+            fprintf([repmat('=',1,50), '\n']);
+        end
+        
+
     end
     
 end

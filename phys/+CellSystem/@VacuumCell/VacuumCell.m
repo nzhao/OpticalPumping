@@ -8,8 +8,10 @@
     methods
         function obj = VacuumCell(gas, beam)
             obj@CellSystem.AbstractCellSystem(gas, beam);
-            
+            obj.set_options('vacuum');
+            obj.calc_interaction();
         end
+        
     end
     
 end
