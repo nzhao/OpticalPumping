@@ -46,10 +46,10 @@ function matrix_steady_state( obj )
 
         freq = obj.vapor.atom.eigen.transFreq;
         gamma1 = gamma_s_ge;
-        %gamma2 = obj.vapor.gamma2+0.5*gamma_s_ge;
+        gamma2 = obj.vapor.gamma2+0.5*gamma_s_ge;
         E_ee = diag( freq{1+Dk, 1+Dk}(:) - 1i*gamma1 );
-        %E_ge = diag( freq{1, 1+Dk}(:) - 1i*gamma2 );
-        %E_eg = diag( freq{1+Dk, 1}(:) - 1i*gamma2 );
+        E_ge = diag( freq{1, 1+Dk}(:) - 1i*gamma2 );
+        E_eg = diag( freq{1+Dk, 1}(:) - 1i*gamma2 );
         E_gg = diag( freq{1, 1}(:) );
 
         qsG_ee{k} =1i*E_ee + pump_rate_e(k)*A_pump_ee{k} + A_collision_ee;
@@ -57,6 +57,29 @@ function matrix_steady_state( obj )
         qsG_eg{k} =-pump_rate_g(k)*A_pump_eg{k};
         qsG_gg{k} = 1i*E_gg + pump_rate_g(k)*A_pump_gg{k} + A_collision_gg;
         qsG{k} = [qsG_ee{k} qsG_eg{k}; qsG_ge{k} qsG_gg{k}];
+
+        Pg=obj.vapor.atom.operator.Proj{1}; Pe=obj.vapor.atom.operator.Proj{1+Dk};
+        gg=obj.vapor.atom.dim(1); ge=obj.vapor.atom.dim(1+Dk);
+        n1=1:ge^2; n2=ge^2+1:ge^2+ge*gg; n3=ge^2+ge*gg+1:ge^2+2*ge*gg; n4=ge^2+2*ge*gg+1:(ge+gg)^2; 
+
+        G0=zeros((ge+gg)^2); 
+        G0(n1, n1)=1i*E_ee; G0(n2, n2)=1i*E_ge; G0(n3, n3)=1i*E_eg; G0(n4, n4)=1i*E_gg;
+
+        G1=zeros((ge+gg)^2); 
+        G1(n1, n2)=1i*kron(Pe, tV); 
+        G1(n1, n3)=-1i*kron(conj(tV), Pe);
+        G1(n2, n4)=-1i*kron(conj(tV), Pg);
+        G1(n3, n4)=1i*kron(Pg, tV);
+        G1=G1-G1';
+
+        G2=zeros((ge+gg)^2);
+        G2(n4, n1)=-gamma_s_ge*A_spDecay_ge;
+
+        G3=zeros((ge+gg)^2);
+        G3(n2, n2)=1i*obj.beam.detune*eye(ge*gg);
+        G3(n3, n3)=-1i*obj.beam.detune*eye(ge*gg);
+
+        fullG=G0+G1+G2+G3;
     end
     
     %% output variables
@@ -69,6 +92,8 @@ function matrix_steady_state( obj )
     obj.matrix.shift_g = shift_g;
     obj.matrix.gamma_e = gamma_e;
     obj.matrix.gamma_g = gamma_g;
+    
+    obj.matrix.fullG = fullG;
     
     obj.parameter.dimG = dimG;
     obj.parameter.dimE = dimE;
