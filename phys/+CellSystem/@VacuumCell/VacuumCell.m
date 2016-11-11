@@ -6,9 +6,13 @@
     end
     
     methods
-        function obj = VacuumCell(gas, beam)
+        function obj = VacuumCell(gas, beam, option)
             obj@CellSystem.AbstractCellSystem(gas, beam);
-            obj.set_options('vacuum');
+            if nargin < 3
+                option = 'vacuum-full';
+            end
+            
+            obj.set_options(option);
             obj.calc_interaction();
         end
         

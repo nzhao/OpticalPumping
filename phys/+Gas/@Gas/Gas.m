@@ -10,13 +10,14 @@ classdef Gas < handle
         pressure
         temperature
         velocity
+        transition
         
         gamma2 = 0
     end
     
     methods
-        function obj = Gas(atom, type, temperature, pressure, name)
-            if nargin < 5
+        function obj = Gas(atom, type, temperature, transition, pressure, name)
+            if nargin < 6
                 name = atom.name;
             end
             obj.name = name;
@@ -24,10 +25,15 @@ classdef Gas < handle
             obj.type = type;
             obj.temperature = temperature;
 
-            if nargin < 4
+            if nargin < 5
                 pressure = obj.getPressure(temperature);
             end
             obj.pressure = pressure;
+            
+            if nargin < 4
+                transition = '';
+            end
+            obj.transition = transition;
             
             try
                 abundance = atom.parameters.abundance;

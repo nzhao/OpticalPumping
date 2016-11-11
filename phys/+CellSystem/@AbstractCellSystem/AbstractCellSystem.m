@@ -29,24 +29,20 @@ classdef AbstractCellSystem < handle
             stuff = [obj.beam, obj.gas];
             obj.nComponent = length(stuff);
             obj.make_component(stuff);
-            obj.interaction = cell(obj.nComponent);
-            
         end
         
         %% Proc
         function obj = make_component(obj, stuff)
             obj.component = cell( 1, obj.nComponent );
             for k=1:length(stuff)
-                obj.component{k} = CellSystem.Component(k, stuff{k});
-                if strcmp(obj.component{k}.type, 'beam')
-                    obj.component{k}.set_frequency();
-                elseif strcmp(obj.component{k}.type, 'vapor')
-                    obj.component{k}.set_frequency(obj.beam{1});
-                end
+                obj.component{k} = CellSystem.Component(k, stuff{k});                
+                obj.component{k}.set_frequency();
+                
             end    
         end
         
         function interaction = calc_interaction(obj)
+            obj.interaction = cell(obj.nComponent);
             for k = 1:obj.nComponent
                 for q = k:obj.nComponent
                     obj.interaction{k, q} = obj.component_interaction(k,q);
@@ -54,6 +50,12 @@ classdef AbstractCellSystem < handle
                 end
             end
             interaction = obj.interaction;
+        end
+        
+        function state = evolution(obj, k, t)
+            ker_full=obj.interaction{1, k}.matrix.fullG;
+            rho = obj.component{k}.state;
+            state = rho.evolve(ker_full, t);
         end
         
         %% Input Interface
