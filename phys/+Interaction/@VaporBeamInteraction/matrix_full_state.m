@@ -5,7 +5,8 @@ function matrix_full_state( obj )
     dimG = obj.vapor.atom.dim(1);
     dimE = obj.vapor.atom.dim(1+Dk);
     
-    velocity_list = obj.parameter.velocityList; nVelocity = length(velocity_list);
+    %velocity_list = obj.parameter.velocityList; nVelocity = length(velocity_list);
+    nVelocity = 1;
     qsG_ee = cell(1, nVelocity); qsG_eg = cell(1, nVelocity);
     qsG_ge = cell(1, nVelocity); qsG_gg = cell(1, nVelocity);
     qsG = cell(1, nVelocity);
@@ -18,9 +19,11 @@ function matrix_full_state( obj )
     A_pump_ee = cell(1, nVelocity); A_pump_eg = cell(1, nVelocity);
     A_pump_ge = cell(1, nVelocity); A_pump_gg = cell(1, nVelocity);
     
-    for k=1:nVelocity
+    k = 1;
+    %for k=1:nVelocity
         %denom = Interaction.DenominatorMat(obj.vapor, obj.beam, 'DopplerAverage');
-        denom = Interaction.DenominatorMat(obj.vapor, obj.beam, velocity_list(k));
+        %denom = Interaction.DenominatorMat(obj.vapor, obj.beam, velocity_list(k));
+        denom = Interaction.DenominatorMat(obj.vapor, obj.beam, obj.parameter.velocity);
         tV =  Interaction.AtomPhotonInteraction(obj.vapor, obj.beam);
         tW = tV.*denom;
 
@@ -76,11 +79,12 @@ function matrix_full_state( obj )
         G2(n4, n1)=-gamma_s_ge*A_spDecay_ge;
 
         G3=zeros((ge+gg)^2);
-        G3(n2, n2)=1i*obj.beam.detune*eye(ge*gg);
-        G3(n3, n3)=-1i*obj.beam.detune*eye(ge*gg);
+        doppler_shif = obj.beam.wavenumber*obj.parameter.velocity /2/pi *1e-6;
+        G3(n2, n2)=1i*(obj.beam.detune+doppler_shif)*eye(ge*gg);
+        G3(n3, n3)=-1i*(obj.beam.detune+doppler_shif)*eye(ge*gg);
 
         fullG=G0+G1+G2+G3;
-    end
+    %end
     
     %% output variables
     obj.matrix.qsG_ee = qsG_ee;

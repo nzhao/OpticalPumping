@@ -52,10 +52,10 @@ classdef AbstractCellSystem < handle
             interaction = obj.interaction;
         end
         
-        function state = evolution(obj, k, t)
-            ker_full=obj.interaction{1, k}.matrix.fullG;
-            rho = obj.component{k}.state;
-            state = rho.evolve(ker_full, t);
+        function state = evolution(obj, component_index, t)
+            ker = obj.get_kernel(component_index);
+            rho = obj.component{component_index}.state;
+            state = rho.evolve(ker, t);
         end
         
         %% Input Interface
@@ -90,8 +90,10 @@ classdef AbstractCellSystem < handle
             end
             fprintf([repmat('=',1,50), '\n']);
         end
-        
-
+    end
+    
+    methods (Abstract = true)
+        ker = get_kernel(obj, component_index)
     end
     
 end

@@ -126,6 +126,10 @@ classdef DensityMatrix < handle
             end                
         end
         
+        function col = mtimes(obj, f)
+            col = obj.getCol() * f;
+        end
+        
         function mat = equilibrium_state_matrix(obj)
             mat = zeros( obj.dim );
             startGS = obj.first(end); endGS=obj.last(end); dimGS = obj.dimList(end);

@@ -14,11 +14,11 @@ classdef VaporBeamInteraction < Interaction.AbstractInteraction
             obj.beam = beam.stuff;
             obj.option = vapor.option;
             
-            obj.parameter.velocityList = 0.0;
-            obj.calc_matrix();
+            obj.parameter.velocity = 0.0;
+            %obj.calc_matrix();
         end
         
-        function calc_matrix(obj)
+        function obj = calc_matrix(obj)
             switch obj.option
                 case 'vacuum'
                     obj.matrix_steady_state();
@@ -31,16 +31,20 @@ classdef VaporBeamInteraction < Interaction.AbstractInteraction
             end
         end
         
-        function set_velocity_list(obj, varargin)
-            if nargin == 2
-                v=varargin{1};
-                obj.parameter.velocityList=v;
-            elseif nargin == 4
-                minV=varargin{1}; maxV=varargin{2}; nV=varargin{3};
-                obj.parameter.velocityList=linspace(minV, maxV, nV);
-            end
-                
-        end
+        function obj = set_velocity(obj, v)
+            obj.parameter.velocity = v;
+        end 
+        
+%         function set_velocity_list(obj, varargin)
+%             if nargin == 2
+%                 v=varargin{1};
+%                 obj.parameter.velocityList=v;
+%             elseif nargin == 4
+%                 minV=varargin{1}; maxV=varargin{2}; nV=varargin{3};
+%                 obj.parameter.velocityList=linspace(minV, maxV, nV);
+%             end
+%                 
+%         end
     end
     
 end

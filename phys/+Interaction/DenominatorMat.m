@@ -19,7 +19,7 @@ function denominator_mat = DenominatorMat( gas, beam, opt )
     switch approx
         case 'None'
             doppler_shif = beam.wavenumber*v /2/pi *1e-6;
-            energy_mat = Heg + detune - doppler_shif - 1i*gamma; % MHz
+            energy_mat = Heg + detune + doppler_shif - 1i*gamma; % MHz
             denominator_mat = ones(dimE,dimG)./energy_mat;
         case 'DopplerAverage'
             doppler_sigma_v = gas.dopplerBroadening();
