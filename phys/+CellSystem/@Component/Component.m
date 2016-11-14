@@ -10,6 +10,7 @@ classdef Component < handle
         
         stuff
         state
+        dimList
 %        steady_state
         option
         frequency
@@ -28,6 +29,7 @@ classdef Component < handle
                 case 'vapor'
                     obj.hasDynamics = 1;
                     obj.state = stuff.atom.operator.equilibrium_state{1+stuff.transition};
+                    obj.dimList = obj.state.dimList;
                 otherwise
                     warning('non-supported type %s', obj.type);
             end

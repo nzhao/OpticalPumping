@@ -35,7 +35,7 @@ classdef VaporBeamInteraction < Interaction.AbstractInteraction
             obj.parameter.velocity = v;
         end 
         
-        function [vList, wList, sigmaV] = velocity_sampling(obj, gamma)
+        function [len, vList, uList, wList, sigmaV] = velocity_sampling(obj, gamma)
             center_freq = obj.beam.detune;
             refTrans = obj.beam.refTransition;
             transFreq =obj.vapor.atom.eigen.transFreq{1+refTrans, 1}(:);
@@ -72,6 +72,9 @@ classdef VaporBeamInteraction < Interaction.AbstractInteraction
             wListTemp = [wListFine; wListRaw];
             [vList, idx] = sort(vListTemp);
             wList = wListTemp(idx);
+            
+            len = length(vList);
+            uList = exp(-vList.*vList/2/sigmaV/sigmaV)/sqrt(2*pi)/sigmaV;
         end
         
 %         function set_velocity_list(obj, varargin)
