@@ -32,6 +32,9 @@ function matrix_full_state( obj )
         shift_e{k} = 0.5*(eff_He{k}+eff_He{k}'); gamma_e{k} = 1i*(eff_He{k}-eff_He{k}');
         pump_rate_g(k) = trace(gamma_g{k})/dimG;
         pump_rate_e(k) = trace(gamma_e{k})/dimE;
+        
+        mat_ge = zeros(dimG, dimE); mat_eg=zeros(dimE, dimG);
+        gamma_col = [gamma_e{k}(:); mat_eg(:); mat_ge(:); gamma_g{k}(:)];
 
         A_pump_gg{k} = 1i*circleC(eff_Hg{k})/pump_rate_g(k);
         A_pump_ee{k} = 1i*circleC(eff_He{k})/pump_rate_e(k);
@@ -80,8 +83,8 @@ function matrix_full_state( obj )
 
         G3=zeros((ge+gg)^2);
         doppler_shif = obj.beam.wavenumber*obj.parameter.velocity /2/pi *1e-6;
-        G3(n2, n2)=1i*(obj.beam.detune+doppler_shif)*eye(ge*gg);
-        G3(n3, n3)=-1i*(obj.beam.detune+doppler_shif)*eye(ge*gg);
+        G3(n2, n2)=1i*(obj.beam.detune-doppler_shif)*eye(ge*gg);
+        G3(n3, n3)=-1i*(obj.beam.detune-doppler_shif)*eye(ge*gg);
 
         fullG=G0+G1+G2+G3;
     %end
@@ -98,6 +101,7 @@ function matrix_full_state( obj )
     obj.matrix.gamma_g = gamma_g;
     
     obj.matrix.fullG = fullG;
+    obj.matrix.gamma_col = gamma_col;
     
     obj.parameter.dimG = dimG;
     obj.parameter.dimE = dimE;

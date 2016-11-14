@@ -18,26 +18,51 @@ temperature=273.15+20;
 gases={  Gas(rb87, 'vapor', temperature, Atom.Transition.D1) };
 
 pumpBeam=AlkaliLaserBeam(5e-4, ...                     % power in [W]
-                         rb87, Atom.Transition.D1, 4580,...%-2.25e3, ... % ref Atom 
+                         rb87, Atom.Transition.D1, -3064,...%-2.25e3, ... % ref Atom 
                          [0 0 1], [1, 0], 2e-3);       % direction, pol, spot size
                      
+
+                     
+%%
+t_inf = 2e1;
+sys=VacuumCell(gases, pumpBeam.set_detuning(4548));
+[res, vData] = sys.velocity_average(2, t_inf);
+
+
+F1pop=sum(vData.popG(6:8, :), 1); F2pop=sum(vData.popG(1:5, :), 1);
+F1gm=sum(vData.gammaG_diag(6:8, :), 1); F2gm=sum(vData.gammaG_diag(1:5, :), 1);
+
+figure
+subplot(3, 2, 1)
+plot(vData.vList, F1pop, 'ro-',vData.vList, F2pop, 'bd-')
+ylim([0 1])
+subplot(3, 2, 3)
+semilogy(vData.vList, F1gm, 'ro-',vData.vList, F2gm, 'bd-')
+subplot(3, 2, 5)
+%plot(vData.vList, F1pop.*F1gm + F2pop.*F2gm, 'ko-', vData.vList, vData.absorption, 'rd-')
+plot(vData.vList, sum(vData.popG.*vData.gammaG_diag,1), 'ko-', vData.vList, vData.absorption, 'rd-')
+
+subplot(3, 2, 2)
+plot(vData.vList, vData.uList, 'ro-')
+subplot(3, 2, 4)
+plot(vData.vList, (F1pop.*F1gm + F2pop.*F2gm).*vData.uList', 'ko-')
+
+subplot(3, 2, 6)
+plot(vData.vList,  vData.absorption.*vData.uList', 'ko-')
+
+
 %% System
 t_inf = 2e1;
-freqList = linspace(3.0e3, 5e3, 51);
-popG=zeros(8, length(freqList));
-cross_section=zeros(1, length(freqList));
+freqList = linspace(-5.0e3, 6e3, 251);
+abs_res=zeros(1, length(freqList));
 for k=1:length(freqList)
     freq = freqList(k);
     fprintf('freq = %f\n', freq);
     sys=VacuumCell(gases, pumpBeam.set_detuning(freq));
-    [state_freq, ~, cross_section(k)] = sys.evolution(2, t_inf, 'DopplerAverage');
-    popG(:, k) = state_freq.population(2);
+    abs_res(k) = sys.velocity_average(2, t_inf);
 end
 figure;
-subplot(2, 1, 1)
-plot(freqList, sum(popG(6:8, :), 1), 'r*-', freqList,  sum(popG(1:5, :), 1), 'bd-')
-subplot(2, 1, 2)
-plot(freqList, cross_section, 'bd-')
+plot(freqList, abs_res, 'r*-')
 
 
 %%

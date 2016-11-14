@@ -20,49 +20,59 @@
             ker=obj.interaction{1, component_index}.matrix.fullG;
         end
         
-        function [state, stateList, cross_section] = evolution(obj, component_index, t, option)
-            if nargin < 4
-                option = 'None';
-            end
-            
-            switch option
-                case 'DopplerAverage'
-                    nSampling = 64; x = 5;
-                    comp = obj.component{component_index};
-                    
-                    dim = comp.state.dim;
-                    sigmaV = comp.stuff.dopplerBroadening();
-                    
-                    [vList, wList] = comp.velocity_sampling(nSampling, x);
-                    stateList = cell(1, nSampling);
-                    col = zeros(dim*dim, 1);
-                    cross_section = 0;
-                    for k = 1:nSampling
-                        v = vList(k);
-                        obj.interaction{1, component_index}.set_velocity(v).calc_matrix();
-                        stateList{k}=evolution@CellSystem.AbstractCellSystem(obj, component_index, t);
-                        
-                        col_e = obj.interaction{1, component_index}.matrix.gamma_e{1}(:);
-                        col_g = obj.interaction{1, component_index}.matrix.gamma_g{1}(:);
-                        mat_eg = zeros(stateList{k}.dimList(1), stateList{k}.dimList(2));
-                        mat_ge = zeros(stateList{k}.dimList(2), stateList{k}.dimList(1));
-                        gamma = [col_e; mat_eg(:); mat_ge(:); col_g];
-
-                        cross_section_k = gamma'*stateList{k}.getCol();
-                        cross_section = cross_section + cross_section_k* exp(-v*v/2/sigmaV/sigmaV)/sqrt(2*pi)/sigmaV * wList(k);
-                        col = col + stateList{k} * exp(-v*v/2/sigmaV/sigmaV)/sqrt(2*pi)/sigmaV * wList(k);
-                    end
-                    state = Algorithm.DensityMatrix(stateList{k}.atom, stateList{k}.subspace);
-                    state.set_col(2.0*col);
-                    
-                case 'None'
-                    state = evolution@CellSystem.AbstractCellSystem(obj, component_index, t);
-                    stateList=cell();
-                
-                otherwise
-                    error('non-surpported option %s', option);
+        function state = evolution(obj, component_index, t)
+            state = evolution@CellSystem.AbstractCellSystem(obj, component_index, t);
+        end
+        
+        function [stateList, gamma_col] = velocity_resolved_evolution(obj, component_index, vList, t)
+            stateList=cell(1, length(vList));
+            dim = 64;
+            gamma_col=zeros(dim, length(vList));
+            for k=1:length(vList)
+                v=vList(k);
+                obj.interaction{1, component_index}.set_velocity(v).calc_matrix();
+                stateList{k} = obj.evolution(component_index, t);
+                gamma_col(:, k) = obj.interaction{1, component_index}.matrix.gamma_g{1}(:);
             end
         end
+        
+        function [res, data] = velocity_average(obj, idx, t)
+            %nSampling = 256; x = 5;
+            %[vList, wList, sigmaV] = obj.component{idx}.velocity_sampling(nSampling, x);
+            [vList, wList, sigmaV] = obj.interaction{1, idx}.velocity_sampling(50.0);
+            nSampling = length(vList);
+            uList = exp(-vList.*vList/2/sigmaV/sigmaV)/sqrt(2*pi)/sigmaV;
+            [stateList, gamma_col] = obj.velocity_resolved_evolution(idx, vList, t);
+            
+            dimG = stateList{1}.dimList(1);
+            
+            data.vList = vList;
+            data.wList = wList;
+            data.uList = uList;
+            data.stateList = stateList;
+            data.gammaG = gamma_col;
+            
+            data.matG = zeros(dimG*dimG, nSampling);
+            data.popG = zeros(dimG, nSampling);
+            %data.gammaG = zeros(dimG*dimG, nSampling);
+            data.gammaG_diag = zeros(dimG, nSampling);
+            data.sbsorption = zeros(1, nSampling);
+            
+            
+            for k=1:nSampling
+                matG = stateList{k}.block(2,2);
+                data.matG(:, k) = matG(:);
+                data.popG(:, k) = diag(matG);
+                %data.gammaG(:, k) = gamma_col(end-dimG*dimG+1:end);
+                data.gammaG_diag(:, k) = diag(reshape(data.gammaG(:, k), [dimG, dimG]));
+                data.absorption(k) = data.matG(:, k)'*data.gammaG(:, k);
+            end
+            
+            func_val = data.absorption.*data.uList';
+            res = func_val*wList;
+        end
+
+
                 
     end
     

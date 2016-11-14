@@ -41,9 +41,8 @@ classdef Gas < handle
                 abundance = 1;
             end
             obj.density = pressure / kB / temperature*abundance;
-            
-            mass = Atom.AtomParameters(obj.name).mass / avogadro * 1e-3;
-            obj.velocity = sqrt( kB*temperature / mass );
+
+            obj.velocity = obj.dopplerBroadening();
         end
         
         function obj = set_temperature(obj, temperature)
