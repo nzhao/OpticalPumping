@@ -16,6 +16,11 @@ classdef VaporBeamInteraction < Interaction.AbstractInteraction
             
             obj.parameter.velocity = 0.0;
             %obj.calc_matrix();
+            
+            obj.parameter.sampling_nRaw = 12;
+            obj.parameter.sampling_nFine = 32;
+            obj.parameter.sampling_xRange = 5;
+            obj.parameter.sampling_gamma = 50; %MHz
         end
         
         function obj = calc_matrix(obj)
@@ -35,7 +40,12 @@ classdef VaporBeamInteraction < Interaction.AbstractInteraction
             obj.parameter.velocity = v;
         end 
         
-        function [len, vList, uList, wList, sigmaV] = velocity_sampling(obj, gamma)
+        function [len, vList, uList, wList, sigmaV] = velocity_sampling(obj)
+            nRaw = obj.parameter.sampling_nRaw; 
+            nFine = obj.parameter.sampling_nFine;
+            xRange = obj.parameter.sampling_xRange; 
+            gamma = obj.parameter.sampling_gamma;
+  
             center_freq = obj.beam.detune;
             refTrans = obj.beam.refTransition;
             transFreq =obj.vapor.atom.eigen.transFreq{1+refTrans, 1}(:);
@@ -46,12 +56,11 @@ classdef VaporBeamInteraction < Interaction.AbstractInteraction
             v_gamma = 2*pi*gamma*1e6/obj.beam.wavenumber;
             
             sigmaV = obj.vapor.velocity;
-            nRaw = 4; nFine = 32; x = 5;
-            if(v_gamma > 5*sigmaV)
+            if(v_gamma > xRange*sigmaV)
                 error('too large v_gamma %f', v_gamma);
             end
             
-            left = v_res -v_gamma; right = v_res + v_gamma; width = x*sigmaV;
+            left = v_res -v_gamma; right = v_res + v_gamma; width = xRange*sigmaV;
             if right < -width || left > width
                 vListFine = []; wListFine = [];
                 [vListRaw, wListRaw] = lgwt(nRaw,-width, width);

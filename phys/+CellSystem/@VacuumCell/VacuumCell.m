@@ -37,7 +37,7 @@
             end
             
             [nSampling, data.vList, data.uList, data.wList, data.sigmaV] = ...
-                obj.interaction{1, index}.velocity_sampling(50.0);
+                obj.interaction{1, index}.velocity_sampling();
             
             dimG = obj.component{index}.dimList(1);
             
