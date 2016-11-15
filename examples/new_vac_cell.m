@@ -23,12 +23,11 @@ pumpBeam=AlkaliLaserBeam(5e-4, ...                     % power in [W]
                      
 
 %%
-t_pump = 2e1;
-sys=VacuumCell(gases, pumpBeam.set_detuning(4548));
+t_pump = 50.0;
+sys=VacuumCell(gases, pumpBeam.set_detuning(-3064));
 vData=sys.velocity_resolved_pumping(2, t_pump, 'diagnose');
 
 %% System
-t_pump = 2e1;
 freqList = linspace(-5.0e3, 6e3, 251);
 abs_res=zeros(1, length(freqList));
 for k=1:length(freqList)
