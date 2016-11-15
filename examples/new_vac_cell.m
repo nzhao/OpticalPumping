@@ -12,23 +12,23 @@ coil = { ...
     Condition.Coil('coily', 0.0), ...
     Condition.Coil('coilz', 0.00003)};
 
-rb87=AlkaliMetal('87Rb', coil);
+rb85=AlkaliMetal('85Rb', coil);
 
 temperature=273.15+20;
-gases={  Gas(rb87, 'vapor', temperature, Atom.Transition.D1) };
+gases={  Gas(rb85, 'vapor', temperature, Atom.Transition.D1) };
 
 pumpBeam=AlkaliLaserBeam(5e-4, ...                     % power in [W]
-                         rb87, Atom.Transition.D1, -3064,...%-2.25e3, ... % ref Atom 
+                         rb85, Atom.Transition.D1, -3064,...%-2.25e3, ... % ref Atom 
                          [0 0 1], [1, 0], 2e-3);       % direction, pol, spot size
                      
 
 %%
 t_pump = 50.0;
-sys=VacuumCell(gases, pumpBeam.set_detuning(-3064));
+sys=VacuumCell(gases, pumpBeam.set_detuning(-1000));
 vData=sys.velocity_resolved_pumping(2, t_pump, 'diagnose');
 
 %% System
-freqList = linspace(-5.0e3, 6e3, 251);
+freqList = linspace(-4.0e3, 4e3, 151);
 abs_res=zeros(1, length(freqList));
 for k=1:length(freqList)
     freq = freqList(k); fprintf('freq = %f\n', freq);
