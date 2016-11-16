@@ -20,10 +20,6 @@
             ker=obj.interaction{1, component_index}.matrix.fullG;
         end
         
-        function state = evolution(obj, component_index, t)
-            state = evolution@CellSystem.AbstractCellSystem(obj, component_index, t);
-        end
-        
         function [state, gammaG] = velocity_resolved_evolution(obj, component_index, v, t)
             obj.interaction{1, component_index}.set_velocity(v).calc_matrix();
             state = obj.evolution(component_index, t);

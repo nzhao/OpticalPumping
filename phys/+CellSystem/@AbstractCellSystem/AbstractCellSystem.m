@@ -55,7 +55,7 @@ classdef AbstractCellSystem < handle
         function state = evolution(obj, component_index, t)
             ker = obj.get_kernel(component_index);
             rho = obj.component{component_index}.state;
-            state = rho.evolve(ker, t);
+            state = rho.evolve(2*pi*ker, t);
         end
         
         %% Input Interface
