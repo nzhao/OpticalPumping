@@ -7,7 +7,7 @@ function optical_matrix = AlkaliOpticalMatrix( gas, beam )
     dimE = gas.atom.dim(1+Dk);
     %dimFull = dimG+dimE;
     
-    denom = VaporCell.DenominatorMat(gas, beam);
+    denom = VaporCell.DenominatorMat(gas, beam, 'DopplerAverage');
     tV =  VaporCell.AtomPhotonInteraction(gas, beam);
     tW = tV.*denom;
     

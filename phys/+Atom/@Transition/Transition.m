@@ -4,6 +4,7 @@ classdef Transition < uint32
     enumeration
         D1 (1)
         D2 (2)
+        None (0)
     end
     
 end

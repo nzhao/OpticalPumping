@@ -3,6 +3,9 @@ classdef AlkaliLaserBeam < handle
     %   Detailed explanation goes here
     
     properties
+        name
+        type
+        
         power
         refAtom
         refTransition
@@ -34,6 +37,8 @@ classdef AlkaliLaserBeam < handle
             obj.refTransition = refTransition;
             obj.frequency = refAtom.parameters.omega(refTransition)/2/pi;
             obj.wavenumber = refAtom.parameters.wavenumber(refTransition);
+            obj.name = [refAtom.name, '_D', num2str(refTransition)];
+            obj.type = 'beam';
             
             obj.detune = detune; % in MHz
             

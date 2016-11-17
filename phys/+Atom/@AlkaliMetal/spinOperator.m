@@ -45,5 +45,12 @@ function op = spinOperator( obj )
     op.spDecay=cell(1,2);
     op.spDecay{1} = A_spDecay1; op.spDecay{2} = A_spDecay2;
     op.electric_dipole=electric_dipole;
+    
+    eyeG=eye(obj.dim(1))/obj.dim(1); zerosD1=zeros(obj.dim(2)); zerosD2=zeros(obj.dim(3));
+    op.thermal_state_qs = {[zerosD1(:); eyeG(:)], [zerosD2(:); eyeG(:)]};
+    
+    op.equilibrium_state = {Algorithm.DensityMatrix(obj, [Atom.Subspace.GS]), ...
+                            Algorithm.DensityMatrix(obj, [Atom.Subspace.GS, Atom.Subspace.ES1]), ...
+                            Algorithm.DensityMatrix(obj, [Atom.Subspace.GS, Atom.Subspace.ES2])};
 end
 
