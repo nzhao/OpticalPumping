@@ -35,7 +35,7 @@
             for k=1:length(v)
                 obj.interaction{1, component_index}.set_velocity( v(k) ).calc_matrix(); % component{1} must be a 'beam'
                 state{k} = obj.evolution(component_index, t);
-                gammaG{k} = obj.interaction{1, component_index}.matrix.gamma_g{1};
+                gammaG{k} = obj.interaction{1, component_index}.matrix.gamma_g;
             end
         end
         
@@ -81,7 +81,9 @@
             obj.beam{1}.set_detuning(freq);  % beam idx must be 1.
             data = obj.velocity_resolved_pumping(index, t_pump);
             crs_sct_v = data.absorption.*data.uList';
-            crs_sct = crs_sct_v*data.wList *2*pi*1e6 / obj.interaction{1, index}.beam.photonFlux * 1e4; %cm^2
+            crs_sct_v_int = crs_sct_v*data.wList;
+            crs_sct = crs_sct_v_int *2*pi*1e6 / obj.interaction{1, index}.beam.photonFlux ...
+                      * 1e4 * obj.component{index}.stuff.atom.parameters.abundance; %cm^2
         end
         
         function crs_sct = total_absorption_cross_section(obj, freqList, t_pump)

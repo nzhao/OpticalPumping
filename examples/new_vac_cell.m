@@ -20,19 +20,19 @@ gases={  Gas(rb85, 'vapor', temperature, Atom.Transition.D1), ...
          Gas(rb87, 'vapor', temperature, Atom.Transition.D1) ...
          };
 
-pumpBeam=AlkaliLaserBeam(5e-4, ...                     % power in [W]
+pumpBeam=AlkaliLaserBeam(5e-6, ...                     % power in [W]
                          rb87, Atom.Transition.D1, -3064,...%-2.25e3, ... % ref Atom 
-                         [0 0 1], [1, -1i], 2e-3);       % direction, pol, spot size
+                         [0 0 1], [1, 0], 2e-3);       % direction, pol, spot size
                      
 
 %%
-t_pump = 50.0;
-sys=VacuumCell(gases, pumpBeam.set_detuning(-1000));
-vData=sys.velocity_resolved_pumping(2, t_pump, 'diagnose');
+t_pump = 10.0;
+sys=VacuumCell(gases, pumpBeam.set_detuning(-2500));
+vData=sys.velocity_resolved_pumping(3, t_pump, 'diagnose');
 
 %%
-tic;
-freqList = linspace(-5.0e3, 6e3, 201);
+freqList = -5e3:200:6e3; tic;
+sys=VacuumCell(gases, pumpBeam);
 res = sys.total_absorption_cross_section(freqList, t_pump);
 time=toc;
 
@@ -42,8 +42,8 @@ title(['time = ' num2str(time)]);
 savefig(fig, '/Users/nzhao/Desktop/abs.fig');
 
 %%
-timeList = linspace(0, 1.0, 101);
-sys=VacuumCell(gases, pumpBeam.set_detuning(4575).set_power(5e-4));
+timeList = linspace(0, 50.0, 101);
+sys=VacuumCell(gases, pumpBeam.set_detuning(4575).set_power(5e-6));
 sys.interaction{1, 3}.calc_matrix();
 states=sys.evolution(3, timeList);
 
