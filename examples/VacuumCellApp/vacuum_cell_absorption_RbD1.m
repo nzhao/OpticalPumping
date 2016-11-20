@@ -8,6 +8,8 @@ function vacuum_cell_absorption_RbD1(output_file, varargin)
     import CellSystem.VacuumCell
 
 %% parse args
+    start_at = datetime('now');
+    code_version = CodeVersion();
     default_parameters = containers.Map();
     default_parameters('Bx') = 0.00001;       % [Tesla]
     default_parameters('By') = 0.0;           % [Tesla]
@@ -21,6 +23,8 @@ function vacuum_cell_absorption_RbD1(output_file, varargin)
     
     parameters = parse_paremeters(default_parameters, varargin);
     
+    disp(start_at);
+    fprintf('Using code with commit id: %s\n', code_version);
     disp(keys(parameters));
     disp(values(parameters));
     
@@ -44,14 +48,18 @@ function vacuum_cell_absorption_RbD1(output_file, varargin)
     sys=VacuumCell(gases, pumpBeam);
 
 %% core
-    freqList = parameters('Frequency'); t_pump = parameters('PumpTime'); tic;
-    res_absorption = sys.total_absorption_cross_section(freqList, t_pump);     time=toc;
+    freqList = parameters('Frequency'); t_pump = parameters('PumpTime');
+    res_absorption = sys.total_absorption_cross_section(freqList, t_pump);
 
+    finish_at = datetime('now');
+    disp(finish_at);
 %% export
-    save(output_file, 'parameters', 'coil', 'rb85', 'rb87', 'gases', 'pumpBeam', 'sys', 'freqList', 'res_absorption');
+    save(output_file, 'start_at', 'code_version', 'parameters', ...
+                      'coil', 'rb85', 'rb87', 'gases', 'pumpBeam', 'sys', ...
+                      'freqList', 'res_absorption');
     figure; 
     plot(freqList, res_absorption, freqList, sum(res_absorption,1), 'kd-');
-    title(['CPU time = ' num2str(time) ', Power =',  parameters('Power')]);
+    title(['Power = ',  num2str(parameters('Power')) 'W']);
 
 end
 
