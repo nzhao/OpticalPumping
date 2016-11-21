@@ -12,7 +12,10 @@ function denominator_mat = DenominatorMat( gas, beam, opt )
     
     dimG = gas.atom.dim(1);
     dimE = gas.atom.dim(1+beam.refTransition);
-    detune = beam.detune;
+    
+    atom_to_ref_detune = ( gas.atom.parameters.omega(beam.refTransition)...
+                         - beam.refAtom.parameters.omega(beam.refTransition) ) /2/pi*1e-6;
+    detune = beam.detune - atom_to_ref_detune;
     gamma =  gas.gamma2 + 0.5*gas.atom.parameters.gamma_s(beam.refTransition);
     Heg = gas.atom.eigen.transFreq{1+beam.refTransition, 1};
 

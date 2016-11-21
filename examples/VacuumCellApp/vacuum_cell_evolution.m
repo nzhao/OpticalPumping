@@ -24,23 +24,6 @@ pumpBeam=AlkaliLaserBeam(5e-6, ...                     % power in [W]
                          rb87, Atom.Transition.D1, -3064,...%-2.25e3, ... % ref Atom 
                          [0 0 1], [1, 0], 2e-3);       % direction, pol, spot size
                      
-
-%%
-t_pump = 10.0;
-sys=VacuumCell(gases, pumpBeam.set_detuning(-2500));
-vData=sys.velocity_resolved_pumping(3, t_pump, 'diagnose');
-
-%%
-freqList = -5e3:200:6e3; tic;
-sys=VacuumCell(gases, pumpBeam);
-res = sys.total_absorption_cross_section(freqList, t_pump);
-time=toc;
-
-fig=figure; 
-plot(freqList, res, freqList, sum(res,1), 'kd-');
-title(['time = ' num2str(time)]);
-savefig(fig, '/Users/nzhao/Desktop/abs.fig');
-
 %%
 timeList = linspace(0, 50.0, 101);
 sys=VacuumCell(gases, pumpBeam.set_detuning(4575).set_power(5e-6));

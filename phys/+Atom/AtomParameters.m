@@ -13,8 +13,8 @@ function parameters = AtomParameters( name )
                     % fine-structure parameters
                     parameters.config='[Kr]5s';     %electron configuation
                     parameters.IP=4.1771;           %ionization potential in eV
-                    parameters.lambda_D1=794.979;   %wave length of D1 transition in nm
-                    parameters.lambda_D2=780.241;   %wave length of D2 transition in nm
+                    parameters.lambda_D1=794.979014933;   %wave length of D1 transition in nm % Daniel Steck, transition diagram
+                    parameters.lambda_D2=780.241368271;   %wave length of D2 transition in nm % Daniel Steck, transition diagram
 
                     parameters.delta_FS=237.60;     %Fine-structure splitting in cm^(-1)
                     parameters.tau_1=27.75;         %lifetime of P_1/2 states
@@ -51,8 +51,8 @@ function parameters = AtomParameters( name )
                     % fine-structure parameters
                     parameters.config='[Kr]5s';     %electron configuation
                     parameters.IP=4.1771;           %ionization potential in eV
-                    parameters.lambda_D1=794.978;   %wave length of D1 transition in nm
-                    parameters.lambda_D2=780.241;   %wave length of D2 transition in nm
+                    parameters.lambda_D1=794.978851156;   %wave length of D1 transition in nm % Daniel Steck, transition diagram
+                    parameters.lambda_D2=780.241209686;   %wave length of D2 transition in nm % Daniel Steck, transition diagram
 
                     parameters.delta_FS=237.60;     %Fine-structure splitting in cm^(-1)
                     parameters.tau_1=27.75;         %lifetime of P_1/2 states
@@ -91,8 +91,8 @@ function parameters = AtomParameters( name )
                     % fine-structure parameters
                     parameters.config='[Xe]6s';     %electron configuation
                     parameters.IP=3.8939;           %ionization potential in eV
-                    parameters.lambda_D1=894.593;   %wave length of D1 transition in nm
-                    parameters.lambda_D2=852.347;   %wave length of D2 transition in nm
+                    parameters.lambda_D1=894.59295986;   %wave length of D1 transition in nm % Daniel Steck, transition diagram
+                    parameters.lambda_D2=852.34727582;   %wave length of D2 transition in nm % Daniel Steck, transition diagram
                     parameters.delta_FS=554.04;     %Fine-structure splitting in cm^(-1)
                     parameters.tau_1=34.88;         %lifetime of P_1/2 states
                     parameters.tau_2=30.462;         %lifetime of P_3/2 states
