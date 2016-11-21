@@ -42,7 +42,7 @@ classdef Coil < handle
                 nB = 101;
             end
             
-            obj.iter = iterator( num2cell(linspace(minB,maxB,nB)) );
+            obj.iter = pattern.iterator( num2cell(linspace(minB,maxB,nB)) );
             obj.type='sweep';
         end
         
