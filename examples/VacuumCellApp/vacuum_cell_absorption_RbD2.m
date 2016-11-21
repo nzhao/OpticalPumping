@@ -1,9 +1,9 @@
-function [freqList, res_absorption] = vacuum_cell_absorption_RbD1(output_file, varargin)
-%VACUUM_CELL_ABSORPTION_RBD1 calculates the absorption spectrum of rubidium
+function [freqList, res_absorption] = vacuum_cell_absorption_RbD2(output_file, varargin)
+%VACUUM_CELL_ABSORPTION_RBD2 calculates the absorption spectrum of rubidium
 %(Rb85 and Rb87) in a vacuum cell (without pressure broadening).
 %
 %   Syntax: 
-%     [freq, absorption_spectrum] = vacuum_cell_absorption_RbD1(output_filename, parameters)
+%     [freq, absorption_spectrum] = vacuum_cell_absorption_RbD2(output_filename, parameters)
 %
 %       *parameters* are given by name-value pairs as
 %         'Name1', value1, 'Name2', value2, ...
@@ -55,10 +55,10 @@ function [freqList, res_absorption] = vacuum_cell_absorption_RbD1(output_file, v
 
     rb85=AlkaliMetal('85Rb', coil);  rb87=AlkaliMetal('87Rb', coil);
 
-    gases={  Gas(rb85, 'vapor', 273.15+parameters('Temperature'), Atom.Transition.D1), ...
-             Gas(rb87, 'vapor', 273.15+parameters('Temperature'), Atom.Transition.D1)};
+    gases={  Gas(rb85, 'vapor', 273.15+parameters('Temperature'), Atom.Transition.D2), ...
+             Gas(rb87, 'vapor', 273.15+parameters('Temperature'), Atom.Transition.D2)};
 
-    pumpBeam=AlkaliLaserBeam(parameters('Power'), rb87, Atom.Transition.D1, 0.0,... 
+    pumpBeam=AlkaliLaserBeam(parameters('Power'), rb87, Atom.Transition.D2, 0.0,... 
                              [0 0 1], parameters('Polarization'), parameters('BeamRadius')); 
     
     sys=VacuumCell(gases, pumpBeam);
