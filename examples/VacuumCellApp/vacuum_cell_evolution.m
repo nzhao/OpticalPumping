@@ -21,20 +21,28 @@ gases={  Gas(rb85, 'vapor', temperature, Atom.Transition.D1), ...
          };
 
 pumpBeam=AlkaliLaserBeam(5e-6, ...                     % power in [W]
-                         rb87, Atom.Transition.D1, -3064,...%-2.25e3, ... % ref Atom 
+                         rb87, Atom.Transition.D1, 4575,...%-2.25e3, ... % ref Atom 
                          [0 0 1], [1, 0], 2e-3);       % direction, pol, spot size
-                     
-%%
-timeList = linspace(0, 50.0, 101);
-sys=VacuumCell(gases, pumpBeam.set_detuning(4575).set_power(5e-6));
-sys.interaction{1, 3}.calc_matrix();
-states=sys.evolution(3, timeList);
 
-popE_t = cell2mat(cellfun(@(s)  s.population(1),       states, 'UniformOutput', false));
-popG_t = cell2mat(cellfun(@(s)  s.population(2),       states, 'UniformOutput', false));
-cohE_t = cell2mat(cellfun(@(s)  s.max_coherence(1),    states, 'UniformOutput', false));
-cohG_t = cell2mat(cellfun(@(s)  s.max_coherence(2),    states, 'UniformOutput', false));
-cohEG_t = cell2mat(cellfun(@(s) s.max_coherence(1, 2), states, 'UniformOutput', false));
+
+                     
+%% full
+sysfull=VacuumCell(gases, pumpBeam, 'vacuum-full');
+sysfull.interaction{1, 3}.calc_matrix();
+
+timeList = linspace(0, 50.0, 101);
+states_full=sysfull.evolution(3, timeList);
+
+%% approx.
+
+sysApprox=VacuumCell(gases, pumpBeam, 'vacuum');
+
+%% plot
+popE_t = cell2mat(cellfun(@(s)  s.population(1),       states_full, 'UniformOutput', false));
+popG_t = cell2mat(cellfun(@(s)  s.population(2),       states_full, 'UniformOutput', false));
+cohE_t = cell2mat(cellfun(@(s)  s.max_coherence(1),    states_full, 'UniformOutput', false));
+cohG_t = cell2mat(cellfun(@(s)  s.max_coherence(2),    states_full, 'UniformOutput', false));
+cohEG_t = cell2mat(cellfun(@(s) s.max_coherence(1, 2), states_full, 'UniformOutput', false));
 
 figure;
 subplot(2,3,1); plot(timeList,popE_t)
