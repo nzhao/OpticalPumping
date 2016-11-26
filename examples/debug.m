@@ -26,25 +26,38 @@ pumpBeam=AlkaliLaserBeam(0.25e-6, ...                     % power in [W]
                      
 
 %%
-freq1 = -3050; freq2 = -2250;
-freq3 = 3750; freq4 = 4600;
+df = 0.2; width = 50;
+freq1 = -3070; freq2 = -2260;
+freq3 = 3765; freq4 = 4575;
 
-freqK = freq1;
-freqList = freqK-50:0.1:freqK+30;
-%freqList = -6e3:100:5e3;
-gammaG = zeros(8, 8, length(freqList));
-for k=1:length(freqList)
-    fprintf('freq = %f\n', freqList(k));
-    sys=VacuumCell(gases, pumpBeam.set_detuning(freqList(k)));
-    mat = sys.velocity_resolved_GammaG(3, 0);
-    gammaG(:,:,k) = mat{1};
-end
-inteGammaG=50*sum(gammaG, 3);
-%% 
-g=zeros(8, length(freqList));
-for k=1:8
-    g(k, :) = reshape(gammaG(k, k, :), [1 length(freqList)])+k*1e-4;
-end
-plot(freqList, g, '*-')
+[gammaG1, diag1, freqList1] = sweep_resonance(freq1, width, df, gases, pumpBeam);
+[gammaG2, diag2, freqList2] = sweep_resonance(freq2, width, df, gases, pumpBeam);
+[gammaG3, diag3, freqList3] = sweep_resonance(freq3, width, df, gases, pumpBeam);
+[gammaG4, diag4, freqList4] = sweep_resonance(freq4, width, df, gases, pumpBeam);
 
 
+subplot(2, 2, 1)
+plot(freqList1, diag1, '*-')
+legend('s1', 's2', 's3', 's4', 's5', 's6', 's7', 's8');
+
+subplot(2, 2, 2)
+plot(freqList2, diag2, '*-')
+legend('s1', 's2', 's3', 's4', 's5', 's6', 's7', 's8');
+
+subplot(2, 2, 3)
+plot(freqList3, diag3, '*-')
+legend('s1', 's2', 's3', 's4', 's5', 's6', 's7', 's8');
+
+subplot(2, 2, 4)
+plot(freqList4, diag4, '*-')
+legend('s1', 's2', 's3', 's4', 's5', 's6', 's7', 's8');
+
+%%
+
+area = df* [sum(diag1, 2) sum(diag2, 2) sum(diag3, 2) sum(diag4, 2)];
+tV = Interaction.AtomPhotonInteraction( gases{2}, pumpBeam );
+ratio = sum(area, 2)./diag(tV'*tV);
+
+disp(area);
+disp(tV);
+disp(ratio);
