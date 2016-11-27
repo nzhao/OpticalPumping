@@ -1,9 +1,10 @@
-function [gammaG, diagElement, freqList] = sweep_resonance( freq, width, df, gases, pumpBeam)
+function [gammaG, diagElement, freqList, weight, area] = sweep_resonance( freq, width, nf, gases, pumpBeam)
 %SWEEP_RESONANCE Summary of this function goes here
 %   Detailed explanation goes here
     import CellSystem.VacuumCell
 
-    freqList = freq-width:df:freq+width;
+    %freqList = freq-width:df:freq+width;
+    [freqList, weight] = lgwt(nf, freq-width, freq+width);
     gammaG = zeros(8, 8, length(freqList));
     for k=1:length(freqList)
         fprintf('freq = %f\n', freqList(k));
@@ -16,6 +17,7 @@ function [gammaG, diagElement, freqList] = sweep_resonance( freq, width, df, gas
     for k=1:8
         diagElement(k, :) = reshape(gammaG(k, k, :), [1 length(freqList)]);
     end
+    area = diagElement * weight;
 
 end
 
