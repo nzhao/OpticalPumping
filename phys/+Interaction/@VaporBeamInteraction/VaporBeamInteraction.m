@@ -18,7 +18,7 @@ classdef VaporBeamInteraction < Interaction.AbstractInteraction
             %obj.calc_matrix();
             
             obj.parameter.sampling_nRaw = 16;
-            obj.parameter.sampling_nFine = 128;
+            obj.parameter.sampling_nFine = 32;
             obj.parameter.sampling_xRange = 5;
             obj.parameter.sampling_gamma = 50; %MHz
             
@@ -76,7 +76,7 @@ classdef VaporBeamInteraction < Interaction.AbstractInteraction
             vFine = cell(1, size(fine_range, 1));
             wFine = cell(1, size(fine_range, 1));
             for k=1:size(fine_range, 1)
-                npoint = round(nFine* (fine_range(k,2) - fine_range(k,1))/100 );
+                npoint = round(nFine* (fine_range(k,2) - fine_range(k,1))/50 );
                 [vFine{k}, wFine{k} ] = lgwt(npoint, fine_range(k, 1), fine_range(k, 2));
             end
             vListTemp = cell2mat([vFine(:); vRaw(:)]);

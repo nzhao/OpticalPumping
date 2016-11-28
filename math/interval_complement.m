@@ -16,9 +16,11 @@ function [B_A, union_A] = interval_complement( A, B )
     if mod(count2, 2) == 0
         nInterval2 = count2/2;
         right = B(2);
+        tail = [];
     else
         nInterval2 = (count2+1)/2;
         right = A1row(end-count2);
+        tail = [right; B(2)];
     end
     
     A2 = A1(:, nIterval1+1:end-nInterval2);
@@ -26,6 +28,14 @@ function [B_A, union_A] = interval_complement( A, B )
     A2row = [left A2(:).' right];
     len = length(A2row);
     B_A = reshape(A2row, [2, len/2]).';
+
+    if ~isempty(tail)
+        if isempty(A2)
+            A2=tail;
+        else
+            A2 = [A2; tail];
+        end
+    end
     union_A = A2.';
 
 end
