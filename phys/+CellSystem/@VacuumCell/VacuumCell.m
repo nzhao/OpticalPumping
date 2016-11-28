@@ -29,14 +29,20 @@
             ker=obj.interaction{1, component_index}.matrix.fullG;
         end
         
-        function [state, gammaG] = velocity_resolved_evolution(obj, component_index, v, t)
+        function state = velocity_resolved_evolution(obj, component_index, v, t)            
             state=cell(1, length(v));
+            for k=1:length(v)
+                obj.interaction{1, component_index}.set_velocity( v(k) ).calc_matrix(); % component{1} must be a 'beam', TODO: improve this.
+                state{k} = obj.evolution(component_index, t);
+            end
+        end
+        
+        function gammaG = velocity_resolved_GammaG(obj, component_index, v)
             gammaG=cell(1, length(v));
             for k=1:length(v)
-                obj.interaction{1, component_index}.set_velocity( v(k) ).calc_matrix(); % component{1} must be a 'beam'
-                state{k} = obj.evolution(component_index, t);
+                obj.interaction{1, component_index}.set_velocity( v(k) ).matrix_effective_Hamiltonian(); % component{1} must be a 'beam', TODO: improve this.
                 gammaG{k} = obj.interaction{1, component_index}.matrix.gamma_g;
-            end
+            end           
         end
         
         function data = velocity_resolved_pumping(obj, index, t_pump, option)  
@@ -47,7 +53,8 @@
             [~, data.vList, data.uList, data.wList, data.sigmaV] = ...
                 obj.interaction{1, index}.velocity_sampling();
             
-            [state, gammaG] = obj.velocity_resolved_evolution(index, data.vList, t_pump);
+            state = obj.velocity_resolved_evolution(index, data.vList, t_pump);
+            gammaG = obj.velocity_resolved_GammaG(index, data.vList);
 
             stateG           = cellfun(@(s) s.block(2,2), state, 'UniformOutput', false);            
             data.stateG      = cell2mat(cellfun(@(s) s(:),    stateG, 'UniformOutput', false));
