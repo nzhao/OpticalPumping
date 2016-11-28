@@ -56,7 +56,7 @@ classdef AlkaliLaserBeam < handle
             
             obj.energyFlux = power / (pi*waist*waist);
             obj.photonFlux = obj.energyFlux / (h_bar * 2*pi*obj.frequency);
-            obj.amplitudeE = sqrt(2.0*obj.energyFlux*VacImp);
+            obj.amplitudeE = 0.5 * sqrt(2.0*obj.energyFlux*VacImp);
             obj.vectorE = obj.amplitudeE * obj.transDir1 * obj.pol(1) ...
                         + obj.amplitudeE * obj.transDir2 * obj.pol(2);
             

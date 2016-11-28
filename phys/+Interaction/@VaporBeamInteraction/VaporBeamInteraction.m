@@ -17,10 +17,10 @@ classdef VaporBeamInteraction < Interaction.AbstractInteraction
             obj.parameter.velocity = 0.0;
             %obj.calc_matrix();
             
-            obj.parameter.sampling_nRaw = 64;
-            obj.parameter.sampling_nFine = 64;
+            obj.parameter.sampling_nRaw = 16;
+            obj.parameter.sampling_nFine = 32;
             obj.parameter.sampling_xRange = 5;
-            obj.parameter.sampling_gamma = 150; %MHz
+            obj.parameter.sampling_gamma = 500; %MHz
             
         end
         
