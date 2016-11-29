@@ -55,14 +55,11 @@ classdef AbstractCellSystem < handle
         function state = evolution(obj, component_index, t)
             ker = obj.get_kernel(component_index);
             rho = obj.component{component_index}.state;
+            option = obj.component{component_index}.option;
+            state = arrayfun(@(tval) rho.evolve(2*pi*ker,tval, option), t, 'UniformOutput', false);
+
             if length(t) == 1
-                state = rho.evolve(2*pi*ker, t);
-            else
-                state = cell(1, length(t));
-                for k=1:length(t)
-                    fprintf('t = %f\n', t(k));
-                    state{k} = rho.evolve(2*pi*ker, t(k));
-                end
+                state = state{1};
             end
         end
         

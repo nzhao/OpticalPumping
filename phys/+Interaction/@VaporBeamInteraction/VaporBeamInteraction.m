@@ -30,7 +30,7 @@ classdef VaporBeamInteraction < Interaction.AbstractInteraction
                     obj.matrix_steady_state();
                 case 'vacuum-full'
                     obj.matrix_full_state();
-                case 'pressure'
+                case 'vacuum-ground'
                     obj.matrix_ground_state();
                 otherwise
                     error('non-supported option %s', obj.vapor.option);
