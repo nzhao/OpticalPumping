@@ -33,7 +33,7 @@ function [B_A, union_A] = interval_complement( A, B )
         if isempty(A2)
             A2=tail;
         else
-            A2 = [A2; tail];
+            A2 = [A2 tail];
         end
     end
     union_A = A2.';

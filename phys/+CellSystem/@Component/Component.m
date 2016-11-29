@@ -48,22 +48,6 @@ classdef Component < handle
             obj.frequency = freq;
         end
         
-        function [vList, wList, sigmaV] = velocity_sampling(obj, n, x)
-            switch nargin
-                case 1
-                    n = 8; x = 3;
-                case 2
-                    x = 3;
-            end
-            
-            try
-                sigmaV = obj.stuff.velocity;
-            catch
-                error('no Velocity information');
-            end
-            [vList, wList] = lgwt(n, -x*sigmaV, x*sigmaV);
-        end
-        
         function disp0(obj)
             fprintf(['component #%d:\n', ...
                      '\t name = %s\n', ...

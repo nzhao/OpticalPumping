@@ -26,7 +26,7 @@
         end
                 
         function ker = get_kernel(obj, component_index)
-            ker=obj.interaction{1, component_index}.matrix.fullG;
+            ker=obj.interaction{1, component_index}.matrix.kernel;
         end
         
         function state = velocity_resolved_evolution(obj, component_index, v, t)            

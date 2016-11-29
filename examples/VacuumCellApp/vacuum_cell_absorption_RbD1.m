@@ -1,14 +1,14 @@
-function [freqList, res_absorption] = vacuum_cell_absorption_RbD1(output_file, varargin)
+function [res_absorption, parameters] = vacuum_cell_absorption_RbD1(output_file, varargin)
 %VACUUM_CELL_ABSORPTION_RBD1 calculates the absorption spectrum of rubidium
 %(Rb85 and Rb87) in a vacuum cell (without pressure broadening).
 %
 %   Syntax: 
-%     [freq, absorption_spectrum] = vacuum_cell_absorption_RbD1(output_filename, parameters)
+%     [res_absorption, parameters] = vacuum_cell_absorption_RbD1(output_filename, parameters)
 %
 %       *parameters* are given by name-value pairs as
 %         'Name1', value1, 'Name2', value2, ...
 %
-%       The output *absorption_spectrum* is the absorption cross section in [cm^2] as a function of *freq*.
+%       The output *res_absorption* is the absorption cross section in [cm^2] as a function of *parameters('Frequency')*.
 %
 %   Paramter names and default values:
 %   * 'Bx': magnetic field along x in [Tesla], (0.00001)
@@ -20,6 +20,7 @@ function [freqList, res_absorption] = vacuum_cell_absorption_RbD1(output_file, v
 %   * 'BeamRadius': beam radius in [m], (2e-3) 
 %   * 'Frequency': laser beam frequency (relative to atom transition) in [MHz], (-5e3:50:6e3)
 %   * 'PumpingTime': pumping time in [micro-second], (10.0)
+%   * 'Mode': option 'vacuum', 'vacuum-ground', 'vacuum-full'
 
     import Condition.Coil
     import Atom.AlkaliMetal
@@ -43,6 +44,7 @@ function [freqList, res_absorption] = vacuum_cell_absorption_RbD1(output_file, v
     default_parameters('BeamRadius') = 2e-3;        % [m]
     default_parameters('Frequency') = -5e3:50:6e3;  % [MHz]
     default_parameters('PumpTime') = 10.0;          % [micro-second]
+    default_parameters('Mode') = 'vacuum-ground';   % string: 'vacuum', 'vacuum-ground', 'vacuum-full'
     parameters = parse_paremeters(default_parameters, varargin);
     
     disp(keys(parameters));
@@ -61,7 +63,7 @@ function [freqList, res_absorption] = vacuum_cell_absorption_RbD1(output_file, v
     pumpBeam=AlkaliLaserBeam(parameters('Power'), rb87, Atom.Transition.D1, 0.0,... 
                              [0 0 1], parameters('Polarization'), parameters('BeamRadius')); 
     
-    sys=VacuumCell(gases, pumpBeam);
+    sys=VacuumCell(gases, pumpBeam, parameters('Mode') );
 
 %% core
     freqList = parameters('Frequency'); t_pump = parameters('PumpTime');
@@ -70,9 +72,10 @@ function [freqList, res_absorption] = vacuum_cell_absorption_RbD1(output_file, v
 %% export
     finish_at = datetime('now'); disp(finish_at);
 
-    save(output_file, 'start_at', 'finish_at', 'code_version', 'parameters', ...
-                      'coil', 'rb85', 'rb87', 'gases', 'pumpBeam', 'sys', ...
-                      'freqList', 'res_absorption');
-
+    if ~isempty(output_file)
+        save(output_file, 'start_at', 'finish_at', 'code_version', 'parameters', ...
+                          'coil', 'rb85', 'rb87', 'gases', 'pumpBeam', 'sys', ...
+                          'freqList', 'res_absorption');
+    end
 end
 

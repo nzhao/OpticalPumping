@@ -19,6 +19,8 @@ function matrix_effective_Hamiltonian( obj )
     mat_ge = zeros(dimG, dimE); mat_eg=zeros(dimE, dimG);
     gamma_col = [gamma_e(:); mat_eg(:); mat_ge(:); gamma_g(:)];
 
+    obj.matrix.tV = tV;
+    obj.matrix.tW = tW;
     obj.matrix.eff_Hg = Hg;
     obj.matrix.eff_He = He;
     obj.matrix.shift_e = shift_e;
@@ -26,6 +28,9 @@ function matrix_effective_Hamiltonian( obj )
     obj.matrix.gamma_e = gamma_e;
     obj.matrix.gamma_g = gamma_g;
     obj.matrix.gamma_col = gamma_col;
+
+    obj.parameter.dimG = dimG;
+    obj.parameter.dimE = dimE;
     obj.parameter.pump_rate_g = pump_rate_g;
     obj.parameter.pump_rate_e = pump_rate_e;
 

@@ -29,6 +29,3 @@ pumpBeam=AlkaliLaserBeam(0.25e-6, ...                     % power in [W]
 t_pump = 10.0;
 sys=VacuumCell(gases, pumpBeam.set_detuning(-1400));
 vData=sys.velocity_resolved_pumping(3, t_pump, 'diagnose');
-
-[~, val]=vacuum_cell_absorption_RbD1('tmp16.mat', 'Power', 10e-9, 'Frequency', -1450);
-real(sum(val,1 ))
