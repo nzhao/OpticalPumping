@@ -44,6 +44,8 @@ classdef DensityMatrix < handle
                     col = obj.getQuasiSteadyStateCol;
                 case 'vacuum-ground'
                     col = obj.getGroundStateCol;
+                case 'vacuum-ground-rate'
+                    col = obj.getGroundStatePopulationCol;
                 otherwise
                     error('non-supported option %s', option);
             end
@@ -62,6 +64,8 @@ classdef DensityMatrix < handle
                     obj.setQuasiSteadyStateCol(col);
                 case 'vacuum-ground'
                     obj.setGroundStateCol(col);
+                case 'vacuum-ground-rate'
+                    obj.setGroundStatePopulationCol(col);
                 otherwise
                     error('non-supported option %s', option);
             end
@@ -171,6 +175,11 @@ classdef DensityMatrix < handle
             col = matG(:);
         end
         
+        function col = getGroundStatePopulationCol(obj)
+            matG=obj.block(2, 2);
+            col = diag(matG);
+        end
+        
         function setQuasiSteadyStateCol(obj, col1)
             obj.col = zeros(obj.dim*obj.dim, 1);
             dimE = obj.dimList(1); dimG = obj.dimList(2);
@@ -184,6 +193,13 @@ classdef DensityMatrix < handle
             obj.col(end-dimG*dimG+1:end) = col1(end-dimG*dimG+1:end);
         end
 
+        function setGroundStatePopulationCol(obj, col1)
+            obj.col = zeros(obj.dim*obj.dim, 1);
+            matG = diag(col1);
+            dimG = obj.dimList(2);
+            obj.col(end-dimG*dimG+1:end) = matG(:);
+        end
+        
         function pop = population(obj, idx)
             subspace_mat = obj.block(idx, idx);
             pop = diag(subspace_mat);

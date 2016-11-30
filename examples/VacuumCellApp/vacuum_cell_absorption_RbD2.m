@@ -20,7 +20,7 @@ function  [res_absorption, parameters] = vacuum_cell_absorption_RbD2(output_file
 %   * 'BeamRadius': beam radius in [m], (2e-3) 
 %   * 'Frequency': laser beam frequency (relative to atom transition) in [MHz], (-5e3:50:6e3)
 %   * 'PumpingTime': pumping time in [micro-second], (10.0)
-%   * 'Mode': option 'vacuum', 'vacuum-ground', 'vacuum-full'
+%   * 'Mode': option 'vacuum', 'vacuum-ground', 'vacuum-full', 'vacuum-ground-rate'
 
     import Condition.Coil
     import Atom.AlkaliMetal
@@ -44,7 +44,7 @@ function  [res_absorption, parameters] = vacuum_cell_absorption_RbD2(output_file
     default_parameters('BeamRadius') = 2e-3;        % [m]
     default_parameters('Frequency') = -5e3:50:6e3;  % [MHz]
     default_parameters('PumpTime') = 10.0;          % [micro-second]
-    default_parameters('Mode') = 'vacuum-ground';   % string: 'vacuum', 'vacuum-ground', 'vacuum-full'
+    default_parameters('Mode') = 'vacuum-ground';   % string: 'vacuum', 'vacuum-ground', 'vacuum-full', 'vacuum-ground-rate'
     parameters = parse_paremeters(default_parameters, varargin);
     
     disp(keys(parameters));
