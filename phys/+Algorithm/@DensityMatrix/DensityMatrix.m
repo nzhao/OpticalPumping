@@ -114,6 +114,15 @@ classdef DensityMatrix < handle
             obj.col = obj.Col2Mat();
         end
         
+        function val = meanGS(obj, op)
+            nSize=size(op, 3);
+            val = zeros(nSize, 1);
+            dimGS = obj.dimList(end);
+            for k=1:nSize
+                op_mat = op(:,:, k);
+                val(k) =  op_mat(:)'*obj.col(end-dimGS*dimGS+1:end);
+            end
+        end
 
         
         function val = mean(obj, op)
