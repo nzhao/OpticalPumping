@@ -30,6 +30,9 @@ classdef Component < handle
                     obj.hasDynamics = 1;
                     obj.state = stuff.atom.operator.equilibrium_state{1+stuff.transition};
                     obj.dimList = obj.state.dimList;
+                case 'buffer'
+                    obj.hasDynamics = 0;
+                    
                 otherwise
                     warning('non-supported type %s', obj.type);
             end
@@ -42,6 +45,8 @@ classdef Component < handle
                 case 'vapor'
                     vapor = obj.stuff;
                     freq = vapor.atom.parameters.omega(vapor.transition)/2/pi;
+                case 'buffer'
+                    freq = 0;
                 otherwise
                     warning('non-supported type %s', obj.type);
             end
