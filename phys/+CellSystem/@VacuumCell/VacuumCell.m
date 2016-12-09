@@ -18,10 +18,7 @@
         
         function idx = get_vapor_index(obj)
             idx = 1:obj.nComponent;
-            isVapor = zeros(1, obj.nComponent);
-            for k=1:obj.nComponent
-                isVapor(k) = strcmp(obj.component{k}.type, 'vapor');
-            end
+            isVapor = cellfun(@(s) strcmp(s.type, 'vapor'), obj.component);
             idx = idx(logical(isVapor));
         end
                 
