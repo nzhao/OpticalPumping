@@ -9,7 +9,6 @@ classdef AbstractCellSystem < handle
         nComponent
         
         interaction
-        interaction_parameter
     end
     
     methods
@@ -42,12 +41,15 @@ classdef AbstractCellSystem < handle
             end    
         end
         
-        function calc_interaction_parameter(obj)
-            obj.interaction_parameter = cellfun(@(s) obj.component_interaction_parameter(s), ...
-                                                num2cell(1:obj.nComponent), 'UniformOutput', false);
+        function prepare_interaction_parameter(obj)
+            for k=1:obj.nComponent
+                obj.set_component_parameter(k);
+            end
         end
         
         function interaction = calc_interaction(obj)
+            obj.prepare_interaction_parameter();
+            
             obj.interaction = cell(obj.nComponent);
             for k = 1:obj.nComponent
                 for q = k:obj.nComponent %q>=k

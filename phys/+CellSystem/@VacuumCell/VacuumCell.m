@@ -14,7 +14,6 @@
             
             obj.set_options(option);
             
-            obj.calc_interaction_parameter();
             obj.calc_interaction();
         end
         

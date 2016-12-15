@@ -26,7 +26,7 @@ classdef VaporBeamInteraction < Interaction.AbstractInteraction
             
             obj.parameter.velocity = 0.0;
             
-            obj.parameter.sampling_nRaw = 16;
+            obj.parameter.sampling_nRaw = -1;%16;
             obj.parameter.sampling_nFine = 32;
             obj.parameter.sampling_xRange = 5;
             obj.parameter.sampling_gamma = 50; %MHz
@@ -80,6 +80,14 @@ classdef VaporBeamInteraction < Interaction.AbstractInteraction
             nFine = obj.parameter.sampling_nFine;
             xRange = obj.parameter.sampling_xRange; 
             gamma = obj.parameter.sampling_gamma;
+            
+            if nRaw < 0 || nFine <0
+                len = 1;
+                vList = obj.parameter.velocity;
+                uList = 1;
+                wList = 1;
+                sigmaV = obj.parameter.velocity;
+            else
   
             center_freq = obj.get_atom_beam_detuning();
             refTrans = obj.beam.refTransition;
@@ -114,6 +122,8 @@ classdef VaporBeamInteraction < Interaction.AbstractInteraction
 
             len = length(vList);
             uList = exp(-vList.*vList/2/sigmaV/sigmaV)/sqrt(2*pi)/sigmaV;
+            
+            end
         end
     end
     

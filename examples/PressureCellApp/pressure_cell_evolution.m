@@ -28,8 +28,16 @@ gases={  Gas(rb85, 'vapor', temperature, Atom.Transition.D1), ...
 
 pumpBeam=AlkaliLaserBeam(500e-6, ...                     % power in [W]
                          rb87, Atom.Transition.D1, 4575,...%-2.25e3, ... % ref Atom 
-                         [0 0 1], [1, 0], 2e-3);       % direction, pol, spot size
+                         [0 0 1], [1, 1i], 2e-3);       % direction, pol, spot size
 
+t_pump = 1e4;
 %% approximation ground state pumping
-
+freqList=-50e3:500:50e3;
 sysApproxGS=VacuumCell(gases, pumpBeam, 'vacuum-ground');
+res_absorption=sysApproxGS.total_absorption_cross_section(freqList, t_pump);
+figure;plot(freqList, sum(res_absorption, 1))
+
+timeList = linspace(0, 5e4, 101);
+state=sysApproxGS.evolution(3, timeList);
+popG = cell2mat(cellfun(@(s)  s.population(2), state, 'UniformOutput', false));
+figure;plot(timeList, popG)
