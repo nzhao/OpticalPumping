@@ -27,16 +27,23 @@ classdef AbstractInteraction < handle
         end
         %% IO
         
-        function ker = getKernel(obj)
+        function ker = getKernel(obj, comp_idx)
             try
-                ker = obj.matrix.kernel;
+                ker_cell = obj.matrix.kernel;
             catch
                 if strcmp(obj.type, 'self')
                     warning('kernel is not calculated for self interaction of %d', obj.component{1}.index);
                 else
                     warning('kernel is not calculated for mutual interaction between %d and %d.', obj.component{1}.index, obj.component{2}.index);
                 end
-                ker = 0.0;
+                ker_cell = {0.0, 0.0, 0.0};
+            end
+            
+            switch nargin
+                case 1
+                    ker = ker_cell;
+                case 2
+                    ker = ker_cell{obj.index == comp_idx};
             end
         end
         

@@ -10,15 +10,12 @@ function interaction = component_interaction( obj, k, q )
     else
         type_pair = [comp_k.stuff.type, '-', comp_q.stuff.type];
         switch type_pair 
-            case 'vapor-beam'
+            case {'vapor-beam', 'beam-vapor'}
                 interaction = Interaction.VaporBeamInteraction(comp_k, comp_q);
-            case 'beam-vapor'
-                interaction = Interaction.VaporBeamInteraction(comp_q, comp_k);
             case 'vapor-vapor'
                 interaction = Interaction.VaporVaporInteraction(comp_k, comp_q);
             otherwise
                 interaction = Interaction.EmptyInteraction(comp_k, comp_q);
-                %warning('non-supported types %s', type_pair);
         end
     end
 

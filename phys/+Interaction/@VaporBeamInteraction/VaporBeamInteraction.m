@@ -5,17 +5,26 @@ classdef VaporBeamInteraction < Interaction.AbstractInteraction
     properties
         vapor
         beam
+        typeStr
     end
     
     methods
-        function obj = VaporBeamInteraction(vapor, beam)
-            obj@Interaction.AbstractInteraction(vapor, beam);
-            obj.vapor = vapor.stuff;
-            obj.beam = beam.stuff;
-            obj.option = vapor.option;
+        function obj = VaporBeamInteraction(comp1, comp2)
+            obj@Interaction.AbstractInteraction(comp1, comp2);
+            
+            obj.typeStr = [comp1.stuff.type, '-', comp2.stuff.type];
+            switch obj.typeStr 
+            case 'vapor-beam'
+                obj.vapor = comp1.stuff;
+                obj.beam = comp2.stuff;
+                obj.option = comp1.option;
+            case 'beam-vapor'
+                obj.beam = comp1.stuff;
+                obj.vapor = comp2.stuff;
+                obj.option = comp2.option;
+            end
             
             obj.parameter.velocity = 0.0;
-            %obj.calc_matrix();
             
             obj.parameter.sampling_nRaw = 16;
             obj.parameter.sampling_nFine = 32;
@@ -25,15 +34,32 @@ classdef VaporBeamInteraction < Interaction.AbstractInteraction
         end
         
         function obj = calc_matrix(obj)
+            mat = obj.vapor_matrix();
+            switch obj.typeStr  
+                case 'vapor-beam'
+                    obj.matrix.kernel1 = mat;
+                    obj.matrix.kernel2 = 0.0;
+                    obj.matrix.kernel12 = 0.0;
+                case 'beam-vapor'
+                    obj.matrix.kernel1 = 0.0;
+                    obj.matrix.kernel2 = mat;
+                    obj.matrix.kernel12 = 0.0;
+            end
+            obj.matrix.kernel={obj.matrix.kernel1, ...
+                               obj.matrix.kernel2, ...
+                               obj.matrix.kernel12}; 
+        end
+        
+        function mat = vapor_matrix(obj)
             switch obj.option
                 case 'vacuum'
-                    obj.matrix_steady_state();
+                    mat = obj.matrix_steady_state();
                 case 'vacuum-full'
-                    obj.matrix_full_state();
+                    mat = obj.matrix_full_state();
                 case 'vacuum-ground'
-                    obj.matrix_ground_state();
+                    mat = obj.matrix_ground_state();
                 case 'vacuum-ground-rate'
-                    obj.matrix_ground_state_rate();
+                    mat = obj.matrix_ground_state_rate();
                 otherwise
                     error('non-supported option %s', obj.vapor.option);
             end

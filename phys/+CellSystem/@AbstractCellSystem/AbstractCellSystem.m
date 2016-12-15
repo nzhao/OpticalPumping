@@ -8,7 +8,8 @@ classdef AbstractCellSystem < handle
         component
         nComponent
         
-        interaction        
+        interaction
+        interaction_parameter
     end
     
     methods
@@ -41,11 +42,16 @@ classdef AbstractCellSystem < handle
             end    
         end
         
+        function calc_interaction_parameter(obj)
+            obj.interaction_parameter = cellfun(@(s) obj.component_interaction_parameter(s), ...
+                                                num2cell(1:obj.nComponent), 'UniformOutput', false);
+        end
+        
         function interaction = calc_interaction(obj)
             obj.interaction = cell(obj.nComponent);
             for k = 1:obj.nComponent
-                for q = k:obj.nComponent
-                    obj.interaction{k, q} = obj.component_interaction(k,q);
+                for q = k:obj.nComponent %q>=k
+                    obj.interaction{k, q} = obj.component_interaction(k,q).calc_matrix();
                     obj.interaction{q, k} = obj.interaction{k, q};
                 end
             end
@@ -53,7 +59,7 @@ classdef AbstractCellSystem < handle
         end
         
         function state = evolution(obj, component_index, t)
-            ker = obj.get_kernel(component_index);
+            ker = obj.get_component_kernel(component_index);
             rho = obj.component{component_index}.state;
             option = obj.component{component_index}.option;
             state = arrayfun(@(tval) rho.evolve(2*pi*ker,tval, option), t, 'UniformOutput', false);
@@ -62,7 +68,7 @@ classdef AbstractCellSystem < handle
                 state = state{1};
             end
         end
-        
+
         %% Input Interface
         function obj = set_options(obj, varargin)
             if nargin == 2
@@ -86,6 +92,25 @@ classdef AbstractCellSystem < handle
             interaction = obj.interaction{k,q};
         end
         
+        function ker = get_component_kernel(obj, component_index)
+            ker = 0;
+            for k=1:obj.nComponent
+                ker = ker + obj.interaction{component_index, k}.getKernel(component_index);
+            end
+        end
+        
+        function idx = get_vapor_index(obj)
+            idx = 1:obj.nComponent;
+            isVapor = cellfun(@(s) strcmp(s.type, 'vapor'), obj.component);
+            idx = idx(logical(isVapor));
+        end
+
+        function idx = get_buffer_index(obj)
+            idx = 1:obj.nComponent;
+            isBuffer = cellfun(@(s) strcmp(s.type, 'buffer'), obj.component);
+            idx = idx(logical(isBuffer));
+        end
+        
         function disp_component(obj)
             fprintf([repmat('=',1,50), '\n']);
             fprintf('There are %d components included.\n', obj.nComponent);
@@ -98,7 +123,7 @@ classdef AbstractCellSystem < handle
     end
     
     methods (Abstract = true)
-        ker = get_kernel(obj, component_index)
+%         ker = get_kernel(obj, component_index)
     end
     
 end

@@ -1,4 +1,4 @@
-function matrix_full_state( obj )
+function fullG = matrix_full_state( obj )
 %MATRIX_FULL_STATE Summary of this function goes here
 %   Detailed explanation goes here
     Dk = obj.beam.refTransition; % D1 or D2
@@ -47,7 +47,7 @@ function matrix_full_state( obj )
     
     %% output variables
     
-    obj.matrix.kernel = fullG;
+    obj.matrix.vapor_kernel = fullG;
     
     obj.parameter.dimG = dimG;
     obj.parameter.dimE = dimE;

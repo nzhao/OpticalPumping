@@ -28,7 +28,7 @@ pumpBeam=AlkaliLaserBeam(500e-6, ...                     % power in [W]
                      
 %% full
 sysfull=VacuumCell(gases, pumpBeam, 'vacuum-full');
-sysfull.interaction{1, 3}.calc_matrix();
+%sysfull.interaction{1, 3}.calc_matrix();
 
 timeList = linspace(0, 10, 101);
 fprintf('begin full evolution...\n');  tic;
@@ -37,21 +37,21 @@ states_full=sysfull.evolution(3, timeList);  timefull =toc;
 %% approximation quasi-static pumping
 
 sysApproxQS=VacuumCell(gases, pumpBeam, 'vacuum');
-sysApproxQS.interaction{1, 3}.calc_matrix();
+%sysApproxQS.interaction{1, 3}.calc_matrix();
 fprintf('begin QS evolution...\n'); tic;
 states_QS=sysApproxQS.evolution(3, timeList); timeQS=toc;
 
 %% approximation ground state pumping
 
 sysApproxGS=VacuumCell(gases, pumpBeam, 'vacuum-ground');
-sysApproxGS.interaction{1, 3}.calc_matrix();
+%sysApproxGS.interaction{1, 3}.calc_matrix();
 fprintf('begin GS evolution...\n'); tic;
 states_GS=sysApproxGS.evolution(3, timeList); timeGS=toc;
 
 %% approximation ground state pumping
 
 sysApproxGSrate=VacuumCell(gases, pumpBeam, 'vacuum-ground-rate');
-sysApproxGSrate.interaction{1, 3}.calc_matrix();
+%sysApproxGSrate.interaction{1, 3}.calc_matrix();
 fprintf('begin GS rate evolution...\n'); tic;
 states_GSrate=sysApproxGSrate.evolution(3, timeList); timeGSrate=toc;
 

@@ -1,4 +1,4 @@
-function matrix_steady_state( obj )
+function qsG=matrix_steady_state( obj )
 %MATRIX_STEADY_STATE Summary of this function goes here
 %   Detailed explanation goes here
     Dk = obj.beam.refTransition; % D1 or D2
@@ -56,7 +56,7 @@ function matrix_steady_state( obj )
     obj.matrix.qsG_ge = qsG_ge;
     obj.matrix.qsG_eg = qsG_eg;
     obj.matrix.qsG_gg = qsG_gg;
-    obj.matrix.kernel = qsG;
+    obj.matrix.vapor_kernel = qsG;
 
 end
 

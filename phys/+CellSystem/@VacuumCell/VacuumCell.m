@@ -13,17 +13,9 @@
             end
             
             obj.set_options(option);
+            
+            obj.calc_interaction_parameter();
             obj.calc_interaction();
-        end
-        
-        function idx = get_vapor_index(obj)
-            idx = 1:obj.nComponent;
-            isVapor = cellfun(@(s) strcmp(s.type, 'vapor'), obj.component);
-            idx = idx(logical(isVapor));
-        end
-                
-        function ker = get_kernel(obj, component_index)
-            ker=obj.interaction{1, component_index}.matrix.kernel;
         end
         
         function state = velocity_resolved_evolution(obj, component_index, v, t)            

@@ -1,4 +1,4 @@
-function matrix_ground_state_rate( obj )
+function rateG=matrix_ground_state_rate( obj )
 %MATRIX_GROUND_RATE Summary of this function goes here
 %   Detailed explanation goes here
     Dk = obj.beam.refTransition; % D1 or D2
@@ -38,6 +38,6 @@ function matrix_ground_state_rate( obj )
     id = eye(dimG);  diagPos = find(id(:));
     rateG = gsG(diagPos, diagPos);
     %% output variables
-    obj.matrix.kernel = rateG;
+    obj.matrix.vapor_kernel = rateG;
 end
 

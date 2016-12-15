@@ -1,4 +1,4 @@
-function matrix_ground_state( obj )
+function gsG = matrix_ground_state( obj )
 %MATRIX_GROUND_STATE Summary of this function goes here
 %   Detailed explanation goes here
     Dk = obj.beam.refTransition; % D1 or D2
@@ -37,6 +37,6 @@ function matrix_ground_state( obj )
 
     
     %% output variables
-    obj.matrix.kernel = gsG;
+    obj.matrix.vapor_kernel = gsG;
 end
 
