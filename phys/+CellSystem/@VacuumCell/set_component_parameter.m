@@ -2,6 +2,8 @@ function set_component_parameter( obj, k )
 %COMPONENT_INTERACTION_PARAMETER Summary of this function goes here
 %   Detailed explanation goes here
     comp = obj.component{k};
+    comp.set_frequency();
+    
     if strcmp(comp.type, 'vapor')
         buf = obj.component(obj.get_buffer_index);
         

@@ -3,11 +3,8 @@ classdef AbstractCellSystem < handle
     %   Detailed explanation goes here
     
     properties
-        gas
-        beam
-        component
-        nComponent
-        
+        stuff
+        component        
         interaction
     end
     
@@ -15,43 +12,28 @@ classdef AbstractCellSystem < handle
         %% Constructor
         function obj = AbstractCellSystem(gas, beam)
             if iscell(gas)
-                obj.gas = gas;
+                obj.stuff.gas = gas;
             else
-                obj.gas =  {gas};
+                obj.stuff.gas =  {gas};
             end
             
             if iscell(beam)
-                obj.beam = beam;
+                obj.stuff.beam = beam;
             else
-                obj.beam = {beam};
+                obj.stuff.beam = {beam};
             end
             
-            stuff = [obj.beam, obj.gas];
-            obj.nComponent = length(stuff);
-            obj.make_component(stuff);
+            % convert stuff to component
+            stuff_cell = [obj.stuff.beam, obj.stuff.gas]; stuff_idx = num2cell(1:length(stuff_cell));
+            obj.component = cellfun( @(stuff_k, k) CellSystem.Component(k, stuff_k), ...
+                                     stuff_cell, stuff_idx, 'UniformOutput', false );
         end
         
         %% Proc
-        function obj = make_component(obj, stuff)
-            obj.component = cell( 1, obj.nComponent );
-            for k=1:length(stuff)
-                obj.component{k} = CellSystem.Component(k, stuff{k});                
-                obj.component{k}.set_frequency();
-                
-            end    
-        end
-        
-        function prepare_interaction_parameter(obj)
-            for k=1:obj.nComponent
-                obj.set_component_parameter(k);
-            end
-        end
-        
-        function interaction = calc_interaction(obj)
-            obj.prepare_interaction_parameter();
-            
-            obj.interaction = cell(obj.nComponent);
+        function interaction = calc_interaction(obj)                        
+            obj.interaction = cell(obj.nComponent);            
             for k = 1:obj.nComponent
+                obj.set_component_parameter(k);
                 for q = k:obj.nComponent %q>=k
                     obj.interaction{k, q} = obj.component_interaction(k,q).calc_matrix();
                     obj.interaction{q, k} = obj.interaction{k, q};
@@ -87,6 +69,11 @@ classdef AbstractCellSystem < handle
         end
         
         %% Output Interface
+        
+        function nLen=nComponent(obj)
+            nLen = length(obj.component);
+        end
+        
         function interaction = get_interaction(obj, k, q)
             if nargin == 2
                 q = k;
@@ -125,7 +112,7 @@ classdef AbstractCellSystem < handle
     end
     
     methods (Abstract = true)
-%         ker = get_kernel(obj, component_index)
+         set_component_parameter(k)
     end
     
 end

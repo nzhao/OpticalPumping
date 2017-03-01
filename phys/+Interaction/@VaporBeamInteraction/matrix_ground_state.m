@@ -37,6 +37,6 @@ function gsG = matrix_ground_state( obj )
 
     
     %% output variables
-    obj.matrix.vapor_kernel = gsG;
+    %obj.matrix.vapor_kernel = gsG;
 end
 

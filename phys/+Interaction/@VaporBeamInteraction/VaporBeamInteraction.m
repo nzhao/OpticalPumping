@@ -34,20 +34,13 @@ classdef VaporBeamInteraction < Interaction.AbstractInteraction
         end
         
         function obj = calc_matrix(obj)
-            mat = obj.vapor_matrix();
+            obj.matrix.kernel={0.0, 0.0, 0.0};
             switch obj.typeStr  
                 case 'vapor-beam'
-                    obj.matrix.kernel1 = mat;
-                    obj.matrix.kernel2 = 0.0;
-                    obj.matrix.kernel12 = 0.0;
+                    obj.matrix.kernel{1} = obj.vapor_matrix();
                 case 'beam-vapor'
-                    obj.matrix.kernel1 = 0.0;
-                    obj.matrix.kernel2 = mat;
-                    obj.matrix.kernel12 = 0.0;
+                    obj.matrix.kernel{2} = obj.vapor_matrix();
             end
-            obj.matrix.kernel={obj.matrix.kernel1, ...
-                               obj.matrix.kernel2, ...
-                               obj.matrix.kernel12}; 
         end
         
         function mat = vapor_matrix(obj)

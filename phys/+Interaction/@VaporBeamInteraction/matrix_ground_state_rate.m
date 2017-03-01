@@ -38,6 +38,6 @@ function rateG=matrix_ground_state_rate( obj )
     id = eye(dimG);  diagPos = find(id(:));
     rateG = gsG(diagPos, diagPos);
     %% output variables
-    obj.matrix.vapor_kernel = rateG;
+    %obj.matrix.vapor_kernel = rateG;
 end
 

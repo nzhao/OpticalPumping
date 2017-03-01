@@ -56,7 +56,7 @@ function qsG=matrix_steady_state( obj )
     obj.matrix.qsG_ge = qsG_ge;
     obj.matrix.qsG_eg = qsG_eg;
     obj.matrix.qsG_gg = qsG_gg;
-    obj.matrix.vapor_kernel = qsG;
+    %obj.matrix.vapor_kernel = qsG;
 
 end
 

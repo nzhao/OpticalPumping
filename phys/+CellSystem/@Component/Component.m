@@ -38,7 +38,7 @@ classdef Component < handle
             end
         end
         
-        function freq = set_frequency(obj)
+        function obj = set_frequency(obj)
             switch obj.type
                 case 'beam'
                     freq = obj.stuff.frequency;

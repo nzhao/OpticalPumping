@@ -47,7 +47,7 @@ function fullG = matrix_full_state( obj )
     
     %% output variables
     
-    obj.matrix.vapor_kernel = fullG;
+    %obj.matrix.vapor_kernel = fullG;
     
     obj.parameter.dimG = dimG;
     obj.parameter.dimE = dimE;
