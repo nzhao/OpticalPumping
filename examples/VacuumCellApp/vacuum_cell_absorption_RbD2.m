@@ -24,9 +24,9 @@ function  [res_absorption, parameters] = vacuum_cell_absorption_RbD2(output_file
 
     import Condition.Coil
     import Atom.AlkaliMetal
-    import Gas.Gas
+    import Gas.VaporGas
     import Laser.AlkaliLaserBeam
-    import CellSystem.VacuumCell
+    import CellSystem.VaporCell
 
 %% parse args
     code_version = CodeVersion();
@@ -57,13 +57,13 @@ function  [res_absorption, parameters] = vacuum_cell_absorption_RbD2(output_file
 
     rb85=AlkaliMetal('85Rb', coil);  rb87=AlkaliMetal('87Rb', coil);
 
-    gases={  Gas(rb85, 'vapor', 273.15+parameters('Temperature'), Atom.Transition.D2), ...
-             Gas(rb87, 'vapor', 273.15+parameters('Temperature'), Atom.Transition.D2)};
+    gases={  VaporGas(rb85, 'vapor', 273.15+parameters('Temperature'), Atom.Transition.D2), ...
+             VaporGas(rb87, 'vapor', 273.15+parameters('Temperature'), Atom.Transition.D2)};
 
     pumpBeam=AlkaliLaserBeam(parameters('Power'), rb87, Atom.Transition.D2, 0.0,... 
                              [0 0 1], parameters('Polarization'), parameters('BeamRadius')); 
     
-    sys=VacuumCell(gases, pumpBeam, parameters('Mode') );
+    sys=VaporCell(gases, pumpBeam, parameters('Mode') );
 
 %% core
     freqList = parameters('Frequency'); t_pump = parameters('PumpTime');

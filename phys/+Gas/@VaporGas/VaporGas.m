@@ -1,4 +1,4 @@
-classdef Gas < handle
+classdef VaporGas < handle
     %GAS Summary of this class goes here
     %   Detailed explanation goes here
     
@@ -16,7 +16,7 @@ classdef Gas < handle
     end
     
     methods
-        function obj = Gas(atom, type, temperature, transition, pressure, name)
+        function obj = VaporGas(atom, type, temperature, transition, pressure, name)
             if nargin < 6
                 name = atom.name;
             end

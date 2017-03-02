@@ -1,4 +1,4 @@
-function matrix_effective_Hamiltonian( obj )
+function [tV, tW] = matrix_effective_Hamiltonian( obj )
 %MATRIX_EFFECTIVE_HAMILTONIAN Summary of this function goes here
 %   Detailed explanation goes here
 

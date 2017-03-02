@@ -24,14 +24,9 @@ function [res_absorption, parameters] = vacuum_cell_absorption_RbD1(output_file,
 
     import Condition.Coil
     import Atom.AlkaliMetal
-    import Gas.Gas
+    import Gas.VaporGas
     import Laser.AlkaliLaserBeam
-    import CellSystem.VacuumCell
-
-%% parse args
-    code_version = CodeVersion();
-    fprintf('Using code with commit id: %s\n', code_version);
-    start_at = datetime('now'); disp(start_at);
+    import CellSystem.VaporCell
 
 %% parameters
     default_parameters = containers.Map();
@@ -45,10 +40,22 @@ function [res_absorption, parameters] = vacuum_cell_absorption_RbD1(output_file,
     default_parameters('Frequency') = -5e3:50:6e3;  % [MHz]
     default_parameters('PumpTime') = 10.0;          % [micro-second]
     default_parameters('Mode') = 'vacuum-ground';   % string: 'vacuum', 'vacuum-ground', 'vacuum-full', 'vacuum-ground-rate'
+    default_parameters('Display') = 'on';           % Screen display: 'on', 'off'
     parameters = parse_paremeters(default_parameters, varargin);
     
-    disp(keys(parameters));
-    disp(values(parameters));
+    if strcmp(parameters('Display'), 'on')
+        disp(keys(parameters));
+        disp(values(parameters));
+    end
+
+%% parse args
+    code_version = CodeVersion();
+    start_at = datetime('now');
+    if strcmp(parameters('Display'), 'on')
+        fprintf('Using code with commit id: %s\n', code_version);
+        disp(start_at);
+    end
+
     
 %% ingredients - system
     coil = { Condition.Coil('coilx', parameters('Bx') ), ...
@@ -57,20 +64,25 @@ function [res_absorption, parameters] = vacuum_cell_absorption_RbD1(output_file,
 
     rb85=AlkaliMetal('85Rb', coil);  rb87=AlkaliMetal('87Rb', coil);
 
-    gases={  Gas(rb85, 'vapor', 273.15+parameters('Temperature'), Atom.Transition.D1), ...
-             Gas(rb87, 'vapor', 273.15+parameters('Temperature'), Atom.Transition.D1)};
+    gases={  VaporGas(rb85, 'vapor', 273.15+parameters('Temperature'), Atom.Transition.D1), ...
+             VaporGas(rb87, 'vapor', 273.15+parameters('Temperature'), Atom.Transition.D1)};
 
     pumpBeam=AlkaliLaserBeam(parameters('Power'), rb87, Atom.Transition.D1, 0.0,... 
                              [0 0 1], parameters('Polarization'), parameters('BeamRadius')); 
     
-    sys=VacuumCell(gases, pumpBeam, parameters('Mode') );
+    sys=VaporCell(gases, pumpBeam, parameters('Mode') );
 
 %% core
+    beam_index = 1;
     freqList = parameters('Frequency'); t_pump = parameters('PumpTime');
-    res_absorption = sys.total_absorption_cross_section(freqList, t_pump);
+    res_absorption = sys.total_absorption_cross_section(beam_index, freqList, t_pump);
     
 %% export
-    finish_at = datetime('now'); disp(finish_at);
+    finish_at = datetime('now'); 
+    
+    if strcmp(parameters('Display'), 'on')
+        disp(finish_at);
+    end
 
     if ~isempty(output_file)
         save(output_file, 'start_at', 'finish_at', 'code_version', 'parameters', ...

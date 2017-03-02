@@ -4,9 +4,10 @@ import Condition.Coil
 import Atom.AlkaliMetal 
 import Atom.Buffer.Nitrogen
 import Atom.Buffer.He4
-import Gas.Gas Gas.BufferGas
+import Gas.VaporGas Gas.BufferGas
 import Laser.AlkaliLaserBeam
-import CellSystem.VacuumCell
+%import CellSystem.VacuumCell
+import CellSystem.VaporCell
 
 %% Ingredients
 coil = { ... 
@@ -20,8 +21,8 @@ n2=Nitrogen();
 he4=He4();
 
 temperature=273.15+20;
-gases={  Gas(rb85, 'vapor', temperature, Atom.Transition.D1), ...
-         Gas(rb87, 'vapor', temperature, Atom.Transition.D1) ...
+gases={  VaporGas(rb85, 'vapor', temperature, Atom.Transition.D1), ...
+         VaporGas(rb87, 'vapor', temperature, Atom.Transition.D1) ...
          BufferGas(n2, temperature, 50*Torr2Pa, 'N2'), ...
          BufferGas(he4, temperature, 700*Torr2Pa) ...
          };
@@ -37,15 +38,16 @@ pumpBeam_cir=AlkaliLaserBeam(500e-6, ...                     % power in [W]
 t_pump = 1e4;
 %% approximation ground state pumping
 
-sysApproxGS_lin=VacuumCell(gases, pumpBeam_lin, 'vacuum-ground');
-sysApproxGS_cir=VacuumCell(gases, pumpBeam_cir, 'vacuum-ground');
-% freqList=-150e3:2000:150e3;
-% res_absorption_lin=sysApproxGS_lin.total_absorption_cross_section(freqList, t_pump);
-% res_absorption_cir=sysApproxGS_cir.total_absorption_cross_section(freqList, t_pump);
-% 
-% figure;plot(freqList, sum(res_absorption_lin, 1), 'rd-', freqList, sum(res_absorption_cir, 1), 'b*-')
+sysApproxGS_lin=VaporCell(gases, pumpBeam_lin, 'vacuum-ground');
+sysApproxGS_cir=VaporCell(gases, pumpBeam_cir, 'vacuum-ground');
 
-timeList = linspace(0, 5e4, 101);
-state=sysApproxGS_cir.evolution(3, timeList);
-popG = cell2mat(cellfun(@(s)  s.population(2), state, 'UniformOutput', false));
-figure;plot(timeList, popG)
+freqList=-150e3:2000:150e3;  beam_index = 1;
+res_absorption_lin=sysApproxGS_lin.total_absorption_cross_section(beam_index, freqList, t_pump);
+res_absorption_cir=sysApproxGS_cir.total_absorption_cross_section(beam_index, freqList, t_pump);
+
+figure;plot(freqList, sum(res_absorption_lin, 1), 'rd-', freqList, sum(res_absorption_cir, 1), 'b*-')
+
+% timeList = linspace(0, 5e4, 101);
+% state=sysApproxGS_cir.evolution(3, timeList);
+% popG = cell2mat(cellfun(@(s)  s.population(2), state, 'UniformOutput', false));
+% figure;plot(timeList, popG)

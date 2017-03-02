@@ -11,20 +11,12 @@ classdef AbstractCellSystem < handle
     methods
         %% Constructor
         function obj = AbstractCellSystem(gas, beam)
-            if iscell(gas)
-                obj.stuff.gas = gas;
-            else
-                obj.stuff.gas =  {gas};
-            end
-            
-            if iscell(beam)
-                obj.stuff.beam = beam;
-            else
-                obj.stuff.beam = {beam};
-            end
-            
+            obj.stuff.gas = make_cell(gas);
+            obj.stuff.beam = make_cell(beam);
+
             % convert stuff to component
-            stuff_cell = [obj.stuff.beam, obj.stuff.gas]; stuff_idx = num2cell(1:length(stuff_cell));
+            stuff_cell = [obj.stuff.beam, obj.stuff.gas]; 
+            stuff_idx = num2cell(1:length(stuff_cell));
             obj.component = cellfun( @(stuff_k, k) CellSystem.Component(k, stuff_k), ...
                                      stuff_cell, stuff_idx, 'UniformOutput', false );
         end
@@ -34,7 +26,7 @@ classdef AbstractCellSystem < handle
             obj.interaction = cell(obj.nComponent);            
             for k = 1:obj.nComponent
                 obj.set_component_parameter(k);
-                for q = k:obj.nComponent %q>=k
+                for q = 1:k % q<=k
                     obj.interaction{k, q} = obj.component_interaction(k,q).calc_matrix();
                     obj.interaction{q, k} = obj.interaction{k, q};
                 end

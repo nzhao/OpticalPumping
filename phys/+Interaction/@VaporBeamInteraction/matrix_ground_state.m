@@ -5,9 +5,8 @@ function gsG = matrix_ground_state( obj )
     dimG = obj.vapor.atom.dim(1);
     dimE = obj.vapor.atom.dim(1+Dk);
     
-    obj.matrix_effective_Hamiltonian();
+    [tV, tW] = obj.matrix_effective_Hamiltonian();
     
-    tV = obj.matrix.tV; tW = obj.matrix.tW;
     eff_Hg = obj.matrix.eff_Hg;  eff_He = obj.matrix.eff_He;
     pump_rate_g = obj.parameter.pump_rate_g; pump_rate_e = obj.parameter.pump_rate_e; 
     
@@ -35,8 +34,5 @@ function gsG = matrix_ground_state( obj )
     qsG_gg = 1i*E_gg + pump_rate_g*A_pump_gg + A_collision_gg;
     gsG = qsG_gg - qsG_ge*(qsG_ee\qsG_eg);
 
-    
-    %% output variables
-    %obj.matrix.vapor_kernel = gsG;
 end
 

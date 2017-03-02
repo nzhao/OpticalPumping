@@ -14,6 +14,8 @@ function interaction = component_interaction( obj, k, q )
                 interaction = Interaction.VaporBeamInteraction(comp_k, comp_q);
             case 'vapor-vapor'
                 interaction = Interaction.VaporVaporInteraction(comp_k, comp_q);
+            case {'vapor-buffer', 'buffer-vapor'}
+                interaction = Interaction.VaporBufferInteraction(comp_k, comp_q);
             otherwise
                 interaction = Interaction.EmptyInteraction(comp_k, comp_q);
         end

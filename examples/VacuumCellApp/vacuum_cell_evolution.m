@@ -2,9 +2,9 @@ clear;clc;
 
 import Condition.Coil
 import Atom.AlkaliMetal
-import Gas.Gas
+import Gas.VaporGas
 import Laser.AlkaliLaserBeam
-import CellSystem.VacuumCell
+import CellSystem.VaporCell
 
 %% Ingredients
 coil = { ... 
@@ -16,8 +16,8 @@ rb85=AlkaliMetal('85Rb', coil);
 rb87=AlkaliMetal('87Rb', coil);
 
 temperature=273.15+20;
-gases={  Gas(rb85, 'vapor', temperature, Atom.Transition.D1), ...
-         Gas(rb87, 'vapor', temperature, Atom.Transition.D1) ...
+gases={  VaporGas(rb85, 'vapor', temperature, Atom.Transition.D1), ...
+         VaporGas(rb87, 'vapor', temperature, Atom.Transition.D1) ...
          };
 
 pumpBeam=AlkaliLaserBeam(500e-6, ...                     % power in [W]
@@ -27,7 +27,7 @@ pumpBeam=AlkaliLaserBeam(500e-6, ...                     % power in [W]
 
                      
 %% full
-sysfull=VacuumCell(gases, pumpBeam, 'vacuum-full');
+sysfull=VaporCell(gases, pumpBeam, 'vacuum-full');
 %sysfull.interaction{1, 3}.calc_matrix();
 
 timeList = linspace(0, 10, 101);
@@ -36,21 +36,21 @@ states_full=sysfull.evolution(3, timeList);  timefull =toc;
 
 %% approximation quasi-static pumping
 
-sysApproxQS=VacuumCell(gases, pumpBeam, 'vacuum');
+sysApproxQS=VaporCell(gases, pumpBeam, 'vacuum');
 %sysApproxQS.interaction{1, 3}.calc_matrix();
 fprintf('begin QS evolution...\n'); tic;
 states_QS=sysApproxQS.evolution(3, timeList); timeQS=toc;
 
 %% approximation ground state pumping
 
-sysApproxGS=VacuumCell(gases, pumpBeam, 'vacuum-ground');
+sysApproxGS=VaporCell(gases, pumpBeam, 'vacuum-ground');
 %sysApproxGS.interaction{1, 3}.calc_matrix();
 fprintf('begin GS evolution...\n'); tic;
 states_GS=sysApproxGS.evolution(3, timeList); timeGS=toc;
 
 %% approximation ground state pumping
 
-sysApproxGSrate=VacuumCell(gases, pumpBeam, 'vacuum-ground-rate');
+sysApproxGSrate=VaporCell(gases, pumpBeam, 'vacuum-ground-rate');
 %sysApproxGSrate.interaction{1, 3}.calc_matrix();
 fprintf('begin GS rate evolution...\n'); tic;
 states_GSrate=sysApproxGSrate.evolution(3, timeList); timeGSrate=toc;

@@ -5,7 +5,7 @@ function fullG = matrix_full_state( obj )
     dimG = obj.vapor.atom.dim(1);
     dimE = obj.vapor.atom.dim(1+Dk);
     
-        tV =  Interaction.AtomPhotonInteraction(obj.vapor, obj.beam);
+        [tV, ~] = obj.matrix_effective_Hamiltonian();
 
         gamma_s_ge = obj.vapor.atom.parameters.gamma_s(Dk);
         A_spDecay_ge=obj.vapor.atom.operator.spDecay{Dk};
@@ -45,11 +45,5 @@ function fullG = matrix_full_state( obj )
 
         fullG=G0+G1+G2+G3;
     
-    %% output variables
-    
-    %obj.matrix.vapor_kernel = fullG;
-    
-    obj.parameter.dimG = dimG;
-    obj.parameter.dimE = dimE;
 end
 
