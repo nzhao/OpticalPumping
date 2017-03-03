@@ -22,7 +22,6 @@ function gsG = matrix_ground_state( obj )
     gamma_s_ge = obj.vapor.atom.parameters.gamma_s(Dk);
     A_spDecay_ge=obj.vapor.atom.operator.spDecay{Dk};
 
-
     freq = obj.vapor.atom.eigen.transFreq;
     gamma1 = gamma_s_ge;
     E_ee = diag( freq{1+Dk, 1+Dk}(:) - 1i*gamma1 );

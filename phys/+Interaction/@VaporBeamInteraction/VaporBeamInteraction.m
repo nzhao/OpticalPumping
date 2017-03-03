@@ -53,6 +53,8 @@ classdef VaporBeamInteraction < Interaction.AbstractInteraction
                     mat = obj.matrix_ground_state();
                 case 'vacuum-ground-rate'
                     mat = obj.matrix_ground_state_rate();
+                case 'high-pressure'
+                    mat = obj.matrix_ground_state_high_pressure();
                 otherwise
                     error('non-supported option %s', obj.vapor.option);
             end
