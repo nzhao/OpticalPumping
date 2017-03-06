@@ -6,7 +6,8 @@ function [tV, tW] = matrix_effective_Hamiltonian( obj )
     dimG = obj.vapor.atom.dim(1);
     dimE = obj.vapor.atom.dim(1+Dk);
     
-    denom = Interaction.DenominatorMat(obj.vapor, obj.beam, obj.parameter.velocity);
+    denom = Interaction.DenominatorMat(obj.vapor, obj.beam, 'HighPressure');
+    %denom = Interaction.DenominatorMat(obj.vapor, obj.beam, obj.parameter.velocity);
     tV =  Interaction.AtomPhotonInteraction(obj.vapor, obj.beam);
     tW = tV.*denom;
 
@@ -15,6 +16,7 @@ function [tV, tW] = matrix_effective_Hamiltonian( obj )
     shift_e = 0.5*(He+He'); gamma_e = 1i*(He-He');
     pump_rate_g = trace(gamma_g)/dimG;
     pump_rate_e = trace(gamma_e)/dimE;
+    kappa = trace(shift_g)/pump_rate_g;
 
     mat_ge = zeros(dimG, dimE); mat_eg=zeros(dimE, dimG);
     gamma_col = [gamma_e(:); mat_eg(:); mat_ge(:); gamma_g(:)];
@@ -33,6 +35,7 @@ function [tV, tW] = matrix_effective_Hamiltonian( obj )
     obj.parameter.dimE = dimE;
     obj.parameter.pump_rate_g = pump_rate_g;
     obj.parameter.pump_rate_e = pump_rate_e;
+    obj.parameter.kappa = kappa;
 
 end
 

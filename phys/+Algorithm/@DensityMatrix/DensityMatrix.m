@@ -46,6 +46,8 @@ classdef DensityMatrix < handle
                     col = obj.getGroundStateCol;
                 case 'vacuum-ground-rate'
                     col = obj.getGroundStatePopulationCol;
+                case 'high-pressure'
+                    col = obj.getGroundStateCol;
                 otherwise
                     error('non-supported option %s', option);
             end
@@ -66,6 +68,8 @@ classdef DensityMatrix < handle
                     obj.setGroundStateCol(col);
                 case 'vacuum-ground-rate'
                     obj.setGroundStatePopulationCol(col);
+                case 'high-pressure'
+                    obj.setGroundStateCol(col);
                 otherwise
                     error('non-supported option %s', option);
             end
