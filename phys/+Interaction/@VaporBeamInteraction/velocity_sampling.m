@@ -4,7 +4,8 @@ function [len, vList, uList, wList, sigmaV] = velocity_sampling(obj)
     xRange = obj.parameter.v_sampling.xRange; 
     gamma = obj.parameter.v_sampling.gamma;
 
-    if nRaw < 0 || nFine <0
+    %if nRaw < 0 || nFine <0
+    if ~obj.parameter.do_velocity_sampling
         len = 1;
         vList = obj.parameter.velocity;
         uList = 1;

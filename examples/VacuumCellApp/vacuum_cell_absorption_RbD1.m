@@ -71,6 +71,8 @@ function [res_absorption, parameters] = vacuum_cell_absorption_RbD1(output_file,
                              [0 0 1], parameters('Polarization'), parameters('BeamRadius')); 
     
     sys=VaporCell(gases, pumpBeam, parameters('Mode') );
+    sys.interaction{1, 2}.enable_velocity_sampling();
+    sys.interaction{1, 3}.enable_velocity_sampling();
 
 %% core
     beam_index = 1;

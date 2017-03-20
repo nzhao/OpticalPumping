@@ -26,7 +26,8 @@ classdef VaporBeamInteraction < Interaction.AbstractInteraction
             
             obj.parameter.velocity = 0.0;
             
-            obj.parameter.v_sampling.nRaw = -1;%16;
+            obj.parameter.do_velocity_sampling = false;
+            obj.parameter.v_sampling.nRaw = 16;%-1;%16;
             obj.parameter.v_sampling.nFine = 32;
             obj.parameter.v_sampling.xRange = 5;
             obj.parameter.v_sampling.gamma = 50; %MHz
@@ -68,6 +69,10 @@ classdef VaporBeamInteraction < Interaction.AbstractInteraction
             atom_to_ref_detune = ( obj.vapor.atom.parameters.omega(obj.beam.refTransition)...
                                  - obj.beam.refAtom.parameters.omega(obj.beam.refTransition) ) /2/pi*1e-6;
             detune = obj.beam.detune - atom_to_ref_detune;
+        end
+        
+        function enable_velocity_sampling(obj)
+            obj.parameter.do_velocity_sampling = true;
         end
         
 
