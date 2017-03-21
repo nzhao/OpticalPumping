@@ -7,10 +7,12 @@ function [tV, tW] = matrix_effective_Hamiltonian( obj )
     dimE = obj.vapor.atom.dim(1+Dk);
     
     switch obj.option
-        case 'high-pressure'
-            denom = Interaction.DenominatorMat(obj.vapor, obj.beam, 'HighPressure');
-        otherwise
+        case {'high-pressure', 'doppler-average'}
+            denom = Interaction.DenominatorMat(obj.vapor, obj.beam, obj.option);
+        case {'vacuum', 'vacuum-full', 'vacuum-ground', 'vacuum-ground-rate'}
             denom = Interaction.DenominatorMat(obj.vapor, obj.beam, obj.parameter.velocity);
+        otherwise
+            error('wrong option');
     end
     tV =  Interaction.AtomPhotonInteraction(obj.vapor, obj.beam);
     tW = tV.*denom;

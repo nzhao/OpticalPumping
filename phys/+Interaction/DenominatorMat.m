@@ -24,12 +24,12 @@ function denominator_mat = DenominatorMat( gas, beam, opt )
             doppler_shif = beam.wavenumber*v /2/pi *1e-6;
             energy_mat = Heg - (detune - doppler_shif) - 1i*gamma; % MHz
             denominator_mat = ones(dimE,dimG)./energy_mat;
-        case 'DopplerAverage'
+        case 'doppler-average'
             doppler_sigma_v = gas.dopplerBroadening();
             sigma = sqrt(2)*beam.wavenumber*doppler_sigma_v /2/pi *1e-6;
             energy_mat = Heg + detune - 1i*gamma; % MHz
             denominator_mat= 1i*sqrt(pi)/sigma * w_Fadeeva( -energy_mat/sigma ); % w(z) is the Faddeeva function
-        case 'HighPressure'
+        case 'high-pressure'
             denominator_mat = -ones(dimE,dimG)/(detune+1i*gamma);
         otherwise
             error('non-supported approximation: %s', approx);

@@ -7,6 +7,7 @@ classdef BufferGas
         temperature
         pressure
         density
+        velocity
         name
         type
     end
@@ -29,6 +30,8 @@ classdef BufferGas
                 abundance = 1;
             end
             obj.density = pressure / kB / temperature*abundance;
+            mass = Atom.AtomParameters(obj.name).mass / avogadro * 1e-3;
+            obj.velocity = sqrt( kB*temperature / mass );
         end
         
         function val=getPressure(obj)

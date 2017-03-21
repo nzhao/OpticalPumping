@@ -20,26 +20,26 @@ rb87=AlkaliMetal('87Rb', coil);
 n2=Nitrogen();
 he4=He4();
 
-temperature=273.15+20;
+temperature=273.15+70;
 gases={  VaporGas(rb85, 'vapor', temperature, Atom.Transition.D1), ...
          VaporGas(rb87, 'vapor', temperature, Atom.Transition.D1) ...
          BufferGas(n2, temperature, 50*Torr2Pa, 'N2'), ...
          BufferGas(he4, temperature, 700*Torr2Pa) ...
          };
 
-pumpBeam_lin=AlkaliLaserBeam(500e-6, ...                     % power in [W]
+pumpBeam_lin=AlkaliLaserBeam(300e-6, ...                     % power in [W]
                          rb87, Atom.Transition.D1, -2.25e3,...%-2.25e3, ... % ref Atom 
-                         [0 0 1], [1, 0], 2e-3);       % direction, pol, spot size
+                         [0 0 1], [1, 0], 4e-3);       % direction, pol, spot size
                      
-pumpBeam_cir=AlkaliLaserBeam(500e-6, ...                     % power in [W]
+pumpBeam_cir=AlkaliLaserBeam(300e-6, ...                     % power in [W]
                          rb87, Atom.Transition.D1, -2.25e3,...%-2.25e3, ... % ref Atom 
-                         [0 0 1], [1, -1i], 2e-3);       % direction, pol, spot size
+                         [0 0 1], [1, -1i], 4e-3);       % direction, pol, spot size
 
 t_pump = 1e4;
 %% approximation ground state pumping
 
-sysApproxGS_lin=VaporCell(gases, pumpBeam_lin, 'vacuum-ground');
-sysApproxGS_cir=VaporCell(gases, pumpBeam_cir, 'vacuum-ground');
+sysApproxGS_lin=VaporCell(gases, pumpBeam_lin, 'high-pressure');
+sysApproxGS_cir=VaporCell(gases, pumpBeam_cir, 'high-pressure');
 
 freqList=-150e3:2000:150e3;  beam_index = 1;
 res_absorption_lin=sysApproxGS_lin.total_absorption_cross_section(beam_index, freqList, t_pump);
