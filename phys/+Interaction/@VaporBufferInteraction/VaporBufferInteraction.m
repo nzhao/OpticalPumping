@@ -38,16 +38,8 @@ classdef VaporBufferInteraction  < Interaction.AbstractInteraction
         end
 
         function mat = vapor_matrix(obj)
-            sd_mat = obj.vapor.atom.operator.SD;
-            sd_cross_section = obj.sd_crosssection(obj.vapor.name, ...
-                                                   obj.buffer.name);
-            sd_rate = obj.buffer.density*1e-6 ... % m-3 to cm-3
-                    * sd_cross_section ...        % cm2
-                    * obj.buffer.velocity*1e2 ... % m/s to cm/s;
-                    * 1e-6;                       % s-1 to 2pi*MHz;
-            mat = sd_rate * sd_mat;
-            
-            obj.parameter.sd_rate=sd_rate;
+              [sd_mat, sd_rate]=Interaction.SDampingMat(obj.vapor, obj.buffer);
+              mat = sd_mat{1};  obj.parameter.sd_rate=sd_rate{1};
         end
 
     end
