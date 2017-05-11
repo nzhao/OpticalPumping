@@ -1,5 +1,8 @@
 function fig = dispMat( mat, xlabel, ylabel )
     [dim1, dim2]=size(mat);
+    if norm(mat)<eps % zero mat
+        mat = eps*ones(dim1, dim2);
+    end
     if nargin == 1
         xlabel=cell(1, dim1);
         ylabel=cell(1, dim2);
@@ -52,7 +55,7 @@ function c=cmap(nstep, maxVal, minVal)
         c = b(end:-1:end-ncut,:);
     elseif minVal < 0 && maxVal >=0
         if abs(minVal) > abs(maxVal)
-            ncut = round(nstep*abs(maxVal/minVal));
+            ncut = round(nstep*abs(maxVal/minVal))-1;%% '-1' ??
             c = [b(end:-1:1,:); [1 1 1]; r(end:-1:end-ncut,:)];
         else
             ncut = round(nstep*abs(minVal/maxVal));

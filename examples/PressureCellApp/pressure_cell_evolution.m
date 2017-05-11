@@ -13,7 +13,7 @@ import CellSystem.VaporCell
 coil = { ... 
     Condition.Coil('coilx', 0.00000), ...
     Condition.Coil('coily', 0.0), ...
-    Condition.Coil('coilz', 0.00003)};
+    Condition.Coil('coilz', 0.0000003)};
 
 rb85=AlkaliMetal('85Rb', coil);
 rb87=AlkaliMetal('87Rb', coil);
@@ -51,3 +51,43 @@ figure;plot(freqList, sum(res_absorption_lin, 1), 'rd-', freqList, sum(res_absor
 % state=sysApproxGS_cir.evolution(3, timeList);
 % popG = cell2mat(cellfun(@(s)  s.population(2), state, 'UniformOutput', false));
 % figure;plot(timeList, popG)
+
+
+%% dispMat
+se=gases{2}.atom.operator.SE;
+sd=gases{2}.atom.operator.SD;
+
+interaction = sysApproxGS_cir.get_interaction(1, 3);
+ker=interaction.getKernel(3);
+kerSD=sysApproxGS_cir.interaction{3, 4}.matrix.kernel{2};
+
+id8=eye(8); id8c=id8(:);
+reorder = [find(id8c==1); find(id8c==0)];
+reorder_ker=ker(reorder, reorder);
+kerPop=ker(id8c==1, id8c==1);
+kerSDPop=kerSD(id8c==1,id8c==1);
+
+figure;dispMatC(reorder_ker);
+figure; dispMat(kerPop);
+
+se3pop=se(id8c==1, id8c==1, 3);
+sdpop=sd(id8c==1, id8c==1);
+figure;dispMat(se3pop)
+figure;dispMat(sdpop)
+
+%% evolution
+
+pumpMat = sdpop+0.5*se3pop;
+
+nt=101; res = zeros(8, nt);
+tlist=linspace(0, 10, nt);
+for k=1:101
+    res(:,k)=expm(-2*pi* (pumpMat+1.5*sdpop) *tlist(k))*ones(8,1)/8.0;
+end
+plot(tlist, res)
+
+smat=gases{2}.atom.matEigen.Smat{1};
+sz=smat(:,:,3);
+spinZ=diag(sz).'*res;
+
+figure; plot(tlist, -spinZ)

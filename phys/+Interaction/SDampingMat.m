@@ -9,7 +9,7 @@ function [mat, rate] = SDampingMat( gas1, gas2 )
         sd_rate1 = gas2.density*1e-6 ... % m-3 to cm-3
                  * sd_cross_section ...        % cm2
                  * relative_velocity*1e2 ...   % m/s to cm/s;
-                 * 1e-6;                       % s-1 to 2pi*MHz;
+                 * 1e-6/2/pi;                  % s-1 to MHz;
         mat1 = sd_rate1 * sd_mat;
     else
         mat1 = 0.0;
@@ -21,7 +21,7 @@ function [mat, rate] = SDampingMat( gas1, gas2 )
         sd_rate2 = gas1.density*1e-6 ...       % m-3 to cm-3
                  * sd_cross_section ...        % cm2
                  * relative_velocity*1e2 ...   % m/s to cm/s;
-                 * 1e-6;                       % s-1 to 2pi*MHz;
+                 * 1e-6/2/pi;                  % s-1 to MHz;
         mat2  = sd_rate2 * sd_mat;
     else
         mat2 = 0.0;
