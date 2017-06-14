@@ -5,7 +5,9 @@ function mat = matrix_ground_state_high_pressure( obj )
     obj.matrix_effective_Hamiltonian();
     
     atom = obj.vapor.atom;
-    mat_h0 = circleC(atom.eigen.eigen_system{1}.diag_H);
+    mat_h0 = circleC(atom.eigen.eigen_system{1}.diag_H ... 
+                   + atom.matEigen.zeeman_terms(:,:,1) ...
+                   + atom.matEigen.zeeman_terms(:,:,2));
     mat_sd = atom.operator.SD;
     mat_se = atom.operator.SE;
     
